@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shell</title>
+    <style type="text/css">
+    body{
+        font-size:30px;
+        background-color:blueviolet;
+        text-align: center;
+    }
+    button{
+        display: block;
+    }
+    .bottom-div{
+        position: absolute;
+        bottom: 0;
+        right:0;
+        width:100px;
+        height: 100px;
+        background-color:brown;
+    }
+</style>
+</head>
+<body>
+<div>TEST</div>
+<div class="bottom-div">bottom</div>
+
+<button onclick="app.pushPage({path:'/index.html',query:{a:1,b:2}})">pushPage</button>
+<button onclick="app.popPage()">popPage</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'bottomHalf'})">presentPage bottomHalf</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'topHalf'})">presentPage topHalf</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'alert'})">presentPage alert</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'popup'})">presentPage  popup</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true})">presentPage fullScreen</button>
+
+
+<button onclick="app.dismissPage()">dismissPage</button>
+<button onclick="app.enableBunces({enable:false})">enableBuncesFalse</button>
+<button onclick="app.enableBunces({enable:true})">enableBuncesTrue</button>
+<button onclick="app.setTabBarSelectedIndex({index:1})">setTabBarSelectedIndex</button>
+
+<button onclick="app.setTabBarBadge({badge:'aa'})">setTabBarBadge</button>
+
+
+<button onclick="app.setApplicationBadge({badge:1})">setApplicationBadge</button>
+
+<button onclick="app.enablePullToRefresh()">enablePullToRefresh</button>
+<button onclick="app.stopPullToRefresh()">stopPullToRefresh</button>
+
+<button onclick="app.showToast({message:'123',type:'error'})">showToast12</button>
+
+<script type="text/javascript">
+
+
+window.page = {
+    pageLoad:function(args){
+        // app.setNavigationBarRightItems({
+        //     images:["navbar-icon.png"],
+        // })
+        // app.setNavigationBarTitle({
+        //     image:"navbar-icon.png",
+        // })
+
+        app.setNavigationBarTitle({
+             title:"test"
+        })
+
+        // app.getLocation({
+        //     callback:function(t){
+        //       app.showToast("getLocation "+JSON.stringify(t))
+        //      }
+        // })
+        //
+        /*weixin.getInfo({
+            callback:function(t){
+                app.showToast("weixin.getInfo"+JSON.stringify(t))
+            }
+        })*/
+        //
+        app.postMessage({
+           args:{a:1}
+        })
+        /*app.unzip({
+            path:"/test.zip",
+            dest:"/",
+            callback:function(t){
+                app.showToast("app.unzip"+JSON.stringify(t))
+            }
+        })*/
+        /*app.startAudioRecord({
+            duration:10,
+            callback:function(t){
+                app.showToast("startAudioRecord"+JSON.stringify(t))
+            }
+        })*/
+    },
+    pageUnload:function(){
+
+    },
+    pageShow:function(){
+
+    },
+    pageHide:function(){
+
+    },
+    pageMessage:function(args){
+
+    }
+}
+//
+/*app.showActionSheet({
+    title:"123",
+    message:"22222222",
+    options:["1","2","3"],
+    callback:function(result){
+        app.showToast(result.option)
+    }
+})*/
+
+/*app.postMessage({
+    message:"hello"
+})*/
+
+/*app.setStorage({
+    key:"name1",
+    value:"itit"
+})
+app.getStorage({
+    key:"name",
+    callback:function(t){
+        app.showToast(JSON.stringify(t))
+    }
+})*/
+//
+/*app.getStorageInfo({
+    callback:function(t){
+        app.showToast("getStorageInfo"+JSON.stringify(t))
+    }
+})*/
+
+
+
+/*app.openURLSchema({
+    url:"itunes://",
+    callback:function(t){
+        app.showToast("openURLSchema"+JSON.stringify(t))
+    }
+})*/
+
+/*app.previewImage({
+    urls:["https://www.baidu.com/img/bd_logo1.png"],
+    callback:function(t){
+        app.showToast("openURLSchema"+JSON.stringify(t))
+    }
+})*/
+/*
+app.downloadFile({
+    url:"https://www.baidu.com/img/bd_logo1.png",
+    path:"bd_logo1.png",
+    callback:function(t){
+        app.showToast("downloadFile"+JSON.stringify(t))
+    }
+})*/
+/*
+app.readFileContent({
+    path:"index.html",
+    callback:function(t){
+        app.showToast("readFileContent"+JSON.stringify(t))
+    }
+})*/
+
+/*
+app.setNavigationBarRightItems({
+    images:["buttom-index.png","buttom-index.png"],
+})
+//
+app.setNavigationBarRightItemEnable({
+    enable:false
+})
+//
+app.listFiles({
+    path:'/',
+    callback:function(t){
+        app.showToast("listFiles"+JSON.stringify(t))
+    }
+})
+//
+app.getTabBarSelectedIndex({
+    callback:function(t){
+        app.showToast("getTabBarSelectedIndex"+JSON.stringify(t))
+    }
+})
+//
+app.setPasteboard({
+    string:"123"
+})*/
+
+/*
+app.openLocation({
+    title:"测试1",
+    subtitle:"测试1",
+    latitude:37.7185,
+    longitude:100.722,
+    delta:0.05,
+    callback:function(t){
+        app.showToast("openLocation"+JSON.stringify(t))
+    }
+})
+*/
+
+</script>
+</body>
+</html>

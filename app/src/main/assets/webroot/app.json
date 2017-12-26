@@ -1,0 +1,27 @@
+{
+	"debug":true,
+	"serverRoot1":"http://localhost:7005",
+	"version":"1.0",
+ 	"pageBackgroundColor":"#555555",
+ 	"navigationBarBackgroundColor":"#ffff00",
+ 	"navigationBarColor":"#ff0000",
+	"tabBarTintColor":"#ff684f",
+	"tabBarBackgroundColor":"#33ff21",
+ 	"tabBarItems":[
+ 		{
+			"page": "/index.html",
+			"title": "首页",
+			"icon": "/tabbar-icon.png"
+		},
+		{
+			"page": "/index.html",
+			"title": "首页1",
+			"icon": "/tabbar-icon.png"
+		},
+		{
+			"page": "/index.html",
+			"title": "首页2",
+			"icon": "/navbar-icon.png"
+		}
+ 	]
+}
