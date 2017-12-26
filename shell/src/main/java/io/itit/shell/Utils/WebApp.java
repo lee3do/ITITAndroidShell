@@ -16,6 +16,7 @@ import cn.trinea.android.common.util.StringUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
 import io.itit.shell.JsArgs;
+import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
 
 /**
@@ -88,5 +89,12 @@ public class WebApp {
     public void postMessage(JsArgs.ArgsBean args) {
         Logger.d(args.args);
         RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(args.args));
+    }
+
+    public void pushPage(JsArgs.ArgsBean args) {
+        //((BaseActivity)shellFragment.getActivity()).start(ShellFragment.newInstance(args.path,
+        // ""));
+        ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
+                .newInstance(args.path, "", true));
     }
 }

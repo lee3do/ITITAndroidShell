@@ -21,7 +21,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 import io.itit.androidlibrary.Consts;
-import io.itit.androidlibrary.ui.BaseMainFragment;
+import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.WebApp;
@@ -31,12 +31,14 @@ import io.itit.shell.Utils.WebApp;
  * Use the {@link ShellFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShellFragment extends BaseMainFragment {
+public class ShellFragment extends BaseBackFragment {
     private static final String Url = "url";
     private static final String Name = "name";
+    private static final String CanBack = "canback";
 
     private String url;
     private String name;
+    private boolean canBack;
 
     public WebView wv;
     public Toolbar toolbar;
@@ -49,11 +51,12 @@ public class ShellFragment extends BaseMainFragment {
         // Required empty public constructor
     }
 
-    public static ShellFragment newInstance(String url, String name) {
+    public static ShellFragment newInstance(String url, String name, boolean canBack) {
         ShellFragment fragment = new ShellFragment();
         Bundle args = new Bundle();
         args.putString(Url, url);
         args.putString(Name, name);
+        args.putBoolean(CanBack, canBack);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,12 +66,11 @@ public class ShellFragment extends BaseMainFragment {
         super.onCreate(savedInstanceState);
         RxBus.get().register(this);
         if (getArguments() != null) {
-            url = getArguments().getString(Url);
+            url = ShellApp.getFileFolderUrl(getContext()) + getArguments().getString(Url);
             name = getArguments().getString(Name);
+            canBack = getArguments().getBoolean(CanBack);
         }
     }
-
-
 
 
     @Override
@@ -81,7 +83,12 @@ public class ShellFragment extends BaseMainFragment {
         toolbar = view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
-        return view;
+
+        setSwipeBackEnable(canBack);
+        if (canBack) {
+            initToolbarNav(toolbar);
+        }
+        return attachToSwipeBack(view);
     }
 
     private void initTitle(View view) {
@@ -104,7 +111,7 @@ public class ShellFragment extends BaseMainFragment {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
     public void pageMessage(String message) {
-        Logger.d("pageMessage"+message);
+        Logger.d("pageMessage" + message);
         wv.evaluateJavascript("pageMessage(" + message + ")", null);
     }
 
