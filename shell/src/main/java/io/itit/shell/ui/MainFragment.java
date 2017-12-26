@@ -76,7 +76,7 @@ public class MainFragment extends BaseMainFragment {
         });
     }
 
-    public void startBrotherFragment(SupportFragment targetFragment) {
-        start(targetFragment);
+    public void startBrotherFragment(SupportFragment fragment) {
+        start(fragment);
     }
 }

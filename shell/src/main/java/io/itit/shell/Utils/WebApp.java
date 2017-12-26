@@ -97,7 +97,6 @@ public class WebApp {
     }
 
     public void popPage(JsArgs.ArgsBean args) {
-        ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
-                .newInstance(args.path, "", args.query, true));
+        shellFragment.pop();
     }
 }

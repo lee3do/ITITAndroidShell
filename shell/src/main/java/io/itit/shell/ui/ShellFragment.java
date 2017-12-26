@@ -173,7 +173,6 @@ public class ShellFragment extends BaseBackFragment {
                     webView.evaluateJavascript(jsContent, null);
                 }
                 webView.evaluateJavascript("pageLoad('"+query+"')", null);
-
             }
         });
 
