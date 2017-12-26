@@ -53,7 +53,7 @@ public class MainFragment extends BaseMainFragment {
             t.setColorString(ShellApp.appConfig.tabBarTintColor, ShellApp.appConfig
                     .tabBarBackgroundColor);
             bottomBar.addItem(t);
-            mFragments[i] = ShellFragment.newInstance( tab.page, tab.title,false);
+            mFragments[i] = ShellFragment.newInstance( tab.page, tab.title, false);
 
         }
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {

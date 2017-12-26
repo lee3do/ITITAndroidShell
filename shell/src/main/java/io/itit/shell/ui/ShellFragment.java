@@ -38,6 +38,7 @@ public class ShellFragment extends BaseBackFragment {
 
     private String url;
     private String name;
+    private String query;
     private boolean canBack;
 
     public WebView wv;
@@ -61,14 +62,26 @@ public class ShellFragment extends BaseBackFragment {
         return fragment;
     }
 
+    public static ShellFragment newInstance(String url, String name, String query, boolean canBack) {
+        ShellFragment fragment = new ShellFragment();
+        Bundle args = new Bundle();
+        args.putString(Url, url);
+        args.putString(Name, name);
+        args.putBoolean(CanBack, canBack);
+        args.putString("query",query);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RxBus.get().register(this);
         if (getArguments() != null) {
             url = ShellApp.getFileFolderUrl(getContext()) + getArguments().getString(Url);
-            name = getArguments().getString(Name);
-            canBack = getArguments().getBoolean(CanBack);
+            name = getArguments().getString(Name,"");
+            canBack = getArguments().getBoolean(CanBack,false);
+            query = getArguments().getString("query","");
         }
     }
 
@@ -159,7 +172,7 @@ public class ShellFragment extends BaseBackFragment {
                 for (String jsContent : ShellApp.jsContents) {
                     webView.evaluateJavascript(jsContent, null);
                 }
-                webView.evaluateJavascript("pageLoad()", null);
+                webView.evaluateJavascript("pageLoad('"+query+"')", null);
 
             }
         });

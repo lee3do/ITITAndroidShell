@@ -92,9 +92,12 @@ public class WebApp {
     }
 
     public void pushPage(JsArgs.ArgsBean args) {
-        //((BaseActivity)shellFragment.getActivity()).start(ShellFragment.newInstance(args.path,
-        // ""));
         ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
-                .newInstance(args.path, "", true));
+                .newInstance(args.path, "",args.query, true));
+    }
+
+    public void popPage(JsArgs.ArgsBean args) {
+        ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
+                .newInstance(args.path, "", args.query, true));
     }
 }
