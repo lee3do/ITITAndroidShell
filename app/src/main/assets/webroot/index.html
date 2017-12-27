@@ -28,7 +28,9 @@
 <div class="bottom-div">bottom</div>
 
 <button onclick="app.pushPage({path:'/index.html',query:{a:1,b:2}})">pushPage</button>
+<button onclick="app.loadPage({path:'/index.html',query:{a:1,b:2}})">loadPage</button>
 <button onclick="app.popPage()">popPage</button>
+<button onclick="app.popToRootPage()">popToRootPage</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'bottomHalf'})">presentPage bottomHalf</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'topHalf'})">presentPage topHalf</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'alert'})">presentPage alert</button>

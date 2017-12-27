@@ -84,7 +84,7 @@ public class ShellFragment extends BaseBackFragment {
         super.onCreate(savedInstanceState);
         RxBus.get().register(this);
         if (getArguments() != null) {
-            url = ShellApp.getFileFolderUrl(getContext()) + getArguments().getString(Url);
+            url = getArguments().getString(Url);
             name = getArguments().getString(Name, "");
             canBack = getArguments().getBoolean(CanBack, false);
             query = getArguments().getString("query", "");
@@ -175,7 +175,8 @@ public class ShellFragment extends BaseBackFragment {
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                Logger.d(ShellApp.getFileFolderUrl(getContext()) +url);
+                view.loadUrl(ShellApp.getFileFolderUrl(getContext()) +url);
                 return true;
             }
 
@@ -188,18 +189,9 @@ public class ShellFragment extends BaseBackFragment {
                 webView.evaluateJavascript("pageLoad('" + query + "')", null);
             }
         });
-        wv.loadUrl(url);
+        wv.loadUrl(ShellApp.getFileFolderUrl(getContext())+url);
     }
 
-    @Override
-    public boolean onBackPressedSupport() {
-        if (wv.canGoBack()) {
-            wv.goBack();
-            return true;
-        } else {
-            return super.onBackPressedSupport();
-        }
-    }
 
     public void showLoading(Boolean isShow) {
         Logger.d("isShow:" + isShow);

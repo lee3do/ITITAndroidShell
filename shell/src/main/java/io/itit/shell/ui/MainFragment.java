@@ -20,7 +20,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public class MainFragment extends BaseMainFragment {
 
-    private SupportFragment[] mFragments;
+    public SupportFragment[] mFragments;
 
     public MainFragment() {
         // Required empty public constructor
@@ -77,6 +77,6 @@ public class MainFragment extends BaseMainFragment {
     }
 
     public void startBrotherFragment(SupportFragment fragment) {
-        start(fragment);
+        start(fragment, STANDARD);
     }
 }

@@ -4,20 +4,20 @@ import android.os.Bundle;
 
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
-import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 public class MainActivity extends BaseActivity {
 
-    private SupportFragment[] mFragments;
+    public MainFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (findFragment(MainFragment.class) == null) {
-            loadRootFragment(R.id.fl_container, new MainFragment());
+            mFragment = new MainFragment();
+            loadRootFragment(R.id.fl_container, mFragment);
         }
     }
 

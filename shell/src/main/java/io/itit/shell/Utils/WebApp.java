@@ -25,6 +25,7 @@ import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.shell.ShellApp;
@@ -39,12 +40,12 @@ import io.itit.shell.ui.ShellFragment;
 
 public class WebApp {
 
-    public Activity activity;
+    public BaseActivity activity;
     public WebView webView;
     public ShellFragment shellFragment;
 
     public WebApp(Activity activity, WebView webView, ShellFragment shellFragment) {
-        this.activity = activity;
+        this.activity = (BaseActivity) activity;
         this.webView = webView;
         this.shellFragment = shellFragment;
     }
@@ -128,12 +129,28 @@ public class WebApp {
     }
 
     public void pushPage(JsArgs.ArgsBean args) {
-        ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
-                .newInstance(args.path, "", args.query, true));
+        if (shellFragment.getParentFragment() instanceof MainFragment) {
+            Logger.d("1");
+            ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance
+                    (args.path, "", args.query, true));
+        } else {
+            Logger.d("2");
+            shellFragment.start(ShellFragment.newInstance
+                    (args.path, "", args.query, true));
+        }
+
+    }
+
+    public void popToRootPage(JsArgs.ArgsBean args) {
+        activity.popTo(MainFragment.class,false);
     }
 
     public void popPage(JsArgs.ArgsBean args) {
         shellFragment.pop();
+    }
+
+    public void loadPage(JsArgs.ArgsBean args) {
+        webView.loadUrl(ShellApp.getFileFolderUrl(activity)+args.path);
     }
 
     public void showLoading(JsArgs.ArgsBean args) {
