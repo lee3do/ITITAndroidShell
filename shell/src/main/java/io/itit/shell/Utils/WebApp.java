@@ -1,5 +1,6 @@
 package io.itit.shell.Utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
+import cn.trinea.android.common.util.ToastUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseActivity;
@@ -34,6 +36,7 @@ import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -110,7 +113,16 @@ public class WebApp {
         }
     }
 
+
     public void getLocation(JsArgs.ArgsBean args) {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(activity, perms)) {
+            ToastUtils.show(activity,"定位中");
+            Locations.location.init(activity,this,args);
+        } else {
+            ToastUtils.show(activity,"没有定位权限，无法定位");
+        }
+
         //  evalJs(args.callback,"1");
     }
 

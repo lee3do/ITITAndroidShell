@@ -39,6 +39,7 @@
 
 
 <button onclick="app.dismissPage()">dismissPage</button>
+<button onclick="window.page.getLocation()">getLocation</button>
 <button onclick="window.page.getSystemInfo()">getSystemInfo</button>
 <button onclick="app.setVariable({key:'key1',value:'value1'})">setVariable</button>
 <button onclick="window.page.getVariable()">getVariable</button>
@@ -71,6 +72,13 @@ window.page = {
             key:"key1",
            callback:function(t){
                 app.showToast("weixin.getVariable"+JSON.stringify(t))
+            }
+        })
+    },
+    getLocation:function(){
+        app.getLocation({
+           callback:function(t){
+                app.showToast("weixin.getLocation"+JSON.stringify(t))
             }
         })
     },

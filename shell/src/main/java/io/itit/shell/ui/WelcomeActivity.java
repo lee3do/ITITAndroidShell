@@ -37,13 +37,12 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
 
     }
 
-    private void initPermission() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
-                .READ_PHONE_STATE};
+    public void initPermission() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
             initStartPage();
         } else {
-            EasyPermissions.requestPermissions(this, "程序需要存储和获取手机状态等权限，请同意以下权限，否则无法正常使用本程序。",
+            EasyPermissions.requestPermissions(this, "为了加快程序运行速度，程序需要读写手机存储权限，请同意以下权限，否则无法正常使用本程序。",
                     10086, perms);
         }
     }

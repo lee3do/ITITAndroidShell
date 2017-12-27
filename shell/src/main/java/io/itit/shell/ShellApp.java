@@ -2,7 +2,6 @@ package io.itit.shell;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.BatteryManager;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -51,14 +50,7 @@ public class ShellApp extends Application {
         super.onCreate();
         initLog();
         initX5();
-        initReceiver();
     }
-
-    private void initReceiver() {
-
-
-    }
-
 
     public static void loadAppConfig(Context context) {
         StringBuilder sb = FileUtils.readFile(context.getFilesDir().getAbsolutePath() +
