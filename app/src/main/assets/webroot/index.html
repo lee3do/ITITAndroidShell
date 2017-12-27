@@ -69,11 +69,12 @@ window.page = {
         //      title:"test"
         // })
 
-        // app.getLocation({
-        //     callback:function(t){
-        //       app.showToast("getLocation "+JSON.stringify(t))
-        //      }
-        // })
+        app.getNetworkType({
+            callback:function(t){
+                console.log("getNetworkType "+JSON.stringify(t));
+              
+             }
+        })
         //
         /*weixin.getInfo({
             callback:function(t){

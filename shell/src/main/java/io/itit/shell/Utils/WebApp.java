@@ -11,10 +11,13 @@ import com.tencent.smtt.sdk.WebView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.trinea.android.common.util.StringUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.shell.JsArgs;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
@@ -53,6 +56,10 @@ public class WebApp {
         }
     }
 
+    public void evalJs(String callback,Map args){
+        webView.evaluateJavascript("shellInvokeCallback('" + callback + "',"+JSON.toJSONString(args)+")", null);
+    }
+
     public void showToast(JsArgs.ArgsBean args) {
         if (StringUtils.isEmpty(args.type)) {
             args.type = "normal";
@@ -75,7 +82,7 @@ public class WebApp {
     }
 
     public void getLocation(JsArgs.ArgsBean args) {
-        webView.evaluateJavascript("shellInvokeCallback('" + args.callback + "',1)", null);
+      //  evalJs(args.callback,"1");
     }
 
     public void setNavigationBarTitle(JsArgs.ArgsBean args) {
@@ -106,4 +113,13 @@ public class WebApp {
     public void hideLoading(JsArgs.ArgsBean args) {
         shellFragment.showLoading(false);
     }
+
+    public void getNetworkType(JsArgs.ArgsBean args) {
+        String type = NetWorkUtil.getNetworkTypeName(activity);
+        Map<String,String> res = new HashMap<>();
+        res.put("networkType",type);
+        evalJs(args.callback,res);
+    }
+
+
 }

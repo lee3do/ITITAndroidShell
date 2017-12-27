@@ -188,7 +188,6 @@ public class ShellFragment extends BaseBackFragment {
                 webView.evaluateJavascript("pageLoad('" + query + "')", null);
             }
         });
-
         wv.loadUrl(url);
     }
 
@@ -210,6 +209,7 @@ public class ShellFragment extends BaseBackFragment {
             loadingDialog.hide();
         }
     }
+
 
 
 }
