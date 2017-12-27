@@ -87,7 +87,6 @@ public class WebApp {
     }
 
     public void postMessage(JsArgs.ArgsBean args) {
-        Logger.d(args.args);
         RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(args.args));
     }
 
@@ -98,5 +97,13 @@ public class WebApp {
 
     public void popPage(JsArgs.ArgsBean args) {
         shellFragment.pop();
+    }
+
+    public void showLoading(JsArgs.ArgsBean args) {
+        shellFragment.showLoading(true);
+    }
+
+    public void hideLoading(JsArgs.ArgsBean args) {
+        shellFragment.showLoading(false);
     }
 }

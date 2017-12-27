@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
@@ -22,6 +24,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
+import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.WebApp;
@@ -35,6 +38,7 @@ public class ShellFragment extends BaseBackFragment {
     private static final String Url = "url";
     private static final String Name = "name";
     private static final String CanBack = "canback";
+    public LoadingDialog loadingDialog;
 
     private String url;
     private String name;
@@ -44,6 +48,7 @@ public class ShellFragment extends BaseBackFragment {
     public WebView wv;
     public Toolbar toolbar;
     public TextView textView;
+    public RelativeLayout containerView;
 
     public boolean hidden = true;
 
@@ -62,13 +67,14 @@ public class ShellFragment extends BaseBackFragment {
         return fragment;
     }
 
-    public static ShellFragment newInstance(String url, String name, String query, boolean canBack) {
+    public static ShellFragment newInstance(String url, String name, String query, boolean
+            canBack) {
         ShellFragment fragment = new ShellFragment();
         Bundle args = new Bundle();
         args.putString(Url, url);
         args.putString(Name, name);
         args.putBoolean(CanBack, canBack);
-        args.putString("query",query);
+        args.putString("query", query);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,10 +85,12 @@ public class ShellFragment extends BaseBackFragment {
         RxBus.get().register(this);
         if (getArguments() != null) {
             url = ShellApp.getFileFolderUrl(getContext()) + getArguments().getString(Url);
-            name = getArguments().getString(Name,"");
-            canBack = getArguments().getBoolean(CanBack,false);
-            query = getArguments().getString("query","");
+            name = getArguments().getString(Name, "");
+            canBack = getArguments().getBoolean(CanBack, false);
+            query = getArguments().getString("query", "");
         }
+
+
     }
 
 
@@ -98,7 +106,12 @@ public class ShellFragment extends BaseBackFragment {
                 .navigationBarBackgroundColor));
 
         setSwipeBackEnable(canBack);
+        containerView = view.findViewById(R.id.container);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams
+                .MATCH_PARENT, 0, 10);
+
         if (canBack) {
+            containerView.setLayoutParams(lp);
             initToolbarNav(toolbar);
         }
         return attachToSwipeBack(view);
@@ -172,7 +185,7 @@ public class ShellFragment extends BaseBackFragment {
                 for (String jsContent : ShellApp.jsContents) {
                     webView.evaluateJavascript(jsContent, null);
                 }
-                webView.evaluateJavascript("pageLoad('"+query+"')", null);
+                webView.evaluateJavascript("pageLoad('" + query + "')", null);
             }
         });
 
@@ -186,6 +199,15 @@ public class ShellFragment extends BaseBackFragment {
             return true;
         } else {
             return super.onBackPressedSupport();
+        }
+    }
+
+    public void showLoading(Boolean isShow) {
+        Logger.d("isShow:" + isShow);
+        if (isShow) {
+            loadingDialog =  LoadingDialog.show(getActivity(),"",true,null);
+        } else {
+            loadingDialog.hide();
         }
     }
 

@@ -48,6 +48,7 @@ public class ShellApp extends Application {
         initX5();
     }
 
+
     public static void loadAppConfig(Context context) {
         StringBuilder sb = FileUtils.readFile(context.getFilesDir().getAbsolutePath() +
                 "/webroot/app.json", "UTF-8");

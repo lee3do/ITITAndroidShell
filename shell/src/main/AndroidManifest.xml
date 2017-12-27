@@ -11,7 +11,7 @@
     <application>
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/AppNoTitleTheme"
+            android:theme="@style/Transparent"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait">

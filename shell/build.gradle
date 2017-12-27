@@ -33,5 +33,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation files('libs/tbs_sdk.jar')
-    compile 'io.itit:androidlibrary:1.7.4'
+    compile 'io.itit:androidlibrary:1.8.0'
 }
