@@ -7,12 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+
+import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseMainFragment;
 import io.itit.androidlibrary.widget.BottomBar;
 import io.itit.androidlibrary.widget.BottomBarTab;
 import io.itit.shell.AppConfig;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.domain.JsArgs;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -21,6 +27,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 public class MainFragment extends BaseMainFragment {
 
     public SupportFragment[] mFragments;
+    public BottomBar bottomBar;
 
     public MainFragment() {
         // Required empty public constructor
@@ -34,7 +41,7 @@ public class MainFragment extends BaseMainFragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         initView(view);
         loadMultipleRootFragment(R.id.fl_tab_container, 0, mFragments);
-
+        RxBus.get().register(this);
         showHideFragment(mFragments[0]);
         return view;
     }
@@ -44,7 +51,7 @@ public class MainFragment extends BaseMainFragment {
     }
 
     private void initBar(View view) {
-        BottomBar bottomBar = view.findViewById(R.id.bottomBar);
+        bottomBar = view.findViewById(R.id.bottomBar);
         mFragments = new SupportFragment[ShellApp.appConfig.tabBarItems.size()];
         for (int i = 0; i < ShellApp.appConfig.tabBarItems.size(); i++) {
             AppConfig.TabBarItemsBean tab = ShellApp.appConfig.tabBarItems.get(i);
@@ -74,6 +81,18 @@ public class MainFragment extends BaseMainFragment {
                 // EventBus.getDefault().post(new TabSelectedEvent(position));
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RxBus.get().unregister(this);
+    }
+
+    @Subscribe(tags = {@Tag(Consts.BusAction.UpdateUnRead)})
+    public void updateUnRead(JsArgs.ArgsBean args) {
+        BottomBarTab tab = bottomBar.getItem(args.index);
+        tab.setUnreadCount(args.badge);
     }
 
     public void startBrotherFragment(SupportFragment fragment) {

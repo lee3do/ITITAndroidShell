@@ -21,6 +21,8 @@ public class JsArgs {
          * query : a=1&b=2
          * callback : null
          */
+        public int badge;
+        public int index;
         public String title;
         public String path;
         public String query;

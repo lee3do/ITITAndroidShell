@@ -33,6 +33,7 @@ import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -205,12 +206,26 @@ public class WebApp {
         return res;
     }
 
+    public void setApplicationBadge(JsArgs.ArgsBean args) {
+        int num = args.badge;
+        if (num == 0) {
+            ShortcutBadger.removeCount(activity);
+        } else {
+            ShortcutBadger.applyCount(activity, num);
+        }
+    }
+
+
     public void removeStorage(JsArgs.ArgsBean args) {
         SharedPreferences settings = activity.getSharedPreferences(PreferencesUtils
                 .PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(args.key);
         editor.apply();
+    }
+
+    public void setTabBarBadge(JsArgs.ArgsBean args) {
+        RxBus.get().post(Consts.BusAction.UpdateUnRead,args);
     }
 
     public Map<String, Object> getSystemInfo(JsArgs.ArgsBean args) {

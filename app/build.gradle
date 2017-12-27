@@ -24,6 +24,8 @@ android {
     dexOptions {
         maxProcessCount 8
         javaMaxHeapSize "4g"
+        incremental true
+        jumboMode true
     }
 }
 
