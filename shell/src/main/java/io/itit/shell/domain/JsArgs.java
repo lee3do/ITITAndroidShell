@@ -1,4 +1,4 @@
-package io.itit.shell;
+package io.itit.shell.domain;
 
 import java.util.Map;
 
@@ -27,6 +27,8 @@ public class JsArgs {
         public String type;
         public String message;
         public String callback;
-        public Map<Object,Object> args;
+        public String key;
+        public Object value;
+        public Map<String,Object> args;
     }
 }

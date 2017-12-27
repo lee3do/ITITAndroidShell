@@ -37,6 +37,8 @@
 
 
 <button onclick="app.dismissPage()">dismissPage</button>
+<button onclick="app.setVariable({key:'key1',value:'value1'})">setVariable</button>
+<button onclick="window.page.getVariable()">getVariable</button>
 <button onclick="app.showLoading()">showLoading</button>
 <button onclick="app.hideLoading()">hideLoading</button>
 <button onclick="app.enableBunces({enable:false})">enableBuncesFalse</button>
@@ -57,6 +59,14 @@
 
 
 window.page = {
+    getVariable:function(){
+        app.getVariable({
+            key:"key1",
+           callback:function(t){
+                app.showToast("weixin.getVariable"+JSON.stringify(t))
+            }
+        })
+    },
     pageLoad:function(args){
         // app.setNavigationBarRightItems({
         //     images:["navbar-icon.png"],
@@ -69,12 +79,6 @@ window.page = {
         //      title:"test"
         // })
 
-        app.getNetworkType({
-            callback:function(t){
-                console.log("getNetworkType "+JSON.stringify(t));
-              
-             }
-        })
         //
         /*weixin.getInfo({
             callback:function(t){

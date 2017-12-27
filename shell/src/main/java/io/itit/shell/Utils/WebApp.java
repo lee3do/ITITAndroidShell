@@ -18,7 +18,9 @@ import cn.trinea.android.common.util.StringUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.utils.NetWorkUtil;
-import io.itit.shell.JsArgs;
+import io.itit.shell.ShellApp;
+import io.itit.shell.domain.JsArgs;
+import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
 
@@ -27,6 +29,7 @@ import io.itit.shell.ui.ShellFragment;
  */
 
 public class WebApp {
+
     public Activity activity;
     public WebView webView;
     public ShellFragment shellFragment;
@@ -94,7 +97,10 @@ public class WebApp {
     }
 
     public void postMessage(JsArgs.ArgsBean args) {
-        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(args.args));
+        PostMessage pm = new PostMessage();
+        pm.name = "pageMessage";
+        pm.body = args;
+        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
     }
 
     public void pushPage(JsArgs.ArgsBean args) {
@@ -116,8 +122,23 @@ public class WebApp {
 
     public void getNetworkType(JsArgs.ArgsBean args) {
         String type = NetWorkUtil.getNetworkTypeName(activity);
-        Map<String,String> res = new HashMap<>();
+        Map<String,Object> res = new HashMap<>();
         res.put("networkType",type);
+        evalJs(args.callback,res);
+    }
+
+    public void setVariable(JsArgs.ArgsBean args) {
+        ShellApp.variables.put(args.key,args.value);
+        PostMessage pm = new PostMessage();
+        pm.name = "variableChanged";
+        pm.body = args;
+        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
+    }
+
+    public void getVariable(JsArgs.ArgsBean args) {
+        Object v = ShellApp.variables.get(args.key);
+        Map<String,Object> res = new HashMap<>();
+        res.put("value",v);
         evalJs(args.callback,res);
     }
 

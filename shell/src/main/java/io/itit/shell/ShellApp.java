@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
 import io.itit.androidlibrary.Consts;
@@ -40,6 +42,8 @@ public class ShellApp extends Application {
     public static int startPage;
     public static AppConfig appConfig;
     public static List<String> jsContents = new ArrayList<>();
+
+    public static Map<String,Object> variables = new HashMap<>();
 
     @Override
     public void onCreate() {
