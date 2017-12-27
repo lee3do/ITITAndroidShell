@@ -43,6 +43,8 @@
 <button onclick="window.page.getSystemInfo()">getSystemInfo</button>
 <button onclick="app.setVariable({key:'key1',value:'value1'})">setVariable</button>
 <button onclick="window.page.getVariable()">getVariable</button>
+<button onclick="window.page.openURLSchema()">openURLSchema</button>
+<button onclick="window.page.canOpenURLSchema()">canOpenURLSchema</button>
 <button onclick="app.removeVariable({key:'key1'})">removeVariable</button>
 <button onclick="app.removeStorage({key:'key1'})">removeStorage</button>
 <button onclick="app.setStorage({key:'key1',value:'value1'})">setStorage</button>
@@ -67,15 +69,33 @@
 
 
 window.page = {
+
+
     getVariable:function(){
         app.getVariable({
-            key:"key1",
            callback:function(t){
                 app.showToast("weixin.getVariable"+JSON.stringify(t))
             }
         })
     },
-    getLocation:function(){
+          canOpenURLSchema:function(){
+        app.canOpenURLSchema({
+            url:"itunes://",
+           callback:function(t){
+             
+                app.showToast("weixin.canOpenURLSchema"+JSON.stringify(t))
+            }
+        })
+    },
+          openURLSchema:function(){
+        app.openURLSchema({
+             url:"itit://",
+           callback:function(t){
+                app.showToast("weixin.openURLSchema"+JSON.stringify(t))
+            }
+        })
+    },
+      getLocation:function(){
         app.getLocation({
            callback:function(t){
                 app.showToast("weixin.getLocation"+JSON.stringify(t))

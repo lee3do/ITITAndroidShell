@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -19,6 +22,7 @@ import com.tencent.smtt.sdk.WebView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -122,9 +126,26 @@ public class WebApp {
         } else {
             ToastUtils.show(activity,"没有定位权限，无法定位");
         }
-
-        //  evalJs(args.callback,"1");
     }
+
+    public Map<String, Object> canOpenURLSchema(JsArgs.ArgsBean args) {
+        PackageManager packageManager = activity.getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(args.url));
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+        boolean isValid = !activities.isEmpty();
+        Map<String, Object> res = new HashMap<>();
+        res.put("result", isValid);
+        return res;
+    }
+
+    public void openURLSchema(JsArgs.ArgsBean args) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri content_url = Uri.parse(args.url);
+        intent.setData(content_url);
+        activity.startActivity(intent);
+    }
+
 
     public void setNavigationBarTitle(JsArgs.ArgsBean args) {
         shellFragment.textView.setText(args.title);
@@ -151,7 +172,6 @@ public class WebApp {
             shellFragment.start(ShellFragment.newInstance
                     (args.path, "", args.query, true));
         }
-
     }
 
     public void popToRootPage(JsArgs.ArgsBean args) {
@@ -201,6 +221,7 @@ public class WebApp {
     public void removeVariable(JsArgs.ArgsBean args) {
         ShellApp.variables.remove(args.key);
     }
+
 
 
     public void setStorage(JsArgs.ArgsBean args) {

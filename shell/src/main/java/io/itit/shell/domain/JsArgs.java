@@ -24,6 +24,7 @@ public class JsArgs {
         public int badge;
         public int index;
         public String title;
+        public String url;
         public String path;
         public String query;
         public String type;
