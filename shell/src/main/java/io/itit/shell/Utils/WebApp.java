@@ -1,6 +1,8 @@
 package io.itit.shell.Utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
@@ -49,7 +52,12 @@ public class WebApp {
             Method m = clazz.getMethod(arg.func, JsArgs.ArgsBean.class);
             activity.runOnUiThread(() -> {
                 try {
-                    m.invoke(this, arg.args);//yes
+                    Object res = m.invoke(this, arg.args);//yes
+                    if (res != null && res instanceof Map) {
+                        evalJs(arg.args.callback, (Map) res);
+                    } else {
+                        evalJs(arg.args.callback);
+                    }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     Logger.e(e, "");
                 }
@@ -59,8 +67,17 @@ public class WebApp {
         }
     }
 
-    public void evalJs(String callback,Map args){
-        webView.evaluateJavascript("shellInvokeCallback('" + callback + "',"+JSON.toJSONString(args)+")", null);
+    public void evalJs(String callback, Map args) {
+        if (!StringUtils.isEmpty(callback)) {
+            webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
+                    .toJSONString(args) + ")", null);
+        }
+    }
+
+    public void evalJs(String callback) {
+        if (!StringUtils.isEmpty(callback)) {
+            webView.evaluateJavascript("shellInvokeCallback('" + callback + ")", null);
+        }
     }
 
     public void showToast(JsArgs.ArgsBean args) {
@@ -85,7 +102,7 @@ public class WebApp {
     }
 
     public void getLocation(JsArgs.ArgsBean args) {
-      //  evalJs(args.callback,"1");
+        //  evalJs(args.callback,"1");
     }
 
     public void setNavigationBarTitle(JsArgs.ArgsBean args) {
@@ -105,7 +122,7 @@ public class WebApp {
 
     public void pushPage(JsArgs.ArgsBean args) {
         ((MainFragment) shellFragment.getParentFragment()).startBrotherFragment(ShellFragment
-                .newInstance(args.path, "",args.query, true));
+                .newInstance(args.path, "", args.query, true));
     }
 
     public void popPage(JsArgs.ArgsBean args) {
@@ -114,32 +131,61 @@ public class WebApp {
 
     public void showLoading(JsArgs.ArgsBean args) {
         shellFragment.showLoading(true);
+        evalJs(args.callback);
     }
 
     public void hideLoading(JsArgs.ArgsBean args) {
         shellFragment.showLoading(false);
+        evalJs(args.callback);
     }
 
-    public void getNetworkType(JsArgs.ArgsBean args) {
+    public Map<String, Object> getNetworkType(JsArgs.ArgsBean args) {
         String type = NetWorkUtil.getNetworkTypeName(activity);
-        Map<String,Object> res = new HashMap<>();
-        res.put("networkType",type);
-        evalJs(args.callback,res);
+        Map<String, Object> res = new HashMap<>();
+        res.put("networkType", type);
+        return res;
     }
 
     public void setVariable(JsArgs.ArgsBean args) {
-        ShellApp.variables.put(args.key,args.value);
+        ShellApp.variables.put(args.key, args.value);
         PostMessage pm = new PostMessage();
         pm.name = "variableChanged";
         pm.body = args;
         RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
     }
 
-    public void getVariable(JsArgs.ArgsBean args) {
+    public Map<String, Object> getVariable(JsArgs.ArgsBean args) {
         Object v = ShellApp.variables.get(args.key);
-        Map<String,Object> res = new HashMap<>();
-        res.put("value",v);
-        evalJs(args.callback,res);
+        Map<String, Object> res = new HashMap<>();
+        res.put("value", v);
+        return res;
+    }
+
+    public void removeVariable(JsArgs.ArgsBean args) {
+        ShellApp.variables.remove(args.key);
+    }
+
+
+    public void setStorage(JsArgs.ArgsBean args) {
+        PreferencesUtils.putString(activity, args.key, args.value + "");
+        PostMessage pm = new PostMessage();
+        pm.name = "variableChanged";
+        pm.body = args;
+        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
+    }
+
+    public Map<String, Object> getStorage(JsArgs.ArgsBean args) {
+        Object v = PreferencesUtils.getString(activity,args.key);
+        Map<String, Object> res = new HashMap<>();
+        res.put("value", v);
+        return res;
+    }
+
+    public void removeStorage(JsArgs.ArgsBean args) {
+        SharedPreferences settings = activity.getSharedPreferences(PreferencesUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(args.key);
+        editor.apply();
     }
 
 

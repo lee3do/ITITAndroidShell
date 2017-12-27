@@ -39,6 +39,10 @@
 <button onclick="app.dismissPage()">dismissPage</button>
 <button onclick="app.setVariable({key:'key1',value:'value1'})">setVariable</button>
 <button onclick="window.page.getVariable()">getVariable</button>
+<button onclick="app.removeVariable({key:'key1'})">removeVariable</button>
+<button onclick="app.removeStorage({key:'key1'})">removeStorage</button>
+<button onclick="app.setStorage({key:'key1',value:'value1'})">setStorage</button>
+<button onclick="window.page.getStorage()">getStorage</button>
 <button onclick="app.showLoading()">showLoading</button>
 <button onclick="app.hideLoading()">hideLoading</button>
 <button onclick="app.enableBunces({enable:false})">enableBuncesFalse</button>
@@ -64,6 +68,14 @@ window.page = {
             key:"key1",
            callback:function(t){
                 app.showToast("weixin.getVariable"+JSON.stringify(t))
+            }
+        })
+    },
+    getStorage:function(){
+        app.getStorage({
+            key:"key1",
+           callback:function(t){
+                app.showToast("weixin.getStorage"+JSON.stringify(t))
             }
         })
     },
