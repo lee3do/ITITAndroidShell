@@ -77,6 +77,13 @@ window.page = {
                 app.showToast("weixin.getVariable"+JSON.stringify(t))
             }
         })
+
+        app.previewImage({
+    urls:["https://www.baidu.com/img/bd_logo1.png"],
+    callback:function(t){
+        app.showToast("openURLSchema"+JSON.stringify(t))
+    }
+})
     },
           canOpenURLSchema:function(){
         app.canOpenURLSchema({
@@ -206,12 +213,7 @@ app.getStorage({
     }
 })*/
 
-/*app.previewImage({
-    urls:["https://www.baidu.com/img/bd_logo1.png"],
-    callback:function(t){
-        app.showToast("openURLSchema"+JSON.stringify(t))
-    }
-})*/
+/**/
 /*
 app.downloadFile({
     url:"https://www.baidu.com/img/bd_logo1.png",

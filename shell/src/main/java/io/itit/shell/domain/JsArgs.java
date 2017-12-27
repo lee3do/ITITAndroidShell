@@ -25,6 +25,7 @@ public class JsArgs {
         public int index;
         public String title;
         public String url;
+        public String urls;
         public String path;
         public String query;
         public String type;

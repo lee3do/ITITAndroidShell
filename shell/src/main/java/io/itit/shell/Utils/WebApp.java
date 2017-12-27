@@ -21,6 +21,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.ShellFragment;
+import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -126,6 +128,16 @@ public class WebApp {
         } else {
             ToastUtils.show(activity,"没有定位权限，无法定位");
         }
+
+
+    }
+
+    public void previewImage(JsArgs.ArgsBean args) {
+        Intent intent = new Intent(activity, ShowImageActivity.class);
+        ArrayList<String> images = new ArrayList<>();
+        intent.putExtra("URL", args.urls);
+        intent.putExtra("POS", args.index);
+        activity.startActivity(intent);
     }
 
     public Map<String, Object> canOpenURLSchema(JsArgs.ArgsBean args) {

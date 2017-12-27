@@ -21,6 +21,13 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".ui.ShowImageActivity"
+            android:label="显示图片"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyHoloFullScreenTheme">
+        </activity>
+        <activity
             android:name=".ui.GuideActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize"
