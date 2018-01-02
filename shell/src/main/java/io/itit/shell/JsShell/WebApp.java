@@ -1,4 +1,4 @@
-package io.itit.shell.Utils;
+package io.itit.shell.JsShell;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -19,8 +18,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.orhanobut.logger.Logger;
 import com.tencent.smtt.sdk.WebView;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,10 +30,10 @@ import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
-import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
@@ -48,54 +46,10 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Created by Lee_3do on 2017/12/25.
  */
 
-public class WebApp {
-
-    public BaseActivity activity;
-    public WebView webView;
-    public ShellFragment shellFragment;
+public class WebApp extends WebJsFunc{
 
     public WebApp(Activity activity, WebView webView, ShellFragment shellFragment) {
-        this.activity = (BaseActivity) activity;
-        this.webView = webView;
-        this.shellFragment = shellFragment;
-    }
-
-    @JavascriptInterface
-    public void postMessage(String value) {
-        Logger.d(value);
-        JsArgs arg = JSON.parseObject(value, JsArgs.class);
-        try {
-            Class clazz = Class.forName("io.itit.shell.Utils.WebApp");
-            Method m = clazz.getMethod(arg.func, JsArgs.ArgsBean.class);
-            activity.runOnUiThread(() -> {
-                try {
-                    Object res = m.invoke(this, arg.args);//yes
-                    if (res != null && res instanceof Map) {
-                        evalJs(arg.args.callback, (Map) res);
-                    } else {
-                        evalJs(arg.args.callback);
-                    }
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    Logger.e(e, "");
-                }
-            });
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            Logger.e(e, "");
-        }
-    }
-
-    public void evalJs(String callback, Map args) {
-        if (!StringUtils.isEmpty(callback)) {
-            Logger.d(JSON.toJSONString(args));
-            webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
-                    .toJSONString(args) + ")", null);
-        }
-    }
-
-    public void evalJs(String callback) {
-        if (!StringUtils.isEmpty(callback)) {
-            webView.evaluateJavascript("shellInvokeCallback('" + callback + ")", null);
-        }
+        super(activity, webView, shellFragment);
     }
 
     public void showToast(JsArgs.ArgsBean args) {
@@ -128,8 +82,6 @@ public class WebApp {
         } else {
             ToastUtils.show(activity,"没有定位权限，无法定位");
         }
-
-
     }
 
     public void previewImage(JsArgs.ArgsBean args) {
@@ -234,7 +186,27 @@ public class WebApp {
         ShellApp.variables.remove(args.key);
     }
 
+    public Map<String, Object> getFileUrl(JsArgs.ArgsBean args) {
+        File file = new File(ShellApp.getFileFolderUrl(activity),args.path);
+        Map<String, Object> res = new HashMap<>();
+        if (file.exists()) {
+            res.put("url", file.getPath());
+        } else {
+            res.put("url", ShellApp.getFileFolderUrl(activity)+args.path);
+        }
+        return res;
+    }
 
+    public Map<String, Object> getFilePath(JsArgs.ArgsBean args) {
+        File file = new File(ShellApp.getFileFolderUrl(activity),args.path);
+        Map<String, Object> res = new HashMap<>();
+        if (file.exists()) {
+            res.put("url", file.getAbsolutePath());
+        } else {
+            res.put("url", ShellApp.getFileFolderUrl(activity)+args.path);
+        }
+        return res;
+    }
 
     public void setStorage(JsArgs.ArgsBean args) {
         PreferencesUtils.putString(activity, args.key, args.value + "");
@@ -259,7 +231,6 @@ public class WebApp {
             ShortcutBadger.applyCount(activity, num);
         }
     }
-
 
     public void removeStorage(JsArgs.ArgsBean args) {
         SharedPreferences settings = activity.getSharedPreferences(PreferencesUtils

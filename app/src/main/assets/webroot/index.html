@@ -64,6 +64,9 @@
 <button onclick="app.stopPullToRefresh()">stopPullToRefresh</button>
 
 <button onclick="app.showToast({message:'123',type:'error'})">showToast12</button>
+<button onclick="window.page.getFileUrl({url:'index.html'})">getFileUrl</button>
+<button onclick="window.page.getFilePath({url:'index.html'})">getFilePath</button>
+<button onclick="window.page.readFile({url:'index.html'})">getFilePath</button>
 
 <script type="text/javascript">
 
@@ -106,6 +109,22 @@ window.page = {
         app.getLocation({
            callback:function(t){
                 app.showToast("weixin.getLocation"+JSON.stringify(t))
+            }
+        })
+    },
+          getFileUrl:function(){
+        app.getFileUrl({
+            url:'index.html',
+           callback:function(t){
+                app.showToast("weixin.getFileUrl"+JSON.stringify(t))
+            }
+        })
+    },
+              getFilePath:function(){
+        app.getFileUrl({
+            url:'index.html',
+           callback:function(t){
+                app.showToast("weixin.getFilePath"+JSON.stringify(t))
             }
         })
     },

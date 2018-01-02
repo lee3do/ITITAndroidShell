@@ -28,6 +28,7 @@ import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
 import io.itit.androidlibrary.Consts;
+import io.itit.shell.domain.AppConfig;
 import me.yokeyword.fragmentation.Fragmentation;
 
 /**

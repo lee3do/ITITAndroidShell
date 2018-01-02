@@ -27,7 +27,7 @@ import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
-import io.itit.shell.Utils.WebApp;
+import io.itit.shell.JsShell.WebApp;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -15,7 +15,7 @@ import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseMainFragment;
 import io.itit.androidlibrary.widget.BottomBar;
 import io.itit.androidlibrary.widget.BottomBarTab;
-import io.itit.shell.AppConfig;
+import io.itit.shell.domain.AppConfig;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.domain.JsArgs;

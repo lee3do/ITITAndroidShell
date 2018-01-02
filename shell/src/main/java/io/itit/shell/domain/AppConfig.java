@@ -1,4 +1,4 @@
-package io.itit.shell;
+package io.itit.shell.domain;
 
 import java.util.List;
 

@@ -13,6 +13,7 @@ import com.orhanobut.logger.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.domain.JsArgs;
 
 /**
