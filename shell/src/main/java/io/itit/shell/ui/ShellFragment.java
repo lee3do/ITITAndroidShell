@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
@@ -53,7 +52,7 @@ public class ShellFragment extends BaseBackFragment {
     public WebView wv;
     public Toolbar toolbar;
     public TextView textView;
-    public RelativeLayout containerView;
+    public LinearLayout containerView;
 
     public boolean hidden = true;
 
@@ -124,14 +123,8 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-        LinearLayout.LayoutParams lp;
-        if (type.equals(PresentPageActivity.topHalf)) {
-            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4);
-        } else {
-            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 10);
-        }
 
-        containerView.setLayoutParams(lp);
+
         if (canBack) {
             initToolbarNav(toolbar);
         }
@@ -191,6 +184,21 @@ public class ShellFragment extends BaseBackFragment {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebview(View view) {
         wv = view.findViewById(R.id.wv);
+        LinearLayout linearLayoutTop = view.findViewById(R.id.empty_top);
+        LinearLayout linearLayoutBottom = view.findViewById(R.id.empty_bottom);
+        LinearLayout.LayoutParams lp;
+        if (type.equals(PresentPageActivity.topHalf)) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
+            wv.setLayoutParams(lp);
+            linearLayoutBottom.setLayoutParams(lp);
+        } else if (type.equals(PresentPageActivity.bottomHalf)) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
+            wv.setLayoutParams(lp);
+            linearLayoutTop.setLayoutParams(lp);
+        }
+        linearLayoutBottom.setOnClickListener(c-> getActivity().finish());
+        linearLayoutTop.setOnClickListener(c-> getActivity().finish());
+
         wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
