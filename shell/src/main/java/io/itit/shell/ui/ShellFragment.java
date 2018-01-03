@@ -145,8 +145,6 @@ public class ShellFragment extends BaseBackFragment {
     private void initPullToRefresh(View view) {
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setEnableRefresh(false);
-        refreshLayout.setEnableLoadmore(true);
-        refreshLayout.setEnableOverScrollBounce(true);
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             // refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             wv.evaluateJavascript("pagePullToRefresh()", null);
