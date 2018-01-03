@@ -25,6 +25,7 @@ public class JsArgs {
         public boolean navigate;
         public int index;
         public String title;
+        public String string;
         public String content;
         public String url;
         public String urls;

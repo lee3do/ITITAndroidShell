@@ -56,7 +56,7 @@ public class WebJsFunc {
 
     public void evalJs(String callback, Map args) {
         if (!StringUtils.isEmpty(callback)) {
-            Logger.d(JSON.toJSONString(args));
+            Logger.d("evaljs:"+JSON.toJSONString(args));
             webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
                     .toJSONString(args) + ")", null);
         }

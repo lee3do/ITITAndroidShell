@@ -2,6 +2,8 @@ package io.itit.shell.JsShell;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -301,6 +303,21 @@ public class WebApp extends WebJsFunc {
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(args.key);
         editor.apply();
+    }
+
+    public void setPasteboard(JsArgs.ArgsBean args) {
+        ClipboardManager clipboardManager = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText("", args.string); //文本型数据 clipData 的构造方法。
+        clipboardManager.setPrimaryClip(clipData);
+    }
+
+    public Map<String, Object> getPasteboard(JsArgs.ArgsBean args) {
+        ClipboardManager cm = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
+        ClipData cd2 = cm.getPrimaryClip();
+        String str2 = cd2.getItemAt(0).getText().toString();
+        Map<String, Object> res = new HashMap<>();
+        res.put("string", str2);
+        return res;
     }
 
     public void setTabBarBadge(JsArgs.ArgsBean args) {
