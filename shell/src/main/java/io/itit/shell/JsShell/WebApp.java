@@ -140,6 +140,14 @@ public class WebApp extends WebJsFunc {
         }
     }
 
+    public void enablePullToRefresh(JsArgs.ArgsBean args) {
+        shellFragment.enableRefresh(true);
+    }
+
+    public void stopPullToRefresh(JsArgs.ArgsBean args) {
+        shellFragment.stopPullToRefresh();
+    }
+
     public void presentPage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, PresentPageActivity.class);
         intent.putExtra("ext", JSON.toJSONString(args));

@@ -17,6 +17,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.orhanobut.logger.Logger;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -53,6 +54,7 @@ public class ShellFragment extends BaseBackFragment {
     public Toolbar toolbar;
     public TextView textView;
     public LinearLayout containerView;
+    SmartRefreshLayout refreshLayout;
 
     public boolean hidden = true;
 
@@ -103,7 +105,7 @@ public class ShellFragment extends BaseBackFragment {
             url = getArguments().getString(Url);
             name = getArguments().getString(Name, "");
             canBack = getArguments().getBoolean(CanBack, false);
-            navigate = getArguments().getBoolean(Navigate, false);
+            navigate = getArguments().getBoolean(Navigate, true);
             query = getArguments().getString("query", "");
             type = getArguments().getString(Type, "");
         }
@@ -114,6 +116,7 @@ public class ShellFragment extends BaseBackFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_shell, container, false);
+        initPullToRefresh(view);
         initWebview(view);
 
         initTitle(view);
@@ -131,7 +134,27 @@ public class ShellFragment extends BaseBackFragment {
         if (!navigate) {
             toolbar.setVisibility(View.GONE);
         }
+        initSize(view);
         return attachToSwipeBack(view);
+    }
+
+    public void enableRefresh(boolean value) {
+        refreshLayout.setEnableRefresh(value);
+    }
+
+    private void initPullToRefresh(View view) {
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadmore(true);
+        refreshLayout.setEnableOverScrollBounce(true);
+        refreshLayout.setOnRefreshListener(refreshlayout -> {
+            // refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            wv.evaluateJavascript("pagePullToRefresh()", null);
+        });
+        refreshLayout.setOnLoadmoreListener(refreshlayout -> {
+            Logger.d("onLoadmore");
+            // refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
+        });
     }
 
     private void initTitle(View view) {
@@ -184,20 +207,8 @@ public class ShellFragment extends BaseBackFragment {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebview(View view) {
         wv = view.findViewById(R.id.wv);
-        LinearLayout linearLayoutTop = view.findViewById(R.id.empty_top);
-        LinearLayout linearLayoutBottom = view.findViewById(R.id.empty_bottom);
-        LinearLayout.LayoutParams lp;
-        if (type.equals(PresentPageActivity.topHalf)) {
-            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
-            wv.setLayoutParams(lp);
-            linearLayoutBottom.setLayoutParams(lp);
-        } else if (type.equals(PresentPageActivity.bottomHalf)) {
-            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
-            wv.setLayoutParams(lp);
-            linearLayoutTop.setLayoutParams(lp);
-        }
-        linearLayoutBottom.setOnClickListener(c-> getActivity().finish());
-        linearLayoutTop.setOnClickListener(c-> getActivity().finish());
+        wv.setHorizontalScrollBarEnabled(false);//水平不显示
+        wv.setVerticalScrollBarEnabled(false); //垂直不显示
 
         wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         WebSettings webSettings = wv.getSettings();
@@ -225,6 +236,23 @@ public class ShellFragment extends BaseBackFragment {
         wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
     }
 
+    private void initSize(View view) {
+        LinearLayout linearLayoutTop = view.findViewById(R.id.empty_top);
+        LinearLayout linearLayoutBottom = view.findViewById(R.id.empty_bottom);
+        LinearLayout.LayoutParams lp;
+        if (type.equals(PresentPageActivity.topHalf)) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
+            refreshLayout.setLayoutParams(lp);
+            linearLayoutBottom.setLayoutParams(lp);
+        } else if (type.equals(PresentPageActivity.bottomHalf)) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
+            refreshLayout.setLayoutParams(lp);
+            linearLayoutTop.setLayoutParams(lp);
+        }
+        linearLayoutBottom.setOnClickListener(c -> getActivity().finish());
+        linearLayoutTop.setOnClickListener(c -> getActivity().finish());
+    }
+
 
     public void showLoading(Boolean isShow) {
         Logger.d("isShow:" + isShow);
@@ -236,4 +264,7 @@ public class ShellFragment extends BaseBackFragment {
     }
 
 
+    public void stopPullToRefresh() {
+        refreshLayout.finishRefresh();
+    }
 }
