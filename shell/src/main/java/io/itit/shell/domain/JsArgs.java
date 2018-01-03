@@ -22,6 +22,7 @@ public class JsArgs {
          * callback : null
          */
         public int badge;
+        public boolean navigate;
         public int index;
         public String title;
         public String content;

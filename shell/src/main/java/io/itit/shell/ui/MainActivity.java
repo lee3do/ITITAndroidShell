@@ -15,6 +15,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSwipeBackEnable(false);
         if (findFragment(MainFragment.class) == null) {
             mFragment = new MainFragment();
             loadRootFragment(R.id.fl_container, mFragment);

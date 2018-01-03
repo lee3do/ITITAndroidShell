@@ -39,6 +39,7 @@ import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainFragment;
+import io.itit.shell.ui.PresentPageActivity;
 import io.itit.shell.ui.ShellFragment;
 import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
@@ -137,6 +138,12 @@ public class WebApp extends WebJsFunc {
             Logger.d("2");
             shellFragment.start(ShellFragment.newInstance(args.path, "", args.query, true));
         }
+    }
+
+    public void presentPage(JsArgs.ArgsBean args) {
+        Intent intent = new Intent(activity,PresentPageActivity.class);
+        intent.putExtra("ext",JSON.toJSONString(args));
+        activity.startActivity(intent);
     }
 
     public void popToRootPage(JsArgs.ArgsBean args) {

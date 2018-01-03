@@ -25,9 +25,10 @@ import com.tencent.smtt.sdk.WebViewClient;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.widget.LoadingDialog;
+import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
-import io.itit.shell.JsShell.WebApp;
+import io.itit.shell.domain.JsArgs;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,12 +39,16 @@ public class ShellFragment extends BaseBackFragment {
     private static final String Url = "url";
     private static final String Name = "name";
     private static final String CanBack = "canback";
+    private static final String Type = "Type";
+    private static final String Navigate = "Navigate";
     public LoadingDialog loadingDialog;
 
     private String url;
     private String name;
+    private String type;
     private String query;
     private boolean canBack;
+    private boolean navigate;
 
     public WebView wv;
     public Toolbar toolbar;
@@ -55,6 +60,18 @@ public class ShellFragment extends BaseBackFragment {
 
     public ShellFragment() {
         // Required empty public constructor
+    }
+
+    public static ShellFragment newInstance(JsArgs.ArgsBean argsBean, boolean canBack) {
+        ShellFragment fragment = new ShellFragment();
+        Bundle args = new Bundle();
+        args.putString(Url, argsBean.path);
+        args.putString(Name, argsBean.title);
+        args.putString(Type, argsBean.type);
+        args.putBoolean(CanBack, canBack);
+        args.putBoolean(Navigate, argsBean.navigate);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public static ShellFragment newInstance(String url, String name, boolean canBack) {
@@ -87,10 +104,10 @@ public class ShellFragment extends BaseBackFragment {
             url = getArguments().getString(Url);
             name = getArguments().getString(Name, "");
             canBack = getArguments().getBoolean(CanBack, false);
+            navigate = getArguments().getBoolean(Navigate, false);
             query = getArguments().getString("query", "");
+            type = getArguments().getString(Type, "");
         }
-
-
     }
 
 
@@ -107,12 +124,19 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams
-                .MATCH_PARENT, 0, 10);
+        LinearLayout.LayoutParams lp;
+        if (type.equals(PresentPageActivity.topHalf)) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4);
+        } else {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 10);
+        }
 
+        containerView.setLayoutParams(lp);
         if (canBack) {
-            containerView.setLayoutParams(lp);
             initToolbarNav(toolbar);
+        }
+        if (!navigate) {
+            toolbar.setVisibility(View.GONE);
         }
         return attachToSwipeBack(view);
     }
@@ -175,8 +199,8 @@ public class ShellFragment extends BaseBackFragment {
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Logger.d(ShellApp.getFileFolderUrl(getContext()) +url);
-                view.loadUrl(ShellApp.getFileFolderUrl(getContext()) +url);
+                Logger.d(ShellApp.getFileFolderUrl(getContext()) + url);
+                view.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
                 return true;
             }
 
@@ -189,19 +213,19 @@ public class ShellFragment extends BaseBackFragment {
                 webView.evaluateJavascript("pageLoad('" + query + "')", null);
             }
         });
-        wv.loadUrl(ShellApp.getFileFolderUrl(getContext())+url);
+        Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);
+        wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
     }
 
 
     public void showLoading(Boolean isShow) {
         Logger.d("isShow:" + isShow);
         if (isShow) {
-            loadingDialog =  LoadingDialog.show(getActivity(),"",true,null);
+            loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
         } else {
             loadingDialog.hide();
         }
     }
-
 
 
 }
