@@ -5,27 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shell</title>
     <style type="text/css">
-    body{
-        font-size:30px;
-        background-color:blueviolet;
-        text-align: center;
-    }
-    button{
-        display: block;
-    }
-    .bottom-div{
-        position: absolute;
-        bottom: 0;
-        right:0;
-        width:100px;
-        height: 100px;
-        background-color:brown;
-    }
-</style>
+        body {
+            font-size: 30px;
+            background-color: blueviolet;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+        }
+
+        .bottom-div {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background-color: brown;
+        }
+    </style>
 </head>
 <body>
 <div>TEST</div>
 <div class="bottom-div">bottom</div>
+
+
+<button onclick="window.page.readFile({url:'index.html'})">readFile</button>
+<button onclick="window.page.writeFile({path:'index.html',content:'111'})">writeFile</button>
+<button onclick="window.page.isFileExists({path:'index.html'})">isFileExists</button>
+<button onclick="window.page.createDirectory({path:'index.html'})">createDirectory</button>
+<button onclick="window.page.deleteFile({path:'index.html'})">deleteFile</button>
+<button onclick="window.page.listFiles({path:'index.html'})">listFiles</button>
+<button onclick="window.page.moveFile({source:'index.html',dest:''})">moveFile</button>
+
 
 <button onclick="app.pushPage({path:'/index.html',query:{a:1,b:2}})">pushPage</button>
 <button onclick="app.loadPage({path:'/index.html',query:{a:1,b:2}})">loadPage</button>
@@ -34,7 +46,7 @@
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'bottomHalf'})">presentPage bottomHalf</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'topHalf'})">presentPage topHalf</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true,type:'alert'})">presentPage alert</button>
-<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'popup'})">presentPage  popup</button>
+<button onclick="app.presentPage({path:'/index.html',navigate:true,type:'popup'})">presentPage popup</button>
 <button onclick="app.presentPage({path:'/index.html',navigate:true})">presentPage fullScreen</button>
 
 
@@ -66,227 +78,289 @@
 <button onclick="app.showToast({message:'123',type:'error'})">showToast12</button>
 <button onclick="window.page.getFileUrl({url:'index.html'})">getFileUrl</button>
 <button onclick="window.page.getFilePath({url:'index.html'})">getFilePath</button>
-<button onclick="window.page.readFile({url:'index.html'})">getFilePath</button>
+<button onclick="window.page.readFile({url:'index.html'})">readFile</button>
 
+<button onclick="window.page.writeFile({path:'index.html',content:'111'})">writeFile</button>
+<button onclick="window.page.isFileExists({path:'index.html'})">isFileExists</button>
+<button onclick="window.page.createDirectory({path:'index.html'})">createDirectory</button>
+<button onclick="window.page.deleteFile({path:'index.html'})">deleteFile</button>
+<button onclick="window.page.listFiles({path:'index.html'})">listFiles</button>
+<button onclick="window.page.moveFile({source:'index.html',dest:''})">moveFile</button>
 <script type="text/javascript">
 
 
-window.page = {
+    window.page = {
+        listFiles: function (obj) {
+            app.listFiles({
+                path: "",
+                callback: function (t) {
+                    app.showToast("weixin.listFiles" + JSON.stringify(t))
+                }
+            })
+        },
+        moveFile: function (obj) {
+            app.moveFile({
+                source: "index1.html",
+                dest:"/test",
+                callback: function (t) {
+                    app.showToast("weixin.moveFile" + JSON.stringify(t))
+                }
+            })
+        },
+        writeFile: function (obj) {
+            app.writeFile({
+                path: "index1.html",
+                content:'1',
+                callback: function (t) {
+                    app.showToast("weixin.writeFile" + JSON.stringify(t))
+                }
+            })
+        },
+        isFileExists: function (obj) {
+            app.isFileExists({
+                path: "index1.html",
+                callback: function (t) {
+                    app.showToast("weixin.isFileExists" + JSON.stringify(t))
+                }
+            })
+        },
+        createDirectory: function (obj) {
+            app.createDirectory({
+                path: "test",
+                callback: function (t) {
+                    app.showToast("weixin.createDirectory" + JSON.stringify(t))
+                }
+            })
+        },
+        deleteFile: function (obj) {
+            app.deleteFile({
+                path: "index1.html",
+                callback: function (t) {
+                    app.showToast("weixin.deleteFile" + JSON.stringify(t))
+                }
+            })
+        },
+        getVariable: function () {
+            app.getVariable({
+                callback: function (t) {
+                    app.showToast("weixin.getVariable" + JSON.stringify(t))
+                }
+            })
 
+            app.previewImage({
+                urls: ["https://www.baidu.com/img/bd_logo1.png"],
+                callback: function (t) {
+                    app.showToast("openURLSchema" + JSON.stringify(t))
+                }
+            })
+        },
+        canOpenURLSchema: function () {
+            app.canOpenURLSchema({
+                url: "itunes://",
+                callback: function (t) {
 
-    getVariable:function(){
-        app.getVariable({
-           callback:function(t){
-                app.showToast("weixin.getVariable"+JSON.stringify(t))
-            }
-        })
+                    app.showToast("weixin.canOpenURLSchema" + JSON.stringify(t))
+                }
+            })
+        },
+        openURLSchema: function () {
+            app.openURLSchema({
+                url: "itit://",
+                callback: function (t) {
+                    app.showToast("weixin.openURLSchema" + JSON.stringify(t))
+                }
+            })
+        },
+        getLocation: function () {
+            app.getLocation({
+                callback: function (t) {
+                    app.showToast("weixin.getLocation" + JSON.stringify(t))
+                }
+            })
+        },
+        getFileUrl: function () {
+            app.getFileURL({
+                path: 'index.html',
+                callback: function (t) {
+                    app.showToast("weixin.getFileUrl" + JSON.stringify(t))
+                }
+            })
+        },
+        readFile: function () {
+            app.readFile({
+                path: 'index1.html',
+                callback: function (t) {
+                    app.showToast("weixin.readFile" + JSON.stringify(t))
+                }
+            })
+        },
+        getFilePath: function () {
+            app.getFileURL({
+                path: 'index.html',
+                callback: function (t) {
+                    app.showToast("weixin.getFilePath" + JSON.stringify(t))
+                }
+            })
+        },
+        getSystemInfo: function () {
+            app.getSystemInfo({
+                callback: function (t) {
+                    app.showToast("weixin.getSystemInfo" + JSON.stringify(t))
+                }
+            })
+        },
+        getStorage: function () {
+            app.getStorage({
+                key: "key1",
+                callback: function (t) {
+                    app.showToast("weixin.getStorage" + JSON.stringify(t))
+                }
+            })
+        },
+        pageLoad: function (args) {
+            // app.setNavigationBarRightItems({
+            //     images:["navbar-icon.png"],
+            // })
+            // app.setNavigationBarTitle({
+            //     image:"navbar-icon.png",
+            // })
 
-        app.previewImage({
-    urls:["https://www.baidu.com/img/bd_logo1.png"],
-    callback:function(t){
-        app.showToast("openURLSchema"+JSON.stringify(t))
+            // app.setNavigationBarTitle({
+            //      title:"test"
+            // })
+
+            //
+            /*weixin.getInfo({
+                callback:function(t){
+                    app.showToast("weixin.getInfo"+JSON.stringify(t))
+                }
+            })*/
+            //
+            // app.postMessage({
+            //    args:{a:1}
+            // })
+            /*app.unzip({
+                path:"/test.zip",
+                dest:"/",
+                callback:function(t){
+                    app.showToast("app.unzip"+JSON.stringify(t))
+                }
+            })*/
+            /*app.startAudioRecord({
+                duration:10,
+                callback:function(t){
+                    app.showToast("startAudioRecord"+JSON.stringify(t))
+                }
+            })*/
+        },
+        pageUnload: function () {
+
+        },
+        pageShow: function () {
+
+        },
+        pageHide: function () {
+
+        },
+        pageMessage: function (args) {
+
+        }
     }
-})
-    },
-          canOpenURLSchema:function(){
-        app.canOpenURLSchema({
-            url:"itunes://",
-           callback:function(t){
-             
-                app.showToast("weixin.canOpenURLSchema"+JSON.stringify(t))
-            }
-        })
-    },
-          openURLSchema:function(){
-        app.openURLSchema({
-             url:"itit://",
-           callback:function(t){
-                app.showToast("weixin.openURLSchema"+JSON.stringify(t))
-            }
-        })
-    },
-      getLocation:function(){
-        app.getLocation({
-           callback:function(t){
-                app.showToast("weixin.getLocation"+JSON.stringify(t))
-            }
-        })
-    },
-          getFileUrl:function(){
-        app.getFileUrl({
-            url:'index.html',
-           callback:function(t){
-                app.showToast("weixin.getFileUrl"+JSON.stringify(t))
-            }
-        })
-    },
-              getFilePath:function(){
-        app.getFileUrl({
-            url:'index.html',
-           callback:function(t){
-                app.showToast("weixin.getFilePath"+JSON.stringify(t))
-            }
-        })
-    },
-    getSystemInfo:function(){
-        app.getSystemInfo({
-           callback:function(t){
-                app.showToast("weixin.getSystemInfo"+JSON.stringify(t))
-            }
-        })
-    },
-    getStorage:function(){
-        app.getStorage({
-            key:"key1",
-           callback:function(t){
-                app.showToast("weixin.getStorage"+JSON.stringify(t))
-            }
-        })
-    },
-    pageLoad:function(args){
-        // app.setNavigationBarRightItems({
-        //     images:["navbar-icon.png"],
-        // })
-        // app.setNavigationBarTitle({
-        //     image:"navbar-icon.png",
-        // })
+    //
+    /*app.showActionSheet({
+        title:"123",
+        message:"22222222",
+        options:["1","2","3"],
+        callback:function(result){
+            app.showToast(result.option)
+        }
+    })*/
 
-        // app.setNavigationBarTitle({
-        //      title:"test"
-        // })
+    /*app.postMessage({
+        message:"hello"
+    })*/
 
-        //
-        /*weixin.getInfo({
-            callback:function(t){
-                app.showToast("weixin.getInfo"+JSON.stringify(t))
-            }
-        })*/
-        //
-        // app.postMessage({
-        //    args:{a:1}
-        // })
-        /*app.unzip({
-            path:"/test.zip",
-            dest:"/",
-            callback:function(t){
-                app.showToast("app.unzip"+JSON.stringify(t))
-            }
-        })*/
-        /*app.startAudioRecord({
-            duration:10,
-            callback:function(t){
-                app.showToast("startAudioRecord"+JSON.stringify(t))
-            }
-        })*/
-    },
-    pageUnload:function(){
-
-    },
-    pageShow:function(){
-
-    },
-    pageHide:function(){
-
-    },
-    pageMessage:function(args){
-
-    }
-}
-//
-/*app.showActionSheet({
-    title:"123",
-    message:"22222222",
-    options:["1","2","3"],
-    callback:function(result){
-        app.showToast(result.option)
-    }
-})*/
-
-/*app.postMessage({
-    message:"hello"
-})*/
-
-/*app.setStorage({
-    key:"name1",
-    value:"itit"
-})
-app.getStorage({
-    key:"name",
-    callback:function(t){
-        app.showToast(JSON.stringify(t))
-    }
-})*/
-//
-/*app.getStorageInfo({
-    callback:function(t){
-        app.showToast("getStorageInfo"+JSON.stringify(t))
-    }
-})*/
+    /*app.setStorage({
+        key:"name1",
+        value:"itit"
+    })
+    app.getStorage({
+        key:"name",
+        callback:function(t){
+            app.showToast(JSON.stringify(t))
+        }
+    })*/
+    //
+    /*app.getStorageInfo({
+        callback:function(t){
+            app.showToast("getStorageInfo"+JSON.stringify(t))
+        }
+    })*/
 
 
 
-/*app.openURLSchema({
-    url:"itunes://",
-    callback:function(t){
-        app.showToast("openURLSchema"+JSON.stringify(t))
-    }
-})*/
+    /*app.openURLSchema({
+        url:"itunes://",
+        callback:function(t){
+            app.showToast("openURLSchema"+JSON.stringify(t))
+        }
+    })*/
 
-/**/
-/*
-app.downloadFile({
-    url:"https://www.baidu.com/img/bd_logo1.png",
-    path:"bd_logo1.png",
-    callback:function(t){
-        app.showToast("downloadFile"+JSON.stringify(t))
-    }
-})*/
-/*
-app.readFileContent({
-    path:"index.html",
-    callback:function(t){
-        app.showToast("readFileContent"+JSON.stringify(t))
-    }
-})*/
+    /**/
+    /*
+    app.downloadFile({
+        url:"https://www.baidu.com/img/bd_logo1.png",
+        path:"bd_logo1.png",
+        callback:function(t){
+            app.showToast("downloadFile"+JSON.stringify(t))
+        }
+    })*/
+    /*
+    app.readFileContent({
+        path:"index.html",
+        callback:function(t){
+            app.showToast("readFileContent"+JSON.stringify(t))
+        }
+    })*/
 
-/*
-app.setNavigationBarRightItems({
-    images:["buttom-index.png","buttom-index.png"],
-})
-//
-app.setNavigationBarRightItemEnable({
-    enable:false
-})
-//
-app.listFiles({
-    path:'/',
-    callback:function(t){
-        app.showToast("listFiles"+JSON.stringify(t))
-    }
-})
-//
-app.getTabBarSelectedIndex({
-    callback:function(t){
-        app.showToast("getTabBarSelectedIndex"+JSON.stringify(t))
-    }
-})
-//
-app.setPasteboard({
-    string:"123"
-})*/
+    /*
+    app.setNavigationBarRightItems({
+        images:["buttom-index.png","buttom-index.png"],
+    })
+    //
+    app.setNavigationBarRightItemEnable({
+        enable:false
+    })
+    //
+    app.listFiles({
+        path:'/',
+        callback:function(t){
+            app.showToast("listFiles"+JSON.stringify(t))
+        }
+    })
+    //
+    app.getTabBarSelectedIndex({
+        callback:function(t){
+            app.showToast("getTabBarSelectedIndex"+JSON.stringify(t))
+        }
+    })
+    //
+    app.setPasteboard({
+        string:"123"
+    })*/
 
-/*
-app.openLocation({
-    title:"测试1",
-    subtitle:"测试1",
-    latitude:37.7185,
-    longitude:100.722,
-    delta:0.05,
-    callback:function(t){
-        app.showToast("openLocation"+JSON.stringify(t))
-    }
-})
-*/
+    /*
+    app.openLocation({
+        title:"测试1",
+        subtitle:"测试1",
+        latitude:37.7185,
+        longitude:100.722,
+        delta:0.05,
+        callback:function(t){
+            app.showToast("openLocation"+JSON.stringify(t))
+        }
+    })
+    */
 
 </script>
 </body>

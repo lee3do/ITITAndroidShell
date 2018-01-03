@@ -19,12 +19,14 @@ import com.orhanobut.logger.Logger;
 import com.tencent.smtt.sdk.WebView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
@@ -46,7 +48,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Created by Lee_3do on 2017/12/25.
  */
 
-public class WebApp extends WebJsFunc{
+public class WebApp extends WebJsFunc {
 
     public WebApp(Activity activity, WebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
@@ -77,10 +79,10 @@ public class WebApp extends WebJsFunc{
     public void getLocation(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(activity, perms)) {
-            ToastUtils.show(activity,"定位中");
-            Locations.location.init(activity,this,args);
+            ToastUtils.show(activity, "定位中");
+            Locations.location.init(activity, this, args);
         } else {
-            ToastUtils.show(activity,"没有定位权限，无法定位");
+            ToastUtils.show(activity, "没有定位权限，无法定位");
         }
     }
 
@@ -133,13 +135,12 @@ public class WebApp extends WebJsFunc{
                     (args.path, "", args.query, true));
         } else {
             Logger.d("2");
-            shellFragment.start(ShellFragment.newInstance
-                    (args.path, "", args.query, true));
+            shellFragment.start(ShellFragment.newInstance(args.path, "", args.query, true));
         }
     }
 
     public void popToRootPage(JsArgs.ArgsBean args) {
-        activity.popTo(MainFragment.class,false);
+        activity.popTo(MainFragment.class, false);
     }
 
     public void popPage(JsArgs.ArgsBean args) {
@@ -147,7 +148,7 @@ public class WebApp extends WebJsFunc{
     }
 
     public void loadPage(JsArgs.ArgsBean args) {
-        webView.loadUrl(ShellApp.getFileFolderUrl(activity)+args.path);
+        webView.loadUrl(ShellApp.getFileFolderUrl(activity) + args.path);
     }
 
     public void showLoading(JsArgs.ArgsBean args) {
@@ -186,25 +187,66 @@ public class WebApp extends WebJsFunc{
         ShellApp.variables.remove(args.key);
     }
 
-    public Map<String, Object> getFileUrl(JsArgs.ArgsBean args) {
-        File file = new File(ShellApp.getFileFolderUrl(activity),args.path);
+    public Map<String, Object> getFileURL(JsArgs.ArgsBean args) {
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
         Map<String, Object> res = new HashMap<>();
         if (file.exists()) {
-            res.put("url", file.getPath());
+            res.put("url", "file:" + file.getPath());
         } else {
-            res.put("url", ShellApp.getFileFolderUrl(activity)+args.path);
+            res.put("url", "file:" + ShellApp.getFileFolderUrl(activity) + args.path);
         }
         return res;
     }
 
     public Map<String, Object> getFilePath(JsArgs.ArgsBean args) {
-        File file = new File(ShellApp.getFileFolderUrl(activity),args.path);
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
         Map<String, Object> res = new HashMap<>();
         if (file.exists()) {
             res.put("url", file.getAbsolutePath());
         } else {
-            res.put("url", ShellApp.getFileFolderUrl(activity)+args.path);
+            res.put("url", ShellApp.getFileFolderUrl(activity) + args.path);
         }
+        return res;
+    }
+
+    public Map<String, Object> readFile(JsArgs.ArgsBean args) {
+        Map<String, Object> res = new HashMap<>();
+        StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");
+        res.put("result", sb.toString());
+        return res;
+    }
+
+    public void deleteFile(JsArgs.ArgsBean args) throws IOException {
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    public void createDirectory(JsArgs.ArgsBean args) throws IOException {
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+        file.mkdirs();
+    }
+
+    public Map<String, Object> isFileExists(JsArgs.ArgsBean args) {
+        Map<String, Object> res = new HashMap<>();
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+        res.put("result", file.exists());
+        return res;
+    }
+
+    public void writeFile(JsArgs.ArgsBean args) throws IOException {
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        FileUtils.writeFile(file.getAbsolutePath(), args.content, true);
+    }
+
+    public Map<String, Object> listFiles(JsArgs.ArgsBean args) {
+        File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+        Map<String, Object> res = new HashMap<>();
+        res.put("result", file.list());
         return res;
     }
 
@@ -241,7 +283,7 @@ public class WebApp extends WebJsFunc{
     }
 
     public void setTabBarBadge(JsArgs.ArgsBean args) {
-        RxBus.get().post(Consts.BusAction.UpdateUnRead,args);
+        RxBus.get().post(Consts.BusAction.UpdateUnRead, args);
     }
 
     public Map<String, Object> getSystemInfo(JsArgs.ArgsBean args) {
@@ -277,10 +319,8 @@ public class WebApp extends WebJsFunc{
         res.put("bundleRegion", Locale.getDefault().getLanguage());
         res.put("bundleVersion", AppUtils.getAppVersionName(activity));
         res.put("bundleBuild", activity.getPackageName());
-        res.put("bundleAppId",  AppUtils.getVersionCode(activity));
+        res.put("bundleAppId", AppUtils.getVersionCode(activity));
         res.put("bundleDisplayName", AppUtils.getApplicationName(activity));
-
-
         return res;
     }
 

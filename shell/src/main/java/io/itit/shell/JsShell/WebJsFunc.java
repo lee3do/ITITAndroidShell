@@ -33,7 +33,7 @@ public class WebJsFunc {
 
     @JavascriptInterface
     public void postMessage(String value) {
-        Logger.d(value);
+        Logger.d("invoke:"+value);
         JsArgs arg = JSON.parseObject(value, JsArgs.class);
         try {
             Method m = this.getClass().getMethod(arg.func, JsArgs.ArgsBean.class);

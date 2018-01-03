@@ -154,6 +154,9 @@ public class ShellApp extends Application {
         return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot";
     }
 
+    public static String getFileFolderPath(Context context) {
+        return context.getFilesDir().getAbsolutePath() + File.separator + "webroot";
+    }
 
 
 }
