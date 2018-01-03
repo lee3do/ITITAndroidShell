@@ -307,16 +307,19 @@ public class WebApp extends WebJsFunc {
 
     public void setPasteboard(JsArgs.ArgsBean args) {
         ClipboardManager clipboardManager = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText("", args.string); //文本型数据 clipData 的构造方法。
+        ClipData clipData = clipboardManager.getPrimaryClip();
+        clipData.addItem(new ClipData.Item(args.string));
         clipboardManager.setPrimaryClip(clipData);
     }
 
     public Map<String, Object> getPasteboard(JsArgs.ArgsBean args) {
         ClipboardManager cm = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
-        ClipData cd2 = cm.getPrimaryClip();
-        String str2 = cd2.getItemAt(0).getText().toString();
+        ClipData data = cm.getPrimaryClip();
+        ClipData.Item item = data.getItemAt(0);
+        String text = item.getText().toString();// 注意 item.getText 可能为空
+
         Map<String, Object> res = new HashMap<>();
-        res.put("string", str2);
+        res.put("string", text);
         return res;
     }
 
