@@ -63,6 +63,7 @@ public class MainFragment extends BaseMainFragment {
             mFragments[i] = ShellFragment.newInstance( tab.page, tab.title, false);
 
         }
+
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
@@ -94,6 +95,7 @@ public class MainFragment extends BaseMainFragment {
         BottomBarTab tab = bottomBar.getItem(args.index);
         tab.setUnreadCount(args.badge);
     }
+
 
     public void startBrotherFragment(SupportFragment fragment) {
         start(fragment, STANDARD);

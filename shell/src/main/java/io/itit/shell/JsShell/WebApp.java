@@ -15,6 +15,8 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
 import com.orhanobut.logger.Logger;
@@ -40,6 +42,7 @@ import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
+import io.itit.shell.ui.MainActivity;
 import io.itit.shell.ui.MainFragment;
 import io.itit.shell.ui.PresentPageActivity;
 import io.itit.shell.ui.ShellFragment;
@@ -179,6 +182,21 @@ public class WebApp extends WebJsFunc {
         evalJs(args.callback);
     }
 
+
+    public void showModal(JsArgs.ArgsBean args) {
+        new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).content(args
+                .message).negativeText("关闭").onNegative((dialog, which) -> dialog.dismiss()).show();
+    }
+
+    public void showActionSheet(JsArgs.ArgsBean args) {
+        new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
+                .options).itemsCallback((dialog, view, which, text) -> {
+            Map<String, Object> res = new HashMap<>();
+            res.put("option", text);
+            evalJs(args.callback,res);
+        }).show();
+    }
+
     public void hideLoading(JsArgs.ArgsBean args) {
         shellFragment.showLoading(false);
         evalJs(args.callback);
@@ -306,20 +324,38 @@ public class WebApp extends WebJsFunc {
     }
 
     public void setPasteboard(JsArgs.ArgsBean args) {
-        ClipboardManager clipboardManager = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(activity
+                .CLIPBOARD_SERVICE);
         ClipData clipData = clipboardManager.getPrimaryClip();
         clipData.addItem(new ClipData.Item(args.string));
         clipboardManager.setPrimaryClip(clipData);
     }
 
     public Map<String, Object> getPasteboard(JsArgs.ArgsBean args) {
-        ClipboardManager cm = (ClipboardManager)activity.getSystemService(activity.CLIPBOARD_SERVICE);
+        ClipboardManager cm = (ClipboardManager) activity.getSystemService(activity
+                .CLIPBOARD_SERVICE);
         ClipData data = cm.getPrimaryClip();
         ClipData.Item item = data.getItemAt(0);
         String text = item.getText().toString();// 注意 item.getText 可能为空
 
         Map<String, Object> res = new HashMap<>();
         res.put("string", text);
+        return res;
+    }
+
+    public void setTabBarSelectedIndex(JsArgs.ArgsBean args) {
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).mFragment.bottomBar.setCurrentItem(args.index);
+        }
+
+    }
+
+    public Map<String, Object> getTabBarSelectedIndex(JsArgs.ArgsBean args) {
+        Map<String, Object> res = new HashMap<>();
+        if (activity instanceof MainActivity) {
+            res.put("index", ((MainActivity) activity).mFragment.bottomBar.getCurrentItemPosition
+                    ());
+        }
         return res;
     }
 

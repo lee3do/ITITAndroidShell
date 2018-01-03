@@ -76,7 +76,6 @@
 <button onclick="app.setApplicationBadge({badge:1})">setApplicationBadge</button>
 
 
-
 <button onclick="app.showToast({message:'123',type:'error'})">showToast12</button>
 <button onclick="window.page.getFileUrl({url:'index.html'})">getFileUrl</button>
 <button onclick="window.page.getFilePath({url:'index.html'})">getFilePath</button>
@@ -103,7 +102,7 @@
         moveFile: function (obj) {
             app.moveFile({
                 source: "index1.html",
-                dest:"/test",
+                dest: "/test",
                 callback: function (t) {
                     app.showToast("weixin.moveFile" + JSON.stringify(t))
                 }
@@ -112,17 +111,26 @@
         writeFile: function (obj) {
             app.writeFile({
                 path: "index1.html",
-                content:'1',
+                content: '1',
                 callback: function (t) {
                     app.showToast("weixin.writeFile" + JSON.stringify(t))
                 }
             })
         },
         isFileExists: function (obj) {
-            app.isFileExists({
-                path: "index1.html",
-                callback: function (t) {
-                    app.showToast("weixin.isFileExists" + JSON.stringify(t))
+            // app.isFileExists({
+            //     path: "index1.html",
+            //     callback: function (t) {
+            //         app.showToast("weixin.isFileExists" + JSON.stringify(t))
+            //     }
+            // });
+
+            app.showActionSheet({
+                title: "123",
+                message: "22222222",
+                options: ["1", "2", "3"],
+                callback: function (result) {
+                    app.showToast(result.option)
                 }
             })
         },
@@ -189,10 +197,18 @@
             })
         },
         readFile: function () {
-            app.readFile({
-                path: 'index1.html',
+            // app.readFile({
+            //     path: 'index1.html',
+            //     callback: function (t) {
+            //         app.showToast("weixin.readFile" + JSON.stringify(t))
+            //     }
+            // });
+            app.showActionSheet({
+                title: "name",
+                message: "1212",
+                options:['1','2','3'],
                 callback: function (t) {
-                    app.showToast("weixin.readFile" + JSON.stringify(t))
+                    app.showToast(JSON.stringify(t))
                 }
             })
         },
@@ -220,6 +236,7 @@
             })
         },
         pageLoad: function (args) {
+
             // app.setNavigationBarRightItems({
             //     images:["navbar-icon.png"],
             // })

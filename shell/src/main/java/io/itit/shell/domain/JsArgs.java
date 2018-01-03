@@ -1,5 +1,6 @@
 package io.itit.shell.domain;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,5 +38,6 @@ public class JsArgs {
         public String key;
         public Object value;
         public Map<String,Object> args;
+        public List<String> options;
     }
 }
