@@ -133,7 +133,7 @@ window.app={
     },
     //显示loading
     showLoading:function(){
-        app.invokeApp('showLoading',{})
+        app.invokeApp('showLoading',{} )
     },
     //隐藏loading
     hideLoading:function(){

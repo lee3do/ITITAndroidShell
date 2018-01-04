@@ -97,6 +97,13 @@
                 callback: function (t) {
                     app.showToast("weixin.listFiles" + JSON.stringify(t))
                 }
+            });
+            app.downloadFile({
+                url: "https://www.baidu.com/img/bd_logo1.png",
+                path: "bd_logo1.png",
+                callback: function (t) {
+                    app.showToast("downloadFile" + JSON.stringify(t))
+                }
             })
         },
         moveFile: function (obj) {
@@ -114,6 +121,12 @@
                 content: '1',
                 callback: function (t) {
                     app.showToast("weixin.writeFile" + JSON.stringify(t))
+                }
+            })
+            app.saveImageToAlbum({
+                path: "https://www.baidu.com/img/bd_logo1.png",
+                callback: function (result) {
+                    app.showToast(result.option)
                 }
             })
         },
@@ -206,7 +219,7 @@
             app.showActionSheet({
                 title: "name",
                 message: "1212",
-                options:['1','2','3'],
+                options: ['1', '2', '3'],
                 callback: function (t) {
                     app.showToast(JSON.stringify(t))
                 }

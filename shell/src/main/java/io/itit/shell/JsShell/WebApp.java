@@ -2,6 +2,7 @@ package io.itit.shell.JsShell;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -10,9 +11,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -20,6 +24,8 @@ import com.afollestad.materialdialogs.Theme;
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
 import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebView;
 
 import java.io.File;
@@ -182,6 +188,33 @@ public class WebApp extends WebJsFunc {
         evalJs(args.callback);
     }
 
+    public void downloadFile(JsArgs.ArgsBean args) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
+        request.setDestinationInExternalPublicDir("/download/", "test");
+        DownloadManager downloadManager= (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
+    }
+
+    public void saveImageToAlbum(JsArgs.ArgsBean args) {
+        Picasso.with(activity).load(args.path).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap,
+                        "pic", "description");
+                ToastUtils.show(activity, "图片保存成功");
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
+    }
 
     public void showModal(JsArgs.ArgsBean args) {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).content(args
@@ -193,7 +226,7 @@ public class WebApp extends WebJsFunc {
                 .options).itemsCallback((dialog, view, which, text) -> {
             Map<String, Object> res = new HashMap<>();
             res.put("option", text);
-            evalJs(args.callback,res);
+            evalJs(args.callback, res);
         }).show();
     }
 
