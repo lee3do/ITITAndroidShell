@@ -179,11 +179,11 @@ public class ShellApp extends Application {
     }
 
     public static String getFileFolderUrl(Context context) {
-        return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot";
+        return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
     }
 
     public static String getFileFolderPath(Context context) {
-        return context.getFilesDir().getAbsolutePath() + File.separator + "webroot";
+        return context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
     }
 
 

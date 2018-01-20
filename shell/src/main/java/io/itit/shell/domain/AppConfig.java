@@ -31,6 +31,7 @@ public class AppConfig {
     public String tabBarTintColor;
     public String tabBarBackgroundColor;
     public List<TabBarItemsBean> tabBarItems;
+    public List<TabBarItemsBean> pages;
 
     public static class TabBarItemsBean {
         /**
@@ -42,5 +43,14 @@ public class AppConfig {
         public String page;
         public String title;
         public String icon;
+    }
+
+    public static class Pages {
+
+        public String page;
+        public String navigationBarBackgroundColor;
+        public String navigationBarColor;
+        public String pageBackgroundColor;
+        public Boolean hideNavigationBar;
     }
 }

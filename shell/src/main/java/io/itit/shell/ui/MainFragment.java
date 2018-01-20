@@ -1,6 +1,7 @@
 package io.itit.shell.ui;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,9 +16,9 @@ import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseMainFragment;
 import io.itit.androidlibrary.widget.BottomBar;
 import io.itit.androidlibrary.widget.BottomBarTab;
-import io.itit.shell.domain.AppConfig;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -57,13 +58,13 @@ public class MainFragment extends BaseMainFragment {
             AppConfig.TabBarItemsBean tab = ShellApp.appConfig.tabBarItems.get(i);
             BottomBarTab t = new BottomBarTab(getContext(), ShellApp.getFileFolderUrl(getContext()) + tab.icon,
                     tab.title);
-            t.setColorString(ShellApp.appConfig.tabBarTintColor, ShellApp.appConfig
-                    .tabBarBackgroundColor);
+            t.setSelectColorString(ShellApp.appConfig.tabBarTintColor);
             bottomBar.addItem(t);
             mFragments[i] = ShellFragment.newInstance( tab.page, tab.title, false);
 
         }
 
+        bottomBar.mTabLayout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.tabBarBackgroundColor));
         bottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {

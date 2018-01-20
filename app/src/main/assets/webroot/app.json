@@ -1,27 +1,50 @@
 {
 	"debug":true,
-	"serverRoot1":"http://localhost:7005",
+	"serverRoot1":"",
 	"version":"1.0",
- 	"pageBackgroundColor":"#555555",
- 	"navigationBarBackgroundColor":"#ffff00",
- 	"navigationBarColor":"#ff0000",
-	"tabBarTintColor":"#ff684f",
-	"tabBarBackgroundColor":"#33ff21",
+ 	"pageBackgroundColor":"#F5F6F9",
+ 	"navigationBarBackgroundColor":"#ffffff",
+ 	"navigationBarColor":"#000000",
+	"tabBarTintColor":"#1589fa",
+	"tabBarBackgroundColor":"#f3f3f3",
  	"tabBarItems":[
  		{
-			"page": "/index.html",
+			"page": "pages/index.html",
 			"title": "首页",
-			"icon": "/tabbar-icon.png"
+			"icon": "image/icons/icon-tab-index.png"
 		},
 		{
-			"page": "/index.html",
-			"title": "首页1",
-			"icon": "/tabbar-icon.png"
+			"page": "pages/news.html",
+			"title": "资讯",
+			"icon": "image/icons/icon-tab-news.png"
 		},
 		{
-			"page": "/index.html",
-			"title": "首页2",
-			"icon": "/navbar-icon.png"
+			"page": "pages/trade.html",
+			"title": "交易汇总",
+			"icon": "image/icons/icon-tab-trade.png"
+		},
+		{
+			"page": "pages/home.html",
+			"title": "个人中心",
+			"icon": "image/icons/icon-tab-home.png"
 		}
- 	]
+ 	],
+	"pages":[
+		{
+			"page":"pages/index.html",
+            "hideNavigationBar":true
+		},
+        {
+          "page":"pages/news.html",
+          "hideNavigationBar":true
+        },
+        {
+          "page":"pages/trade.html",
+          "hideNavigationBar":true
+        },
+        {
+          "page":"pages/home.html",
+          "hideNavigationBar":true
+        }
+	]
 }
