@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -129,11 +131,13 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-        containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
-                .pageBackgroundColor));
+        containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
 
         if (canBack) {
-            initToolbarNav(toolbar);
+           // initToolbarNav(toolbar);
+            ImageView backView = view.findViewById(R.id.back);
+            backView.setVisibility(View.VISIBLE);
+            backView.setOnClickListener(v -> _mActivity.onBackPressed());
         }
         if (!navigate) {
             toolbar.setVisibility(View.GONE);
@@ -141,12 +145,11 @@ public class ShellFragment extends BaseBackFragment {
         initSize(view);
         for (AppConfig.Pages page : ShellApp.appConfig.pages) {
             if (page.page.equals(url)) {
-                if (page.hideNavigationBar!=null&&page.hideNavigationBar) {
+                if (page.hideNavigationBar != null && page.hideNavigationBar) {
                     toolbar.setVisibility(View.GONE);
                 }
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
-                    toolbar.setBackgroundColor(Color.parseColor(page
-                            .navigationBarBackgroundColor));
+                    toolbar.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
                 }
                 if (!StringUtils.isEmpty(page.navigationBarColor)) {
                     textView.setTextColor(Color.parseColor(page.navigationBarColor));
@@ -155,7 +158,7 @@ public class ShellFragment extends BaseBackFragment {
                     containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                             .pageBackgroundColor));
                 }
-                if (page.enableBounces!=null) {
+                if (page.enableBounces != null) {
                     if (page.enableBounces) {
                         refreshLayout.setEnableOverScrollBounce(true);
                     } else {
@@ -258,6 +261,17 @@ public class ShellFragment extends BaseBackFragment {
                     webView.evaluateJavascript(jsContent, null);
                 }
                 webView.evaluateJavascript("pageLoad('" + query + "')", null);
+            }
+
+        });
+
+        wv.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView webView, String s) {
+                super.onReceivedTitle(webView, s);
+                if (StringUtils.isEmpty(name)) {
+                    textView.setText(s);
+                }
             }
         });
         Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);

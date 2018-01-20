@@ -13,7 +13,7 @@
             android:name=".ui.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/MyHoloFullScreenTheme"
+            android:theme="@style/AppNoTitleTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
         <activity
