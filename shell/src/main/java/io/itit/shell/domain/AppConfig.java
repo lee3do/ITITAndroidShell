@@ -52,5 +52,6 @@ public class AppConfig {
         public String navigationBarColor;
         public String pageBackgroundColor;
         public Boolean hideNavigationBar;
+        public Boolean enableBounces;
     }
 }

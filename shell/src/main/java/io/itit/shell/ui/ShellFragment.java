@@ -129,7 +129,8 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-
+        containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
+                .pageBackgroundColor));
 
         if (canBack) {
             initToolbarNav(toolbar);
@@ -140,7 +141,7 @@ public class ShellFragment extends BaseBackFragment {
         initSize(view);
         for (AppConfig.Pages page : ShellApp.appConfig.pages) {
             if (page.page.equals(url)) {
-                if (page.hideNavigationBar) {
+                if (page.hideNavigationBar!=null&&page.hideNavigationBar) {
                     toolbar.setVisibility(View.GONE);
                 }
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
@@ -149,6 +150,17 @@ public class ShellFragment extends BaseBackFragment {
                 }
                 if (!StringUtils.isEmpty(page.navigationBarColor)) {
                     textView.setTextColor(Color.parseColor(page.navigationBarColor));
+                }
+                if (!StringUtils.isEmpty(page.pageBackgroundColor)) {
+                    containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
+                            .pageBackgroundColor));
+                }
+                if (page.enableBounces!=null) {
+                    if (page.enableBounces) {
+                        refreshLayout.setEnableOverScrollBounce(true);
+                    } else {
+                        refreshLayout.setEnableOverScrollBounce(false);
+                    }
                 }
                 break;
             }
@@ -186,9 +198,7 @@ public class ShellFragment extends BaseBackFragment {
         super.onHiddenChanged(hidden);
         this.hidden = hidden;
         if (hidden) {
-            wv.evaluateJavascript("pageHide()", null);
         } else {
-            wv.evaluateJavascript("pageShow()", null);
         }
     }
 

@@ -44,18 +44,18 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            app:srlEnableLoadmore="true"
-            app:srlEnableLoadmoreWhenContentNotFull="true"
+            android:layout_height="match_parent"
+            app:srlEnableLoadmore="false"
+            app:srlEnableLoadmoreWhenContentNotFull="false"
            >
-
             <com.tencent.smtt.sdk.WebView
                 android:id="@+id/wv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
+
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
         <LinearLayout
             android:id="@+id/empty_bottom"
