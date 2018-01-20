@@ -31,7 +31,7 @@ public class AppConfig {
     public String tabBarTintColor;
     public String tabBarBackgroundColor;
     public List<TabBarItemsBean> tabBarItems;
-    public List<TabBarItemsBean> pages;
+    public List<Pages> pages;
 
     public static class TabBarItemsBean {
         /**

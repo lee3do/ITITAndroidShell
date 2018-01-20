@@ -22,12 +22,14 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
+import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
 
 /**
@@ -121,6 +123,7 @@ public class ShellFragment extends BaseBackFragment {
 
         initTitle(view);
         toolbar = view.findViewById(R.id.toolbar);
+
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
 
@@ -135,6 +138,22 @@ public class ShellFragment extends BaseBackFragment {
             toolbar.setVisibility(View.GONE);
         }
         initSize(view);
+        for (AppConfig.Pages page : ShellApp.appConfig.pages) {
+            if (page.page.equals(url)) {
+                if (page.hideNavigationBar) {
+                    toolbar.setVisibility(View.GONE);
+                }
+                if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
+                    toolbar.setBackgroundColor(Color.parseColor(page
+                            .navigationBarBackgroundColor));
+                }
+                if (!StringUtils.isEmpty(page.navigationBarColor)) {
+                    textView.setTextColor(Color.parseColor(page.navigationBarColor));
+                }
+                break;
+            }
+        }
+
         return attachToSwipeBack(view);
     }
 
