@@ -34,4 +34,6 @@ public class MainActivity extends BaseActivity {
         return new DefaultHorizontalAnimator();
     }
 
+
+
 }

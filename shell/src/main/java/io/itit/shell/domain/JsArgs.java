@@ -26,6 +26,8 @@ public class JsArgs {
         public boolean navigate;
         public boolean visible;
         public int index;
+        public int limit;
+        public double quality;
         public int height;
         public String title;
         public String string;

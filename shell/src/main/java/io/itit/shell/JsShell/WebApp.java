@@ -25,6 +25,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -63,6 +65,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class WebApp extends WebJsFunc {
+
 
     public WebApp(Activity activity, WebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
@@ -177,6 +180,13 @@ public class WebApp extends WebJsFunc {
             activity.finish();
         }
     }
+
+    public void showImagePicker(JsArgs.ArgsBean args) {
+        ImagePicker.getInstance().setSelectLimit(args.limit);
+        Intent intent = new Intent(activity, ImageGridActivity.class);
+        shellFragment.startActivityForResult(intent, 10086);
+    }
+
 
     public void popToRootPage(JsArgs.ArgsBean args) {
         activity.popTo(MainFragment.class, false);

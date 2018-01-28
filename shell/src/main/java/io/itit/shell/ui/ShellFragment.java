@@ -2,8 +2,10 @@ package io.itit.shell.ui;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -13,10 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
 import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -24,15 +29,24 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.WebApp;
+import io.itit.shell.JsShell.WebJsFunc;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +76,7 @@ public class ShellFragment extends BaseBackFragment {
     SmartRefreshLayout refreshLayout;
 
     public boolean hidden = true;
+    public WebApp webApp;
 
 
     public ShellFragment() {
@@ -104,7 +119,7 @@ public class ShellFragment extends BaseBackFragment {
             navigate = getArguments().getBoolean(Navigate, true);
             query = getArguments().getString("query", "");
             type = getArguments().getString(Type, "");
-            height = getArguments().getInt("height",400);
+            height = getArguments().getInt("height", 400);
         }
     }
 
@@ -237,7 +252,8 @@ public class ShellFragment extends BaseBackFragment {
         wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        wv.addJavascriptInterface(new WebApp(getActivity(), wv, this), "appAndroid");
+        webApp = new WebApp(getActivity(), wv, this);
+        wv.addJavascriptInterface(webApp, "appAndroid");
 
         wv.setWebViewClient(new WebViewClient() {
             @Override
@@ -289,7 +305,8 @@ public class ShellFragment extends BaseBackFragment {
             centerView.setLayoutParams(lp);
             linearLayoutTop.setLayoutParams(lp);
 
-        } else if (type.equals(PresentPageActivity.alert)||type.equals(PresentPageActivity.popup)||type.equals(PresentPageActivity.custom)) {
+        } else if (type.equals(PresentPageActivity.alert) || type.equals(PresentPageActivity
+                .popup) || type.equals(PresentPageActivity.custom)) {
             if (type.equals(PresentPageActivity.alert)) {
                 lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2);
                 centerView.setLayoutParams(lp);
@@ -310,14 +327,16 @@ public class ShellFragment extends BaseBackFragment {
 
             if (type.equals(PresentPageActivity.custom)) {
 
-                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, height/80);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,
+                        height / 80);
                 centerView.setLayoutParams(lp);
 
-                int w = (10-height/80)/2;
-                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, w+1);
+                int w = (10 - height / 80) / 2;
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, w +
+                        1);
                 linearLayoutBottom.setLayoutParams(lp);
 
-                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,w);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, w);
                 linearLayoutTop.setLayoutParams(lp);
             }
 
@@ -329,7 +348,7 @@ public class ShellFragment extends BaseBackFragment {
             lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 8);
             refreshLayout.setLayoutParams(lp);
 
-        }  else {
+        } else {
             containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                     .pageBackgroundColor));
         }
@@ -346,6 +365,50 @@ public class ShellFragment extends BaseBackFragment {
             loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
         } else {
             loadingDialog.hide();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Logger.d(requestCode);
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            if (data != null && requestCode == 10086) {
+                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra
+                        (ImagePicker.EXTRA_RESULT_ITEMS);
+                List<String> strings = new ArrayList<>();
+                for (ImageItem image : images) {
+                    strings.add(image.path);
+                }
+                List<String> imagePath = new ArrayList<>();
+                Luban.with(getActivity()).load(strings).ignoreBy((int) (300 *
+                        WebJsFunc.argsBean.quality)).
+                        setTargetDir(getActivity().getExternalFilesDir(Environment
+                                .DIRECTORY_DCIM).getAbsolutePath()).
+                        setCompressListener(new OnCompressListener() {
+                            @Override
+                            public void onStart() {
+                                Logger.v("压缩开始");
+                            }
+
+                            @Override
+                            public void onSuccess(File file) {
+                                imagePath.add(file.getAbsolutePath());
+                                if (imagePath.size()==strings.size()) {
+                                    Map<String, Object> res = new HashMap<>();
+                                    res.put("images", JSON.toJSONString(imagePath));
+                                    webApp.evalJs(webApp.argsBean.callback, res);
+                                }
+
+                            }
+
+                            @Override
+                            public void onError(Throwable throwable) {
+                                Logger.e(throwable, "压缩失败");
+                            }
+                        }).launch();
+
+            }
         }
     }
 
