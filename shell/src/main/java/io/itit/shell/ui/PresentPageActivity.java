@@ -20,6 +20,7 @@ public class PresentPageActivity extends BaseActivity {
     public static String alert = "alert";
     public static String popup = "popup";
     public static String topHalf = "topHalf";
+    public static String custom = "custom";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

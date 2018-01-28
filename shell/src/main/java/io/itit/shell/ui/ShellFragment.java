@@ -51,6 +51,7 @@ public class ShellFragment extends BaseBackFragment {
     private String name;
     private String type;
     private String query;
+    private int height;
     private boolean canBack;
     private boolean navigate;
 
@@ -74,7 +75,9 @@ public class ShellFragment extends BaseBackFragment {
         args.putString(Name, argsBean.title);
         args.putString(Type, argsBean.type);
         args.putBoolean(CanBack, canBack);
+        args.putString("query", argsBean.query);
         args.putBoolean(Navigate, argsBean.navigate);
+        args.putInt("height", argsBean.height);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,17 +92,6 @@ public class ShellFragment extends BaseBackFragment {
         return fragment;
     }
 
-    public static ShellFragment newInstance(String url, String name, String query, boolean
-            canBack) {
-        ShellFragment fragment = new ShellFragment();
-        Bundle args = new Bundle();
-        args.putString(Url, url);
-        args.putString(Name, name);
-        args.putBoolean(CanBack, canBack);
-        args.putString("query", query);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +104,7 @@ public class ShellFragment extends BaseBackFragment {
             navigate = getArguments().getBoolean(Navigate, true);
             query = getArguments().getString("query", "");
             type = getArguments().getString(Type, "");
+            height = getArguments().getInt("height",400);
         }
     }
 
@@ -131,10 +124,10 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-        containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+
 
         if (canBack) {
-           // initToolbarNav(toolbar);
+            // initToolbarNav(toolbar);
             ImageView backView = view.findViewById(R.id.back);
             backView.setVisibility(View.VISIBLE);
             backView.setOnClickListener(v -> _mActivity.onBackPressed());
@@ -281,17 +274,68 @@ public class ShellFragment extends BaseBackFragment {
     private void initSize(View view) {
         LinearLayout linearLayoutTop = view.findViewById(R.id.empty_top);
         LinearLayout linearLayoutBottom = view.findViewById(R.id.empty_bottom);
+        LinearLayout linearLayoutLeft = view.findViewById(R.id.empty_left);
+        LinearLayout linearLayoutRight = view.findViewById(R.id.empty_right);
+
+        LinearLayout centerView = view.findViewById(R.id.center);
         LinearLayout.LayoutParams lp;
         if (type.equals(PresentPageActivity.topHalf)) {
             lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
-            refreshLayout.setLayoutParams(lp);
+            centerView.setLayoutParams(lp);
             linearLayoutBottom.setLayoutParams(lp);
+
         } else if (type.equals(PresentPageActivity.bottomHalf)) {
             lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 5);
-            refreshLayout.setLayoutParams(lp);
+            centerView.setLayoutParams(lp);
             linearLayoutTop.setLayoutParams(lp);
+
+        } else if (type.equals(PresentPageActivity.alert)||type.equals(PresentPageActivity.popup)||type.equals(PresentPageActivity.custom)) {
+            if (type.equals(PresentPageActivity.alert)) {
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2);
+                centerView.setLayoutParams(lp);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4);
+                linearLayoutTop.setLayoutParams(lp);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4);
+                linearLayoutBottom.setLayoutParams(lp);
+            }
+
+            if (type.equals(PresentPageActivity.popup)) {
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 3);
+                centerView.setLayoutParams(lp);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 3);
+                linearLayoutTop.setLayoutParams(lp);
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4);
+                linearLayoutBottom.setLayoutParams(lp);
+            }
+
+            if (type.equals(PresentPageActivity.custom)) {
+
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, height/80);
+                centerView.setLayoutParams(lp);
+
+                int w = (10-height/80)/2;
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, w+1);
+                linearLayoutBottom.setLayoutParams(lp);
+
+                lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,w);
+                linearLayoutTop.setLayoutParams(lp);
+            }
+
+
+            lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            linearLayoutLeft.setLayoutParams(lp);
+            linearLayoutRight.setLayoutParams(lp);
+
+            lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 8);
+            refreshLayout.setLayoutParams(lp);
+
+        }  else {
+            containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
+                    .pageBackgroundColor));
         }
         linearLayoutBottom.setOnClickListener(c -> getActivity().finish());
+        linearLayoutLeft.setOnClickListener(c -> getActivity().finish());
+        linearLayoutRight.setOnClickListener(c -> getActivity().finish());
         linearLayoutTop.setOnClickListener(c -> getActivity().finish());
     }
 

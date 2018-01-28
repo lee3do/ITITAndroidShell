@@ -2,7 +2,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/transparent"
+              android:background="#00000000"
               android:orientation="vertical"
     >
 
@@ -20,11 +20,11 @@
             android:layout_width="21dp"
             android:layout_height="21dp"
             android:layout_gravity="left"
-            android:scaleType="fitStart"
             android:clickable="true"
+            android:scaleType="fitStart"
+            android:src="@drawable/backicon"
             android:tint="@color/black"
             android:visibility="gone"
-            android:src="@drawable/backicon"
             />
 
         <TextView
@@ -50,26 +50,54 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0"
+            android:background="#55000000"
             android:orientation="horizontal"/>
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/refreshLayout"
+        <LinearLayout
+            android:id="@+id/center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srlEnableLoadmore="false"
-            app:srlEnableLoadmoreWhenContentNotFull="false"
-            app:srlEnableOverScrollDrag ="false"
-            app:srlEnableAutoLoadmore ="false"
-            app:srlEnableRefresh="false"
-           >
-            <com.tencent.smtt.sdk.WebView
-                android:id="@+id/wv"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:weightSum="10"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/empty_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#55000000"
+                android:orientation="horizontal"/>
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                app:srlEnableAutoLoadmore="false"
+                app:srlEnableLoadmore="false"
+                app:srlEnableLoadmoreWhenContentNotFull="false"
+                app:srlEnableOverScrollDrag="false"
+                app:srlEnableRefresh="false"
+                >
 
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                <com.tencent.smtt.sdk.WebView
+                    android:id="@+id/wv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <LinearLayout
+                android:id="@+id/empty_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#55000000"
+                android:orientation="horizontal"/>
+        </LinearLayout>
 
 
         <LinearLayout
@@ -77,6 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0"
+            android:background="#55000000"
             android:orientation="horizontal"/>
 
     </LinearLayout>

@@ -39,7 +39,7 @@
         <activity
             android:name=".ui.PresentPageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Transparent">
+            android:theme="@style/NewTransparent">
         </activity>
     </application>
 

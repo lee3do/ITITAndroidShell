@@ -151,10 +151,10 @@ public class WebApp extends WebJsFunc {
         if (shellFragment.getParentFragment() instanceof MainFragment) {
             Logger.d("1");
             ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance
-                    (args.path, "", args.query, true));
+                    (args, true));
         } else {
             Logger.d("2");
-            shellFragment.start(ShellFragment.newInstance(args.path, "", args.query, true));
+            shellFragment.start(ShellFragment.newInstance(args, true));
         }
     }
 
