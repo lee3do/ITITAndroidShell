@@ -16,6 +16,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -317,6 +318,12 @@ public class WebApp extends WebJsFunc {
         FileUtils.writeFile(file.getAbsolutePath(), args.content, true);
     }
 
+    public void vibrate(JsArgs.ArgsBean args) {
+        Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(200);
+    }
+
+
     public Map<String, Object> listFiles(JsArgs.ArgsBean args) {
         File file = new File(ShellApp.getFileFolderPath(activity), args.path);
         Map<String, Object> res = new HashMap<>();
@@ -339,6 +346,14 @@ public class WebApp extends WebJsFunc {
         return res;
     }
 
+    public Map<String, Object> getStorageInfo(JsArgs.ArgsBean args) {
+        SharedPreferences settings = activity.getSharedPreferences(PreferencesUtils
+                .PREFERENCE_NAME, Context.MODE_PRIVATE);
+        Map<String, Object> res = new HashMap<>();
+        res.put("value", settings.getAll());
+        return res;
+    }
+
     public void setApplicationBadge(JsArgs.ArgsBean args) {
         int num = args.badge;
         if (num == 0) {
@@ -353,6 +368,7 @@ public class WebApp extends WebJsFunc {
                 .PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(args.key);
+        Logger.d(JSON.toJSONString(settings.getAll()));
         editor.apply();
     }
 

@@ -92,7 +92,7 @@ public class ShellApp extends Application {
 //        StringBuilder sb = FileUtils.readFile(context.getFilesDir().getAbsolutePath() +
 //                "/js/app.js", "UTF-8");
 //        jsContents.add(sb.toString());
-        File file = new File(context.getFilesDir().getAbsolutePath() + "/js/app.js");
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/js/AppBridge.js");
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(new FileInputStream(file), "UTF-8");
