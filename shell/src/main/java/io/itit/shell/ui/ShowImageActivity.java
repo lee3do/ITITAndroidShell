@@ -13,10 +13,12 @@ import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.itit.shell.R;
+import io.itit.shell.ShellApp;
 
 
 public class ShowImageActivity extends FragmentActivity {
@@ -36,8 +38,8 @@ public class ShowImageActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
         pager = findViewById(R.id.viewpager);
-        imagesUrls = JSON.parseArray(getIntent().getExtras().getString("URL"),String.class) ;
-        pos = getIntent().getIntExtra("POS",0);
+        imagesUrls = JSON.parseArray(getIntent().getExtras().getString("URL"), String.class);
+        pos = getIntent().getIntExtra("POS", 0);
         initView();
     }
 
@@ -80,8 +82,15 @@ public class ShowImageActivity extends FragmentActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = images.get(position);
             container.addView(imageView);
-            Logger.d(imagesUrls.get(position));
-            Picasso.with(ShowImageActivity.this).load(imagesUrls.get(position)).into(imageView);
+            String url = imagesUrls.get(position);
+            if (!url.startsWith("http")) {
+                File file = new File(ShellApp.getFileFolderPath(getApplicationContext()), url);
+                Logger.d(file.exists());
+                Picasso.with(ShowImageActivity.this).load(file).into(imageView);
+            } else {
+                Picasso.with(ShowImageActivity.this).load(imagesUrls.get(position)).into(imageView);
+            }
+
             imageView.setOnClickListener(l -> finish());
             return images.get(position);
         }

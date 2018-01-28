@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -123,6 +124,11 @@ public class WebApp extends WebJsFunc {
         Uri content_url = Uri.parse(args.url);
         intent.setData(content_url);
         activity.startActivity(intent);
+    }
+
+
+    public void setNavigationBarVisible(JsArgs.ArgsBean args) {
+        shellFragment.toolbar.setVisibility(args.visible? View.VISIBLE:View.GONE);
     }
 
 
@@ -377,15 +383,14 @@ public class WebApp extends WebJsFunc {
                 .CLIPBOARD_SERVICE);
         ClipData clipData = clipboardManager.getPrimaryClip();
         clipData.addItem(new ClipData.Item(args.string));
-        clipboardManager.setPrimaryClip(clipData);
+        Logger.d(args.string);
+        clipboardManager.setText(args.string);
     }
 
     public Map<String, Object> getPasteboard(JsArgs.ArgsBean args) {
         ClipboardManager cm = (ClipboardManager) activity.getSystemService(activity
                 .CLIPBOARD_SERVICE);
-        ClipData data = cm.getPrimaryClip();
-        ClipData.Item item = data.getItemAt(0);
-        String text = item.getText().toString();// 注意 item.getText 可能为空
+        String text = cm.getText().toString();// 注意 item.getText 可能为空
 
         Map<String, Object> res = new HashMap<>();
         res.put("string", text);
