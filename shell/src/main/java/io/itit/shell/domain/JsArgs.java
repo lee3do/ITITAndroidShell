@@ -28,6 +28,8 @@ public class JsArgs {
         public int index;
         public int limit;
         public double quality;
+        public double latitude;
+        public double longitude;
         public int height;
         public String title;
         public String string;

@@ -238,6 +238,32 @@ public class WebApp extends WebJsFunc {
                 .message).negativeText("关闭").onNegative((dialog, which) -> dialog.dismiss()).show();
     }
 
+
+    public void scanQRCode(JsArgs.ArgsBean args) {
+//        activity.startActivityForResult(intent, 10010);
+    }
+
+    public void openLocation(JsArgs.ArgsBean args) {
+        try {
+            Intent intent = new Intent("android.intent.action.VIEW", Uri.parse
+                    ("androidamap://viewMap?sourceApplication=appname&poiname=" + args.title + "&lat="
+                            + args.latitude + "&lon=" + args.longitude + "&dev=1"));
+            intent.setPackage("com.autonavi.minimap");
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            try {
+                Uri uri = Uri.parse("geo:" + args.latitude  + "," + args.longitude + "(" + args.title + ")");
+                Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                activity.startActivity(it);
+            } catch (Exception ex) {
+                new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title("错误").content
+                        ("未安装地图应用,无法导航").negativeText("关闭").onNegative((dialog, which) -> dialog
+                        .dismiss()).show();
+            }
+
+        }
+    }
+
     public void showActionSheet(JsArgs.ArgsBean args) {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
                 .options).itemsCallback((dialog, view, which, text) -> {
