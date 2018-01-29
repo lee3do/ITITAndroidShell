@@ -222,7 +222,9 @@ public class ShellFragment extends BaseBackFragment {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.SCAN_SUCCESS)})
     public void scanSuccess(String message) {
-        webApp.evalJs(webApp.argsBean.callback);
+        Map<String, Object> res = new HashMap<>();
+        res.put("text", message);
+        webApp.evalJs(webApp.argsBean.callback,res);
     }
 
     @Override

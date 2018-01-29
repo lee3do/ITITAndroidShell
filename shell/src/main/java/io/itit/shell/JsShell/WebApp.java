@@ -269,7 +269,7 @@ public class WebApp extends WebJsFunc {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
                 .options).itemsCallback((dialog, view, which, text) -> {
             Map<String, Object> res = new HashMap<>();
-            res.put("option", text);
+            res.put("text", text);
             evalJs(args.callback, res);
         }).show();
     }
