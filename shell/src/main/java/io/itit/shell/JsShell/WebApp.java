@@ -521,6 +521,15 @@ public class WebApp extends WebJsFunc {
         return res;
     }
 
+
+
+    public Map<String, Object> moveFile(JsArgs.ArgsBean args) throws IOException {
+        boolean b = FileUtils.copyFile(args.source,new File(ShellApp.getFileFolderPath(activity), args.dest).getAbsolutePath());
+        Map<String, Object> res = new HashMap<>();
+        res.put("result", b);
+        return res;
+    }
+
     public void writeFile(JsArgs.ArgsBean args) throws IOException {
         File file = new File(ShellApp.getFileFolderPath(activity), args.path);
         if (!file.exists()) {

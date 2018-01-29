@@ -34,6 +34,8 @@ public class JsArgs {
         public String title;
         public List<String> titles;
         public String position;
+        public String source;
+        public String dest;
         public List<String> images;
         public String image;
         public String string;
