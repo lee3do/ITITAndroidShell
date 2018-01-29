@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
 
+import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
 import io.itit.shell.domain.JsArgs;
@@ -30,6 +31,10 @@ public class PresentPageActivity extends BaseActivity {
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
                 .ArgsBean.class);
         type = argsBean.type;
+        if(!StringUtils.isEmpty(type)){
+            argsBean.navigate = false;
+            argsBean.visible = false;
+        }
         Logger.d("type is "+type);
         if (findFragment(MainFragment.class) == null) {
             mFragment = ShellFragment.newInstance(argsBean, false);

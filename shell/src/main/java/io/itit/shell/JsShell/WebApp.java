@@ -143,7 +143,8 @@ public class WebApp extends WebJsFunc {
 
 
     public void setNavigationBarVisible(JsArgs.ArgsBean args) {
-        shellFragment.toolbar.setVisibility(args.visible ? View.VISIBLE : View.GONE);
+        shellFragment.toolbar.setVisibility(args.visible == null ? View.VISIBLE : (args.visible ?
+                View.VISIBLE : View.GONE));
     }
 
 
@@ -230,6 +231,13 @@ public class WebApp extends WebJsFunc {
             Logger.d("2");
             shellFragment.start(ShellFragment.newInstance(args, true));
         }
+    }
+
+
+    public void showWebView(JsArgs.ArgsBean args) {
+        args.navigate = true;
+        ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance(args,
+                true));
     }
 
     public void enablePullToRefresh(JsArgs.ArgsBean args) {
@@ -363,7 +371,7 @@ public class WebApp extends WebJsFunc {
                 Map<String, Object> res = new HashMap<>();
                 res.put("result", new Date(year - 1900, month, dayOfMonth).getTime());
                 evalJs(args.callback, res);
-            }, date.getYear()+1900, date.getMonth(), date.getDay());
+            }, date.getYear() + 1900, date.getMonth(), date.getDay());
             dialog.show();
         }
 
@@ -390,7 +398,7 @@ public class WebApp extends WebJsFunc {
                     evalJs(args.callback, res);
                 }, date.getHours(), date.getMinutes(), false);
                 dialog2.show();
-            }, date.getYear()+1900, date.getMonth(), date.getDay());
+            }, date.getYear() + 1900, date.getMonth(), date.getDay());
             dialog.show();
         }
     }
@@ -559,8 +567,8 @@ public class WebApp extends WebJsFunc {
         if (activity instanceof MainActivity) {
             ((MainActivity) activity).mFragment.bottomBar.setCurrentItem(args.index);
         }
-
     }
+
 
     public Map<String, Object> getTabBarSelectedIndex(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();

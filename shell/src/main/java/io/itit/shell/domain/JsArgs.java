@@ -23,8 +23,8 @@ public class JsArgs {
          * callback : null
          */
         public int badge;
-        public boolean navigate;
-        public boolean visible;
+        public Boolean navigate;
+        public Boolean visible;
         public int index;
         public int limit;
         public double quality;

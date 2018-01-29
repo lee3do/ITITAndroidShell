@@ -3,10 +3,12 @@ package io.itit.shell.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,12 +89,16 @@ public class ShellFragment extends BaseBackFragment {
     public static ShellFragment newInstance(JsArgs.ArgsBean argsBean, boolean canBack) {
         ShellFragment fragment = new ShellFragment();
         Bundle args = new Bundle();
-        args.putString(Url, argsBean.path);
+        if (StringUtils.isEmpty(argsBean.path)) {
+            args.putString(Url, argsBean.url);
+        } else {
+            args.putString(Url, argsBean.path);
+        }
         args.putString(Name, argsBean.title);
         args.putString(Type, argsBean.type);
         args.putBoolean(CanBack, canBack);
         args.putString("query", argsBean.query);
-        args.putBoolean(Navigate, argsBean.navigate);
+        args.putBoolean(Navigate, argsBean.navigate == null ? true : argsBean.navigate);
         args.putInt("height", argsBean.height);
         fragment.setArguments(args);
         return fragment;
@@ -141,14 +147,15 @@ public class ShellFragment extends BaseBackFragment {
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-
+        ImageView backView = view.findViewById(R.id.back);
 
         if (canBack) {
             // initToolbarNav(toolbar);
-            ImageView backView = view.findViewById(R.id.back);
             backView.setVisibility(View.VISIBLE);
             backView.setOnClickListener(v -> _mActivity.onBackPressed());
         }
+        ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
+                (ShellApp.appConfig.navigationBarColor)));
         if (!navigate) {
             toolbar.setVisibility(View.GONE);
         }
@@ -163,6 +170,8 @@ public class ShellFragment extends BaseBackFragment {
                 }
                 if (!StringUtils.isEmpty(page.navigationBarColor)) {
                     textView.setTextColor(Color.parseColor(page.navigationBarColor));
+                    ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color
+                            .parseColor(page.navigationBarColor)));
                 }
                 if (!StringUtils.isEmpty(page.pageBackgroundColor)) {
                     containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
@@ -226,7 +235,7 @@ public class ShellFragment extends BaseBackFragment {
     public void scanSuccess(String message) {
         Map<String, Object> res = new HashMap<>();
         res.put("text", message);
-        webApp.evalJs(webApp.argsBean.callback,res);
+        webApp.evalJs(webApp.argsBean.callback, res);
     }
 
     @Override
@@ -293,7 +302,12 @@ public class ShellFragment extends BaseBackFragment {
             }
         });
         Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);
-        wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
+        if (url.startsWith("http")) {
+            wv.loadUrl(url);
+        } else {
+            wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
+        }
+
     }
 
     private void initSize(View view) {
@@ -390,8 +404,8 @@ public class ShellFragment extends BaseBackFragment {
                     strings.add(image.path);
                 }
                 List<String> imagePath = new ArrayList<>();
-                Luban.with(getActivity()).load(strings).ignoreBy((int) (300 *
-                        WebJsFunc.argsBean.quality)).
+                Luban.with(getActivity()).load(strings).ignoreBy((int) (300 * WebJsFunc.argsBean
+                        .quality)).
                         setTargetDir(getActivity().getExternalFilesDir(Environment
                                 .DIRECTORY_DCIM).getAbsolutePath()).
                         setCompressListener(new OnCompressListener() {
@@ -403,7 +417,7 @@ public class ShellFragment extends BaseBackFragment {
                             @Override
                             public void onSuccess(File file) {
                                 imagePath.add(file.getAbsolutePath());
-                                if (imagePath.size()==strings.size()) {
+                                if (imagePath.size() == strings.size()) {
                                     Map<String, Object> res = new HashMap<>();
                                     res.put("images", JSON.toJSONString(imagePath));
                                     webApp.evalJs(webApp.argsBean.callback, res);
