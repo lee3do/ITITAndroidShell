@@ -176,8 +176,8 @@ public class WebApp extends WebJsFunc {
         if (!ListUtils.isEmpty(args.images)) {
             for (String image : args.images) {
                 ImageView imageView = new ImageView(activity);
-                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(35),
-                        CommonUtil.dipToPixel(30));
+                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(33),
+                        CommonUtil.dipToPixel(27));
                 if (args.position.equals("left")) {
                     lp.gravity = Gravity.LEFT;
                 } else if (args.position.equals("right")) {
