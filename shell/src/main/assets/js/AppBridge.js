@@ -884,9 +884,10 @@ window.pageShow=function(args){
     }
 }
 
-window.pageNavigationItemClicked=function(args){
-    if(window.page&&window.page.pageNavigationItemClicked){
-        window.page.pageNavigationItemClicked(args);
+
+window.pageNavigationBarSegmentSelected=function(args){
+    if(window.page&&window.page.pageNavigationBarSegmentSelected){
+        window.page.pageNavigationBarSegmentSelected(args);
     }
 }
 

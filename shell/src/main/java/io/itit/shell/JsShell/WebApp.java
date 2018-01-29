@@ -298,7 +298,7 @@ public class WebApp extends WebJsFunc {
 
     public void downloadFile(JsArgs.ArgsBean args) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
-        request.setDestinationInExternalPublicDir("/download/", "test");
+        request.setDestinationInExternalPublicDir("/download/", args.path);
         DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
                 .DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
