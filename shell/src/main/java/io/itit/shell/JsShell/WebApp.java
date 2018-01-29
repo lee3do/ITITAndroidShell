@@ -2,7 +2,9 @@ package io.itit.shell.JsShell;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.DownloadManager;
+import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -41,6 +43,7 @@ import com.tencent.smtt.sdk.WebView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -152,7 +155,7 @@ public class WebApp extends WebJsFunc {
         } else {
             shellFragment.centerImage.setVisibility(View.VISIBLE);
             shellFragment.textView.setVisibility(View.GONE);
-            displayImage(args.image,shellFragment.centerImage);
+            displayImage(args.image, shellFragment.centerImage);
         }
     }
 
@@ -172,8 +175,8 @@ public class WebApp extends WebJsFunc {
         if (!ListUtils.isEmpty(args.images)) {
             for (String image : args.images) {
                 ImageView imageView = new ImageView(activity);
-                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil
-                        .dipToPixel(35), CommonUtil.dipToPixel(30));
+                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(35),
+                        CommonUtil.dipToPixel(30));
                 if (args.position.equals("left")) {
                     lp.gravity = Gravity.LEFT;
                 } else if (args.position.equals("right")) {
@@ -181,12 +184,12 @@ public class WebApp extends WebJsFunc {
                 }
                 imageView.setLayoutParams(lp);
                 imageView.setTag(image);
-                displayImage(image,imageView);
+                displayImage(image, imageView);
                 imageView.setOnClickListener(v -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("value", imageView.getTag());
-                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
-                            .toJSONString(res) + ")", null);
+                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
+                            (res) + ")", null);
                 });
                 shellFragment.toolbar.addView(imageView);
             }
@@ -195,22 +198,22 @@ public class WebApp extends WebJsFunc {
             for (String title : args.titles) {
                 TextView textView = new TextView(activity);
                 textView.setText(title);
-                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil
-                        .dipToPixel(50), CommonUtil.dipToPixel(30));
+                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(50),
+                        CommonUtil.dipToPixel(30));
                 if (args.position.equals("left")) {
                     lp.gravity = Gravity.LEFT;
                 } else if (args.position.equals("right")) {
                     lp.gravity = Gravity.RIGHT;
                 }
                 textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,17);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setGravity(Gravity.CENTER);
                 textView.setLayoutParams(lp);
                 textView.setOnClickListener(v -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("value", textView.getText());
-                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
-                            .toJSONString(res) + ")", null);
+                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
+                            (res) + ")", null);
                 });
                 shellFragment.toolbar.addView(textView);
             }
@@ -338,9 +341,58 @@ public class WebApp extends WebJsFunc {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
                 .options).itemsCallback((dialog, view, which, text) -> {
             Map<String, Object> res = new HashMap<>();
-            res.put("text", text);
+            res.put("option", text);
             evalJs(args.callback, res);
         }).show();
+    }
+
+    public void showPickerView(JsArgs.ArgsBean args) {
+        new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
+                .items).itemsCallback((dialog, view, which, text) -> {
+            Map<String, Object> res = new HashMap<>();
+            res.put("item", text);
+            evalJs(args.callback, res);
+        }).show();
+    }
+
+    public void showDatePickerView(JsArgs.ArgsBean args) {
+        Date date = new Date(args.date);
+        if (args.mode.equals("date")) {
+            DatePickerDialog dialog = new DatePickerDialog(activity, (view, year, month,
+                                                                      dayOfMonth) -> {
+                Map<String, Object> res = new HashMap<>();
+                res.put("result", new Date(year - 1900, month, dayOfMonth).getTime());
+                evalJs(args.callback, res);
+            }, date.getYear()+1900, date.getMonth(), date.getDay());
+            dialog.show();
+        }
+
+        if (args.mode.equals("time")) {
+            TimePickerDialog dialog = new TimePickerDialog(activity, (view, hourOfDay, minute) -> {
+                Map<String, Object> res = new HashMap<>();
+                res.put("hour", hourOfDay);
+                res.put("minute", minute);
+                evalJs(args.callback, res);
+            }, date.getHours(), date.getMinutes(), false);
+            dialog.show();
+        }
+
+        if (args.mode.equals("dateAndTime")) {
+            DatePickerDialog dialog = new DatePickerDialog(activity, (view, year, month,
+                                                                      dayOfMonth) -> {
+                TimePickerDialog dialog2 = new TimePickerDialog(activity, (view2, hourOfDay,
+                                                                           minute) -> {
+                    Map<String, Object> res = new HashMap<>();
+                    Logger.d(year + " " + month + " " + dayOfMonth + " " + hourOfDay + " " +
+                            minute);
+                    res.put("result", new Date(year - 1900, month, dayOfMonth, hourOfDay, minute)
+                            .getTime());
+                    evalJs(args.callback, res);
+                }, date.getHours(), date.getMinutes(), false);
+                dialog2.show();
+            }, date.getYear()+1900, date.getMonth(), date.getDay());
+            dialog.show();
+        }
     }
 
     public void hideLoading(JsArgs.ArgsBean args) {
@@ -560,7 +612,6 @@ public class WebApp extends WebJsFunc {
         res.put("bundleDisplayName", AppUtils.getApplicationName(activity));
         return res;
     }
-
 
 
     private void displayImage(String url, ImageView imageView) {

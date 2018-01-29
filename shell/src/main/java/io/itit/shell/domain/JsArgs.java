@@ -49,5 +49,8 @@ public class JsArgs {
         public Object value;
         public Map<String,Object> args;
         public List<String> options;
+        public List<String> items;
+        public String mode;
+        public long date;
     }
 }
