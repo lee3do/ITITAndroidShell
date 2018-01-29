@@ -7,7 +7,11 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -77,6 +81,9 @@ public class ShellFragment extends BaseBackFragment {
     public TextView textView;
     public LinearLayout containerView;
     SmartRefreshLayout refreshLayout;
+    public TabLayout mTab;
+    public ViewPager mViewPager;
+    public List<String> mTitles = new ArrayList<>();
 
     public boolean hidden = true;
     public WebApp webApp;
@@ -135,19 +142,28 @@ public class ShellFragment extends BaseBackFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_shell, container, false);
-        initPullToRefresh(view);
-        initWebview(view);
-
-        initTitle(view);
+        mTab = view.findViewById(R.id.tab);
+        mViewPager = view.findViewById(R.id.viewPager);
+        ImageView backView = view.findViewById(R.id.back);
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
 
+        initPullToRefresh(view);
+        initWebview(view);
+
+
+        initTitle(view);
+
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
+        mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
+        mTab.setTabTextColors(ColorStateList.valueOf(Color.parseColor(ShellApp.appConfig
+                .navigationBarColor)));
+        mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
-        ImageView backView = view.findViewById(R.id.back);
+
 
         if (canBack) {
             // initToolbarNav(toolbar);
@@ -167,11 +183,16 @@ public class ShellFragment extends BaseBackFragment {
                 }
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
                     toolbar.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
+                    mTab.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
                 }
                 if (!StringUtils.isEmpty(page.navigationBarColor)) {
                     textView.setTextColor(Color.parseColor(page.navigationBarColor));
                     ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color
                             .parseColor(page.navigationBarColor)));
+
+                    mTab.setTabTextColors(ColorStateList.valueOf(Color.parseColor(page
+                            .navigationBarColor)));
+                    mTab.setSelectedTabIndicatorColor(Color.parseColor(page.navigationBarColor));
                 }
                 if (!StringUtils.isEmpty(page.pageBackgroundColor)) {
                     containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
@@ -438,5 +459,59 @@ public class ShellFragment extends BaseBackFragment {
 
     public void stopPullToRefresh() {
         refreshLayout.finishRefresh();
+    }
+
+    public void setNavigationBarSegment(JsArgs.ArgsBean args) {
+        mTitles = args.items;
+        mViewPager.setAdapter(new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return mTitles.size();
+            }
+
+            @NonNull
+            @Override
+            public Object instantiateItem(@NonNull ViewGroup container, int position) {
+                return 1;
+            }
+
+            @Override
+            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+                return false;
+            }
+
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object
+                    object) {
+
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mTitles.get(position);
+            }
+        });
+        mTab.setupWithViewPager(mViewPager);
+        mTab.setVisibility(View.VISIBLE);
+        mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Map<String, Object> res = new HashMap<>();
+                res.put("index", tab.getPosition());
+                wv.evaluateJavascript("pageNavigationBarSegmentSelected(" + JSON.toJSONString(res) + ")" +
+                        "", null);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        toolbar.setVisibility(View.GONE);
     }
 }

@@ -883,6 +883,13 @@ window.pageShow=function(args){
         window.page.pageShow(args);
     }
 }
+
+window.pageNavigationItemClicked=function(args){
+    if(window.page&&window.page.pageNavigationItemClicked){
+        window.page.pageNavigationItemClicked(args);
+    }
+}
+
 //
 window.pageHide=function(args){
     if(window.page&&window.page.pageHide){
@@ -1428,6 +1435,19 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
+    setNavigationBarSegment:function(obj){
+            app.invokeApp('setNavigationBarSegment',{
+                items:obj.items,
+                callback:nextInvokeCallback(obj?obj.callback:null)
+            })
+        },
+
+        selectNavigationBarSegment:function(obj){
+            app.invokeApp('selectNavigationBarSegment',{
+                index:obj.index,
+                callback:nextInvokeCallback(obj?obj.callback:null)
+            })
+        },
 
 
 

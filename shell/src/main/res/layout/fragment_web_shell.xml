@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:paddingRight="20dp"
         android:background="?attr/colorPrimary"
+        android:paddingRight="20dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
         app:titleTextAppearance="@style/Toolbar_TextAppearance_White">
@@ -44,10 +44,24 @@
             android:clickable="true"
             android:scaleType="fitXY"
             />
-
-
     </android.support.v7.widget.Toolbar>
 
+    <android.support.design.widget.TabLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tab"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:tabMode="scrollable"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextAppearance="@style/tab_appearance"
+        app:tabTextColor="#EF9A9A"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
     <LinearLayout
         android:id="@+id/container"
@@ -72,8 +86,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:weightSum="10"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <LinearLayout
                 android:id="@+id/empty_left"

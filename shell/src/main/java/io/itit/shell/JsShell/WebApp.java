@@ -115,6 +115,18 @@ public class WebApp extends WebJsFunc {
         }
     }
 
+
+    public void setNavigationBarSegment(JsArgs.ArgsBean args) {
+      shellFragment.setNavigationBarSegment(args);
+    }
+
+    public void selectNavigationBarSegment(JsArgs.ArgsBean args) {
+        shellFragment.mViewPager.setCurrentItem(args.index);
+    }
+
+
+
+
     public void previewImage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, ShowImageActivity.class);
         ArrayList<String> images = new ArrayList<>();
