@@ -46,6 +46,7 @@ import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.shell.ShellApp;
@@ -238,9 +239,9 @@ public class WebApp extends WebJsFunc {
                 .message).negativeText("关闭").onNegative((dialog, which) -> dialog.dismiss()).show();
     }
 
-
     public void scanQRCode(JsArgs.ArgsBean args) {
-//        activity.startActivityForResult(intent, 10010);
+        Intent intent = new Intent(activity, ScanQrActivity.class);
+        activity.startActivity(intent);
     }
 
     public void openLocation(JsArgs.ArgsBean args) {

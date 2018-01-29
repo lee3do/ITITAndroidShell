@@ -220,6 +220,11 @@ public class ShellFragment extends BaseBackFragment {
         wv.evaluateJavascript("pageMessage(" + message + ")", null);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.SCAN_SUCCESS)})
+    public void scanSuccess(String message) {
+        webApp.evalJs(webApp.argsBean.callback);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
