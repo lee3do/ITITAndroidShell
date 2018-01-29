@@ -60,6 +60,7 @@ import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.CommonUtil;
 import io.itit.androidlibrary.utils.NetWorkUtil;
+import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
@@ -107,11 +108,13 @@ public class WebApp extends WebJsFunc {
 
     public void getLocation(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+
         if (EasyPermissions.hasPermissions(activity, perms)) {
             ToastUtils.show(activity, "定位中");
             Locations.location.init(activity, this, args);
         } else {
-            ToastUtils.show(activity, "没有定位权限，无法定位");
+            EasyPermissions.requestPermissions(shellFragment, "请授予定位权限。",
+                    10086, perms);
         }
     }
 
@@ -302,6 +305,30 @@ public class WebApp extends WebJsFunc {
         DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
                 .DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
+    }
+
+
+    public void startAudioRecord(JsArgs.ArgsBean args) {
+        String[] perms = {Manifest.permission.RECORD_AUDIO};
+        if (EasyPermissions.hasPermissions(activity, perms)) {
+            VoiceRecorder.getInstance().startRecording();
+        } else {
+            EasyPermissions.requestPermissions(shellFragment, "请授予录音权限。",
+                    10086, perms);
+        }
+
+    }
+
+    public Map<String, Object> getAudioRecordStatus(JsArgs.ArgsBean args) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("isRecording", VoiceRecorder.getInstance().isRecording());
+        return res;
+    }
+
+    public Map<String, Object> stopAudioRecord(JsArgs.ArgsBean args) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("path", VoiceRecorder.getInstance().stopRecoding());
+        return res;
     }
 
     public void saveImageToAlbum(JsArgs.ArgsBean args) {

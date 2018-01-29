@@ -38,7 +38,7 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
     }
 
     public void initPermission() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION};
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             initStartPage();
         } else {

@@ -1,6 +1,7 @@
 package io.itit.shell.ui;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
@@ -42,15 +44,19 @@ import java.util.List;
 import java.util.Map;
 
 import cn.trinea.android.common.util.StringUtils;
+import cn.trinea.android.common.util.ToastUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
+import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WebJsFunc;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
+import pub.devrel.easypermissions.EasyPermissions;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -59,7 +65,7 @@ import top.zibin.luban.OnCompressListener;
  * Use the {@link ShellFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShellFragment extends BaseBackFragment {
+public class ShellFragment extends BaseBackFragment implements EasyPermissions.PermissionCallbacks {
     private static final String Url = "url";
     private static final String Name = "name";
     private static final String CanBack = "canback";
@@ -498,8 +504,8 @@ public class ShellFragment extends BaseBackFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 Map<String, Object> res = new HashMap<>();
                 res.put("index", tab.getPosition());
-                wv.evaluateJavascript("pageNavigationBarSegmentSelected(" + JSON.toJSONString(res) + ")" +
-                        "", null);
+                wv.evaluateJavascript("pageNavigationBarSegmentSelected(" + JSON.toJSONString
+                        (res) + ")" + "", null);
             }
 
             @Override
@@ -513,5 +519,37 @@ public class ShellFragment extends BaseBackFragment {
             }
         });
         toolbar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int i, List<String> list) {
+        if (list.contains(Manifest.permission.RECORD_AUDIO)) {
+            VoiceRecorder.getInstance().startRecording();
+        }
+
+        if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ToastUtils.show(getActivity(), "定位中");
+            Locations.location.init(getActivity(), webApp, webApp.argsBean);
+        }
+
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        if (list.contains(Manifest.permission.RECORD_AUDIO)) {
+            Toast.makeText(getActivity(), "您拒绝给予权限,无法正常录音!", Toast.LENGTH_LONG).show();
+        }
+
+        if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(getActivity(), "您拒绝给予权限,无法正常定位!", Toast.LENGTH_LONG).show();
+        }
     }
 }
