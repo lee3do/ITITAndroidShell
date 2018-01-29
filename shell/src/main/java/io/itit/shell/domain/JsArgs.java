@@ -32,6 +32,10 @@ public class JsArgs {
         public double longitude;
         public int height;
         public String title;
+        public List<String> titles;
+        public String position;
+        public List<String> images;
+        public String image;
         public String string;
         public String content;
         public String url;

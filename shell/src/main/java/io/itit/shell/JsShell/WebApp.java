@@ -12,13 +12,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
+import cn.trinea.android.common.util.ListUtils;
 import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
@@ -48,6 +55,7 @@ import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.AppUtils;
+import io.itit.androidlibrary.utils.CommonUtil;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
@@ -132,13 +140,22 @@ public class WebApp extends WebJsFunc {
 
 
     public void setNavigationBarVisible(JsArgs.ArgsBean args) {
-        shellFragment.toolbar.setVisibility(args.visible? View.VISIBLE:View.GONE);
+        shellFragment.toolbar.setVisibility(args.visible ? View.VISIBLE : View.GONE);
     }
 
 
     public void setNavigationBarTitle(JsArgs.ArgsBean args) {
-        shellFragment.textView.setText(args.title);
+        if (StringUtils.isEmpty(args.image)) {
+            shellFragment.textView.setText(args.title);
+            shellFragment.centerImage.setVisibility(View.GONE);
+            shellFragment.textView.setVisibility(View.VISIBLE);
+        } else {
+            shellFragment.centerImage.setVisibility(View.VISIBLE);
+            shellFragment.textView.setVisibility(View.GONE);
+            displayImage(args.image,shellFragment.centerImage);
+        }
     }
+
 
     public void log(JsArgs.ArgsBean args) {
         Logger.d(args.message);
@@ -150,6 +167,56 @@ public class WebApp extends WebJsFunc {
         pm.body = args;
         RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
     }
+
+    public void setNavigationBarItems(JsArgs.ArgsBean args) {
+        if (!ListUtils.isEmpty(args.images)) {
+            for (String image : args.images) {
+                ImageView imageView = new ImageView(activity);
+                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil
+                        .dipToPixel(35), CommonUtil.dipToPixel(30));
+                if (args.position.equals("left")) {
+                    lp.gravity = Gravity.LEFT;
+                } else if (args.position.equals("right")) {
+                    lp.gravity = Gravity.RIGHT;
+                }
+                imageView.setLayoutParams(lp);
+                imageView.setTag(image);
+                displayImage(image,imageView);
+                imageView.setOnClickListener(v -> {
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("value", imageView.getTag());
+                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
+                            .toJSONString(res) + ")", null);
+                });
+                shellFragment.toolbar.addView(imageView);
+            }
+        }
+        if (!ListUtils.isEmpty(args.titles)) {
+            for (String title : args.titles) {
+                TextView textView = new TextView(activity);
+                textView.setText(title);
+                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil
+                        .dipToPixel(50), CommonUtil.dipToPixel(30));
+                if (args.position.equals("left")) {
+                    lp.gravity = Gravity.LEFT;
+                } else if (args.position.equals("right")) {
+                    lp.gravity = Gravity.RIGHT;
+                }
+                textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,17);
+                textView.setGravity(Gravity.CENTER);
+                textView.setLayoutParams(lp);
+                textView.setOnClickListener(v -> {
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("value", textView.getText());
+                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
+                            .toJSONString(res) + ")", null);
+                });
+                shellFragment.toolbar.addView(textView);
+            }
+        }
+    }
+
 
     public void pushPage(JsArgs.ArgsBean args) {
         if (shellFragment.getParentFragment() instanceof MainFragment) {
@@ -209,7 +276,8 @@ public class WebApp extends WebJsFunc {
     public void downloadFile(JsArgs.ArgsBean args) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
         request.setDestinationInExternalPublicDir("/download/", "test");
-        DownloadManager downloadManager= (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
+                .DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
     }
 
@@ -217,8 +285,8 @@ public class WebApp extends WebJsFunc {
         Picasso.with(activity).load(args.path).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap,
-                        "pic", "description");
+                MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap, "pic",
+                        "description");
                 ToastUtils.show(activity, "图片保存成功");
             }
 
@@ -247,13 +315,14 @@ public class WebApp extends WebJsFunc {
     public void openLocation(JsArgs.ArgsBean args) {
         try {
             Intent intent = new Intent("android.intent.action.VIEW", Uri.parse
-                    ("androidamap://viewMap?sourceApplication=appname&poiname=" + args.title + "&lat="
-                            + args.latitude + "&lon=" + args.longitude + "&dev=1"));
+                    ("androidamap://viewMap?sourceApplication=appname&poiname=" + args.title +
+                            "&lat=" + args.latitude + "&lon=" + args.longitude + "&dev=1"));
             intent.setPackage("com.autonavi.minimap");
             activity.startActivity(intent);
         } catch (Exception e) {
             try {
-                Uri uri = Uri.parse("geo:" + args.latitude  + "," + args.longitude + "(" + args.title + ")");
+                Uri uri = Uri.parse("geo:" + args.latitude + "," + args.longitude + "(" + args
+                        .title + ")");
                 Intent it = new Intent(Intent.ACTION_VIEW, uri);
                 activity.startActivity(it);
             } catch (Exception ex) {
@@ -490,6 +559,17 @@ public class WebApp extends WebJsFunc {
         res.put("bundleAppId", AppUtils.getVersionCode(activity));
         res.put("bundleDisplayName", AppUtils.getApplicationName(activity));
         return res;
+    }
+
+
+
+    private void displayImage(String url, ImageView imageView) {
+        if (!url.startsWith("http")) {
+            File file = new File(ShellApp.getFileFolderPath(activity), url);
+            Picasso.with(activity).load(file).into(imageView);
+        } else {
+            Picasso.with(activity).load(url).into(imageView);
+        }
     }
 
 }

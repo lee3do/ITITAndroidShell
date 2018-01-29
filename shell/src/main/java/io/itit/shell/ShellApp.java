@@ -38,6 +38,7 @@ import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.ITITApplication;
 import io.itit.androidlibrary.utils.PicassoImageLoader;
 import io.itit.shell.domain.AppConfig;
 import me.yokeyword.fragmentation.Fragmentation;
@@ -83,6 +84,7 @@ public class ShellApp extends Application {
         initLog();
         initX5();
         initGallery();
+        ITITApplication.appContext = this;
     }
 
     private void initGallery() {

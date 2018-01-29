@@ -71,6 +71,7 @@ public class ShellFragment extends BaseBackFragment {
 
     public WebView wv;
     public Toolbar toolbar;
+    public ImageView centerImage;
     public TextView textView;
     public LinearLayout containerView;
     SmartRefreshLayout refreshLayout;
@@ -133,6 +134,7 @@ public class ShellFragment extends BaseBackFragment {
 
         initTitle(view);
         toolbar = view.findViewById(R.id.toolbar);
+        centerImage = view.findViewById(R.id.center_image);
 
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
