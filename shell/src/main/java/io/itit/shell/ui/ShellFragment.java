@@ -254,6 +254,12 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         }
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
+    public void loginSuccess(String message) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("code", message);
+        wxApp.evalJs(wxApp.argsBean.callback,res);
+    }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
     public void pageMessage(String message) {
