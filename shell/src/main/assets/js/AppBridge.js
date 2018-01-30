@@ -939,7 +939,6 @@ window.pagePullToRefresh=function(args){
 window.app={
     invoke:function(bridge,func,args){
             console.log("invoke:"+args);
-            console.log(window);
             window[bridge+"Android"].postMessage(JSON.stringify({'func':func,'args':args}))
         },
     invokeApp:function(func,args){

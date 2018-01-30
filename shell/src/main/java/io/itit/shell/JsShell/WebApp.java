@@ -358,8 +358,16 @@ public class WebApp extends WebJsFunc {
     }
 
     public void scanQRCode(JsArgs.ArgsBean args) {
-        Intent intent = new Intent(activity, ScanQrActivity.class);
-        activity.startActivity(intent);
+        String[] perms = {Manifest.permission.CAMERA};
+
+        if (EasyPermissions.hasPermissions(activity, perms)) {
+            Intent intent = new Intent(activity, ScanQrActivity.class);
+            activity.startActivity(intent);
+        } else {
+            EasyPermissions.requestPermissions(shellFragment, "请授予照相权限。",
+                    10086, perms);
+        }
+
     }
 
     public void openLocation(JsArgs.ArgsBean args) {

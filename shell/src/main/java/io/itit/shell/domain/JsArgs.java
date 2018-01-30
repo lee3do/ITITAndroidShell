@@ -32,6 +32,8 @@ public class JsArgs {
         public double longitude;
         public int height;
         public String title;
+        public int scene;
+        public String text;
         public List<String> titles;
         public String position;
         public String source;
@@ -43,6 +45,9 @@ public class JsArgs {
         public String url;
         public String urls;
         public String path;
+        public String description;
+        public String state;
+        public String thumbPath;
         public String query;
         public String type;
         public String message;

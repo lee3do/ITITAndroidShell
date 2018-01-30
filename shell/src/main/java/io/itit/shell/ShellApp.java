@@ -49,7 +49,7 @@ import me.yokeyword.fragmentation.Fragmentation;
 
 public class ShellApp extends Application {
     public Boolean useBugly = false;
-    public String appId = "";
+    public static String appId = "wxd2452b98bd35e114";
     public static IWXAPI msgApi;
     public static List<Integer> GuildImageList = new ArrayList<>();
     public static int startPage;
@@ -108,11 +108,11 @@ public class ShellApp extends Application {
     }
 
 
-    public static void loadAppJs(Context context) {
+    public static void loadAppJs(Context context, String name) {
 //        StringBuilder sb = FileUtils.readFile(context.getFilesDir().getAbsolutePath() +
 //                "/js/app.js", "UTF-8");
 //        jsContents.add(sb.toString());
-        File file = new File(context.getFilesDir().getAbsolutePath() + "/js/AppBridge.js");
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/js/" + name);
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(new FileInputStream(file), "UTF-8");
@@ -192,10 +192,13 @@ public class ShellApp extends Application {
         Fragmentation.builder().handleException(CrashReport::postCatchedException).install();
     }
 
-    public void setWx(String appId) {
-        msgApi = WXAPIFactory.createWXAPI(this, null);
-        boolean res = msgApi.registerApp(appId);
-        Logger.d("res api " + res);
+    public static IWXAPI getWx(Context context) {
+        if (msgApi == null) {
+            msgApi = WXAPIFactory.createWXAPI(context, appId, true);
+            // 将该app注册到微信
+            msgApi.registerApp(appId);
+        }
+        return msgApi;
     }
 
     public static String getFileFolderUrl(Context context) {

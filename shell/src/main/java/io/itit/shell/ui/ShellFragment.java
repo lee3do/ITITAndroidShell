@@ -47,10 +47,12 @@ import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
+import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WebJsFunc;
+import io.itit.shell.JsShell.WxApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
@@ -93,6 +95,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     public boolean hidden = true;
     public WebApp webApp;
+    public WxApp wxApp;
 
 
     public ShellFragment() {
@@ -299,6 +302,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         webSettings.setJavaScriptEnabled(true);
         webApp = new WebApp(getActivity(), wv, this);
         wv.addJavascriptInterface(webApp, "appAndroid");
+
+        wxApp = new WxApp(getActivity(), wv, this);
+        wv.addJavascriptInterface(wxApp, "WeixinBridge");
 
         wv.setWebViewClient(new WebViewClient() {
             @Override
@@ -540,6 +546,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         }
 
 
+        if (list.contains(Manifest.permission.CAMERA)) {
+            Intent intent = new Intent(getActivity(), ScanQrActivity.class);
+            startActivity(intent);
+        }
+
+
+
     }
 
     @Override
@@ -550,6 +563,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getActivity(), "您拒绝给予权限,无法正常定位!", Toast.LENGTH_LONG).show();
+        }
+
+        if (list.contains(Manifest.permission.CAMERA)) {
+            Toast.makeText(getActivity(), "您拒绝给予权限,无法正常拍照!", Toast.LENGTH_LONG).show();
         }
     }
 }
