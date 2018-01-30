@@ -1,7 +1,6 @@
 window.weixin={
     invoke:function(func,args){
-         console.log("invoke:"+args);
-         window["WeixinBridge"].postMessage(JSON.stringify({'func':func,'args':args}))
+        app.invoke('WeixinBridge',func,args);
     },
     //
     getInfo:function(obj){

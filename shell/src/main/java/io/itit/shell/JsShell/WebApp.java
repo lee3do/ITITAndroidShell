@@ -240,11 +240,9 @@ public class WebApp extends WebJsFunc {
 
     public void pushPage(JsArgs.ArgsBean args) {
         if (shellFragment.getParentFragment() instanceof MainFragment) {
-            Logger.d("1");
             ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance
                     (args, true));
         } else {
-            Logger.d("2");
             shellFragment.start(ShellFragment.newInstance(args, true));
         }
     }
@@ -405,13 +403,19 @@ public class WebApp extends WebJsFunc {
     public void showPickerView(JsArgs.ArgsBean args) {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
                 .items).itemsCallback((dialog, view, which, text) -> {
+            Map<String, Object> res1 = new HashMap<>();
+            res1.put("value", text);
+            res1.put("index", which);
             Map<String, Object> res = new HashMap<>();
-            res.put("item", text);
+            res.put("result",res1);
             evalJs(args.callback, res);
         }).show();
     }
 
     public void showDatePickerView(JsArgs.ArgsBean args) {
+        if (args.date==null) {
+            args.date = new Date().getTime();
+        }
         Date date = new Date(args.date);
         if (args.mode.equals("date")) {
             DatePickerDialog dialog = new DatePickerDialog(activity, (view, year, month,

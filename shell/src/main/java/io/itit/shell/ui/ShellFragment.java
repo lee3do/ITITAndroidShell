@@ -307,7 +307,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webApp = new WebApp(getActivity(), wv, this);
-        wv.addJavascriptInterface(webApp, "appAndroid");
+        wv.addJavascriptInterface(webApp, "AppBridge");
 
         wxApp = new WxApp(getActivity(), wv, this);
         wv.addJavascriptInterface(wxApp, "WeixinBridge");
@@ -326,7 +326,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 for (String jsContent : ShellApp.jsContents) {
                     webView.evaluateJavascript(jsContent, null);
                 }
-                webView.evaluateJavascript("pageLoad('" + query + "')", null);
+                Map<String,Object> queryMap = new HashMap<>();
+                if (!StringUtils.isEmpty(query)) {
+                    for (String s : query.split("&")) {
+                        queryMap.put(s.split("=")[0],s.split("=")[1]);
+                    }
+                }
+                webView.evaluateJavascript("pageLoad(" + JSON.toJSONString(queryMap) + ")", null);
             }
 
         });

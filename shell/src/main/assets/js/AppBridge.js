@@ -869,7 +869,7 @@ window.pageLoad=function(args){
     app.setNavigationBarTitle({
         title:window.document.title
     })
-    FastClick.attach(document.body);
+    FastClick.attach(window.document.body);
 }
 //
 window.pageUnLoad=function(args){
@@ -883,14 +883,6 @@ window.pageShow=function(args){
         window.page.pageShow(args);
     }
 }
-
-
-window.pageNavigationBarSegmentSelected=function(args){
-    if(window.page&&window.page.pageNavigationBarSegmentSelected){
-        window.page.pageNavigationBarSegmentSelected(args);
-    }
-}
-
 //
 window.pageHide=function(args){
     if(window.page&&window.page.pageHide){
@@ -936,13 +928,28 @@ window.pagePullToRefresh=function(args){
     }
 }
 //
+window.pageNavigationBarSegmentSelected=function(args){
+    if(window.page&&window.page.pageNavigationBarSegmentSelected){
+        window.page.pageNavigationBarSegmentSelected(args);
+    }
+}
+//
 window.app={
     invoke:function(bridge,func,args){
-            console.log("invoke:"+args);
-            window[bridge+"Android"].postMessage(JSON.stringify({'func':func,'args':args}))
-        },
+        if(window.webkit&& window.webkit.messageHandlers){
+            //ios
+            window.webkit.messageHandlers.shell.postMessage({
+                                                            bridge:bridge,
+                                                            func:func,
+                                                            args:args,
+                                                            })
+        }else{
+            //android
+            window[bridge].postMessage(JSON.stringify({'func':func,'args':args}))
+        }
+    },
     invokeApp:function(func,args){
-         app.invoke('app',func,args);
+         app.invoke('AppBridge',func,args);
     },
     //发送消息
     postMessage:function(args){
@@ -1073,6 +1080,21 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
+
+    setNavigationBarSegment:function(obj){
+        app.invokeApp('setNavigationBarSegment',{
+            items:obj.items,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+
+    selectNavigationBarSegment:function(obj){
+        app.invokeApp('selectNavigationBarSegment',{
+            index:obj.index,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+
     getQueryString:function(query){
         if(query){
             var t=[];
@@ -1099,11 +1121,6 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    vibrate:function(obj){
-            app.invokeApp('vibrate',{
-                callback:nextInvokeCallback(obj?obj.callback:null)
-            })
-        },
     //模态显示页面
     /*
     *  type
@@ -1279,8 +1296,6 @@ window.app={
         })
     },
     //
-    //移动文件传递的path 必须为全路径
-    //可以通过 getFilePath 获得
     moveFile:function(obj){
         app.invokeApp('moveFile',{
             source:obj.source,
@@ -1435,19 +1450,6 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    setNavigationBarSegment:function(obj){
-            app.invokeApp('setNavigationBarSegment',{
-                items:obj.items,
-                callback:nextInvokeCallback(obj?obj.callback:null)
-            })
-        },
-
-        selectNavigationBarSegment:function(obj){
-            app.invokeApp('selectNavigationBarSegment',{
-                index:obj.index,
-                callback:nextInvokeCallback(obj?obj.callback:null)
-            })
-        },
 
 
 

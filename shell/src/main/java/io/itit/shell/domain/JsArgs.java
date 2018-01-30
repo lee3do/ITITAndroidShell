@@ -58,6 +58,6 @@ public class JsArgs {
         public List<String> options;
         public List<String> items;
         public String mode;
-        public long date;
+        public Long date;
     }
 }
