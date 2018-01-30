@@ -869,6 +869,9 @@ window.pageLoad=function(args){
     app.setNavigationBarTitle({
         title:window.document.title
     })
+    if(window.page&&window.page.pageScrollToBottom){
+        app.invokeApp('enableLoadMore',{})
+    }
     FastClick.attach(window.document.body);
 }
 //

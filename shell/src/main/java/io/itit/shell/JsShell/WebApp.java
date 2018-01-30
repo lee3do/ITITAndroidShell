@@ -391,6 +391,11 @@ public class WebApp extends WebJsFunc {
         }
     }
 
+
+    public void enableLoadMore(JsArgs.ArgsBean args) {
+        shellFragment.refreshLayout.setEnableLoadmore(true);
+    }
+
     public void showActionSheet(JsArgs.ArgsBean args) {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
                 .options).itemsCallback((dialog, view, which, text) -> {

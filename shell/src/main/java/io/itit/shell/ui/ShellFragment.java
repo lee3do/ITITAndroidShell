@@ -88,7 +88,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public ImageView centerImage;
     public TextView textView;
     public LinearLayout containerView;
-    SmartRefreshLayout refreshLayout;
+    public SmartRefreshLayout refreshLayout;
     public TabLayout mTab;
     public ViewPager mViewPager;
     public List<String> mTitles = new ArrayList<>();
@@ -229,13 +229,16 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setEnableLoadmore(false);
+        refreshLayout.setEnableOverScrollBounce(true);
+
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             // refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             wv.evaluateJavascript("pagePullToRefresh()", null);
         });
         refreshLayout.setOnLoadmoreListener(refreshlayout -> {
             Logger.d("onLoadmore");
-            // refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
+            wv.evaluateJavascript("pageScrollToBottom()", null);
+            refreshlayout.finishLoadmore(1);//传入false表示加载失败
         });
     }
 
