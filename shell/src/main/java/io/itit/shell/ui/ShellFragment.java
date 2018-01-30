@@ -480,6 +480,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     }
 
     public void setNavigationBarSegment(JsArgs.ArgsBean args) {
+        textView.setText("");
+        centerImage.setImageBitmap(null);
+        mTab.setVisibility(View.VISIBLE);
         mTitles = args.items;
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
@@ -510,7 +513,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             }
         });
         mTab.setupWithViewPager(mViewPager);
-        mTab.setVisibility(View.VISIBLE);
+
         mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -530,7 +533,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
             }
         });
-        toolbar.setVisibility(View.GONE);
     }
 
     @Override

@@ -164,6 +164,7 @@ public class WebApp extends WebJsFunc {
 
 
     public void setNavigationBarTitle(JsArgs.ArgsBean args) {
+        shellFragment.mTab.setVisibility(View.GONE);
         if (StringUtils.isEmpty(args.image)) {
             shellFragment.textView.setText(args.title);
             shellFragment.centerImage.setVisibility(View.GONE);
