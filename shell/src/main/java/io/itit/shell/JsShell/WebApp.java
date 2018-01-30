@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -21,11 +22,12 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Vibrator;
 import android.provider.MediaStore;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.widget.ImageViewCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,21 +115,18 @@ public class WebApp extends WebJsFunc {
             ToastUtils.show(activity, "定位中");
             Locations.location.init(activity, this, args);
         } else {
-            EasyPermissions.requestPermissions(shellFragment, "请授予定位权限。",
-                    10086, perms);
+            EasyPermissions.requestPermissions(shellFragment, "请授予定位权限。", 10086, perms);
         }
     }
 
 
     public void setNavigationBarSegment(JsArgs.ArgsBean args) {
-      shellFragment.setNavigationBarSegment(args);
+        shellFragment.setNavigationBarSegment(args);
     }
 
     public void selectNavigationBarSegment(JsArgs.ArgsBean args) {
         shellFragment.mViewPager.setCurrentItem(args.index);
     }
-
-
 
 
     public void previewImage(JsArgs.ArgsBean args) {
@@ -182,48 +181,57 @@ public class WebApp extends WebJsFunc {
     }
 
     public void postMessage(JsArgs.ArgsBean args) {
-        PostMessage pm = new PostMessage();
-        pm.name = "pageMessage";
-        pm.body = args;
-        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(pm));
+        RxBus.get().post(Consts.BusAction.REC_MSG, JSON.toJSONString(args));
     }
 
     public void setNavigationBarItems(JsArgs.ArgsBean args) {
+        shellFragment.leftBar.removeAllViews();
+        shellFragment.rightBar.removeAllViews();
+
         if (!ListUtils.isEmpty(args.images)) {
             for (String image : args.images) {
                 ImageView imageView = new ImageView(activity);
-                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(33),
-                        CommonUtil.dipToPixel(27));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(CommonUtil
+                        .dipToPixel(33), CommonUtil.dipToPixel(24));
                 if (args.position.equals("left")) {
                     lp.gravity = Gravity.LEFT;
                 } else if (args.position.equals("right")) {
                     lp.gravity = Gravity.RIGHT;
                 }
+
                 imageView.setLayoutParams(lp);
                 imageView.setTag(image);
                 displayImage(image, imageView);
+
                 imageView.setOnClickListener(v -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("value", imageView.getTag());
                     webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
                             (res) + ")", null);
                 });
-                shellFragment.toolbar.addView(imageView);
+                if (args.position.equals("left")) {
+                    shellFragment.leftBar.addView(imageView);
+                } else {
+                    shellFragment.rightBar.addView(imageView);
+                }
+                ImageViewCompat.setImageTintList(imageView, ColorStateList.valueOf(Color
+                        .parseColor(ShellApp.appConfig.navigationBarColor)));
             }
         }
         if (!ListUtils.isEmpty(args.titles)) {
             for (String title : args.titles) {
                 TextView textView = new TextView(activity);
                 textView.setText(title);
-                Toolbar.LayoutParams lp = new Toolbar.LayoutParams(CommonUtil.dipToPixel(50),
-                        CommonUtil.dipToPixel(30));
+                textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout
+                        .LayoutParams.WRAP_CONTENT, CommonUtil.dipToPixel(30));
                 if (args.position.equals("left")) {
                     lp.gravity = Gravity.LEFT;
                 } else if (args.position.equals("right")) {
                     lp.gravity = Gravity.RIGHT;
                 }
                 textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
                 textView.setGravity(Gravity.CENTER);
                 textView.setLayoutParams(lp);
                 textView.setOnClickListener(v -> {
@@ -232,7 +240,11 @@ public class WebApp extends WebJsFunc {
                     webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
                             (res) + ")", null);
                 });
-                shellFragment.toolbar.addView(textView);
+                if (args.position.equals("left")) {
+                    shellFragment.leftBar.addView(textView);
+                } else {
+                    shellFragment.rightBar.addView(textView);
+                }
             }
         }
     }
@@ -312,8 +324,7 @@ public class WebApp extends WebJsFunc {
         if (EasyPermissions.hasPermissions(activity, perms)) {
             VoiceRecorder.getInstance().startRecording();
         } else {
-            EasyPermissions.requestPermissions(shellFragment, "请授予录音权限。",
-                    10086, perms);
+            EasyPermissions.requestPermissions(shellFragment, "请授予录音权限。", 10086, perms);
         }
 
     }
@@ -351,9 +362,14 @@ public class WebApp extends WebJsFunc {
         });
     }
 
-    public void showModal(JsArgs.ArgsBean args) {
+    public boolean showModal(JsArgs.ArgsBean args) {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).content(args
-                .message).negativeText("关闭").onNegative((dialog, which) -> dialog.dismiss()).show();
+                .message).positiveText("确定").negativeText("取消").onNegative((dialog, which) ->
+                dialog.dismiss()).onPositive((dialog, which) -> {
+                    evalJs(args.callback);
+                    dialog.dismiss();
+        }).show();
+        return false;
     }
 
     public void scanQRCode(JsArgs.ArgsBean args) {
@@ -363,8 +379,7 @@ public class WebApp extends WebJsFunc {
             Intent intent = new Intent(activity, ScanQrActivity.class);
             activity.startActivity(intent);
         } else {
-            EasyPermissions.requestPermissions(shellFragment, "请授予照相权限。",
-                    10086, perms);
+            EasyPermissions.requestPermissions(shellFragment, "请授予照相权限。", 10086, perms);
         }
 
     }
@@ -412,13 +427,13 @@ public class WebApp extends WebJsFunc {
             res1.put("value", text);
             res1.put("index", which);
             Map<String, Object> res = new HashMap<>();
-            res.put("result",res1);
+            res.put("result", res1);
             evalJs(args.callback, res);
         }).show();
     }
 
     public void showDatePickerView(JsArgs.ArgsBean args) {
-        if (args.date==null) {
+        if (args.date == null) {
             args.date = new Date().getTime();
         }
         Date date = new Date(args.date);
@@ -540,9 +555,9 @@ public class WebApp extends WebJsFunc {
     }
 
 
-
     public Map<String, Object> moveFile(JsArgs.ArgsBean args) throws IOException {
-        boolean b = FileUtils.copyFile(args.source,new File(ShellApp.getFileFolderPath(activity), args.dest).getAbsolutePath());
+        boolean b = FileUtils.copyFile(args.source, new File(ShellApp.getFileFolderPath(activity)
+                , args.dest).getAbsolutePath());
         Map<String, Object> res = new HashMap<>();
         res.put("result", b);
         return res;

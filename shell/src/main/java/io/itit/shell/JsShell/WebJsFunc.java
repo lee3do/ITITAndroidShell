@@ -45,7 +45,11 @@ public class WebJsFunc {
                     if (res != null && res instanceof Map) {
                         evalJs(arg.args.callback, (Map) res);
                     } else {
-                        evalJs(arg.args.callback);
+                        if (res != null && res instanceof Boolean) {
+
+                        } else {
+                            evalJs(arg.args.callback);
+                        }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     Logger.e(e, "");
@@ -57,7 +61,7 @@ public class WebJsFunc {
     }
 
     public void evalJs(String callback, Map args) {
-        Logger.d("evaljs:"+JSON.toJSONString(args));
+        Logger.d("evaljs:"+callback+","+JSON.toJSONString(args));
         if (!StringUtils.isEmpty(callback)) {
             webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
                     .toJSONString(args) + ")", null);
@@ -65,8 +69,9 @@ public class WebJsFunc {
     }
 
     public void evalJs(String callback) {
+        Logger.d("evaljs0:"+JSON.toJSONString(callback));
         if (!StringUtils.isEmpty(callback)) {
-            webView.evaluateJavascript("shellInvokeCallback('" + callback + ")", null);
+            webView.evaluateJavascript("shellInvokeCallback('" + callback + "')", null);
         }
     }
 }

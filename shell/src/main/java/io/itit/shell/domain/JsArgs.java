@@ -12,7 +12,7 @@ public class JsArgs {
      * func : pushPage
      * args : {"path":"/index.html","query":"a=1&b=2","callback":null}
      */
-
+    public String name;
     public String func;
     public ArgsBean args;
 
@@ -32,6 +32,7 @@ public class JsArgs {
         public double longitude;
         public int height;
         public String title;
+        public String name;
         public int scene;
         public String text;
         public List<String> titles;
@@ -40,6 +41,7 @@ public class JsArgs {
         public String dest;
         public List<String> images;
         public String image;
+        public String code;
         public String string;
         public String content;
         public String url;

@@ -85,6 +85,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     public WebView wv;
     public Toolbar toolbar;
+    public LinearLayout leftBar;
+    public LinearLayout rightBar;
     public ImageView centerImage;
     public TextView textView;
     public LinearLayout containerView;
@@ -154,6 +156,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         mTab = view.findViewById(R.id.tab);
         mViewPager = view.findViewById(R.id.viewPager);
         ImageView backView = view.findViewById(R.id.back);
+        toolbar = view.findViewById(R.id.toolbar);
+        leftBar = view.findViewById(R.id.leftBar);
+        rightBar = view.findViewById(R.id.rightBar);
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
 
@@ -435,6 +440,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (isShow) {
             loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
         } else {
+            if (loadingDialog==null) {
+                return;
+            }
             loadingDialog.hide();
         }
     }

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="40dp"
+            android:layout_height="22dp"
             android:layout_gravity="left"
             android:clickable="true"
             android:scaleType="fitStart"
@@ -28,6 +28,14 @@
             android:visibility="gone"
             />
 
+        <LinearLayout
+            android:id="@+id/leftBar"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </LinearLayout>
 
         <LinearLayout
             android:layout_gravity="center"
@@ -65,6 +73,15 @@
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabTextAppearance="@style/tab_appearance"
                 app:tabTextColor="#EF9A9A"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightBar"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
