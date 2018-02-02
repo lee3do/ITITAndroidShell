@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"serverRoot1":"http://10.0.0.6:7004",
+	"serverRoot1":"http://10.0.0.7:7004",
 	"version":"1.0",
  	"pageBackgroundColor":"#F5F6F9",
  	"navigationBarBackgroundColor":"#ffffff",
@@ -40,12 +40,29 @@
         {
             "page":"pages/trade.html",
             "hideNavigationBar":true,
-			"enableBounces":false
+			"enableBounces":true
         },
-        {
-            "page":"pages/home.html",
+		{
+			"page":"pages/home.html",
+			"hideNavigationBar":true,
+			"enableBounces":false
+		},
+		{
+			"page":"pages/login.html",
             "hideNavigationBar":true,
 			"enableBounces":false
-        }
+		},
+		{
+			"page":"pages/register.html",
+			"enableBounces":false
+		},
+		{
+			"page":"pages/forget-password.html",
+			"enableBounces":false
+		},
+		{
+			"page":"pages/share.html",
+			"enableBounces":false
+		}
 	]
 }

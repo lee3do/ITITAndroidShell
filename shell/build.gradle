@@ -38,7 +38,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation files('libs/tbs_sdk.jar')
-    compile 'io.itit:androidlibrary:1.9.7'
+    compile 'io.itit:androidlibrary:2.0.0'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-5'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-5'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'

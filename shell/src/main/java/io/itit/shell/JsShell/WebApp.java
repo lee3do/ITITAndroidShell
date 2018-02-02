@@ -63,6 +63,7 @@ import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.CommonUtil;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.androidlibrary.utils.VoiceRecorder;
+import io.itit.androidlibrary.widget.ActionSheetDialog;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
@@ -412,12 +413,18 @@ public class WebApp extends WebJsFunc {
     }
 
     public void showActionSheet(JsArgs.ArgsBean args) {
-        new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
-                .options).itemsCallback((dialog, view, which, text) -> {
-            Map<String, Object> res = new HashMap<>();
-            res.put("option", text);
-            evalJs(args.callback, res);
-        }).show();
+
+
+        ActionSheetDialog actionSheetDialog =   new ActionSheetDialog(activity).builder();
+        actionSheetDialog.setCancelable(true).setCanceledOnTouchOutside(false).setTitle(args.title);
+        for (String option : args.options) {
+            actionSheetDialog.addSheetItem(option, null, which -> {
+                Map<String, Object> res = new HashMap<>();
+                res.put("option", option);
+                evalJs(args.callback, res);
+            });
+        }
+        actionSheetDialog.show();
     }
 
     public void showPickerView(JsArgs.ArgsBean args) {
