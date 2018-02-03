@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.alibaba.fastjson.JSON;
+import com.bigkoo.pickerview.OptionsPickerView;
 import com.hwangjr.rxbus.RxBus;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -367,8 +368,8 @@ public class WebApp extends WebJsFunc {
         new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).content(args
                 .message).positiveText("确定").negativeText("取消").onNegative((dialog, which) ->
                 dialog.dismiss()).onPositive((dialog, which) -> {
-                    evalJs(args.callback);
-                    dialog.dismiss();
+            evalJs(args.callback);
+            dialog.dismiss();
         }).show();
         return false;
     }
@@ -415,7 +416,7 @@ public class WebApp extends WebJsFunc {
     public void showActionSheet(JsArgs.ArgsBean args) {
 
 
-        ActionSheetDialog actionSheetDialog =   new ActionSheetDialog(activity).builder();
+        ActionSheetDialog actionSheetDialog = new ActionSheetDialog(activity).builder();
         actionSheetDialog.setCancelable(true).setCanceledOnTouchOutside(false).setTitle(args.title);
         for (String option : args.options) {
             actionSheetDialog.addSheetItem(option, null, which -> {
@@ -428,15 +429,18 @@ public class WebApp extends WebJsFunc {
     }
 
     public void showPickerView(JsArgs.ArgsBean args) {
-        new MaterialDialog.Builder(activity).theme(Theme.LIGHT).title(args.title).items(args
-                .items).itemsCallback((dialog, view, which, text) -> {
+
+        OptionsPickerView pvOptions = new OptionsPickerView.Builder(activity, (options1, option2,
+                                                                               options3, v) -> {
             Map<String, Object> res1 = new HashMap<>();
-            res1.put("value", text);
-            res1.put("index", which);
+            res1.put("value", args.items.get(options1));
+            res1.put("index", options1);
             Map<String, Object> res = new HashMap<>();
             res.put("result", res1);
             evalJs(args.callback, res);
-        }).show();
+        }).setContentTextSize(22).setLineSpacingMultiplier(1.5f).build();
+        pvOptions.setPicker(args.items);
+        pvOptions.show();
     }
 
     public void showDatePickerView(JsArgs.ArgsBean args) {
