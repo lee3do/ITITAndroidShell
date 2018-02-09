@@ -15,8 +15,6 @@ import io.itit.shell.ui.ShellFragment;
 
 public class WxApp extends WebJsFunc {
 
-
-
     public WxApp(Activity activity, WebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }

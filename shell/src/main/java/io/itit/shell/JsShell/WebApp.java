@@ -159,6 +159,9 @@ public class WebApp extends WebJsFunc {
 
 
     public void setNavigationBarVisible(JsArgs.ArgsBean args) {
+        if (shellFragment.showSegment) {
+            shellFragment.mTab.setVisibility(View.VISIBLE);
+        }
         shellFragment.toolbar.setVisibility(args.visible == null ? View.VISIBLE : (args.visible ?
                 View.VISIBLE : View.GONE));
     }
@@ -414,8 +417,6 @@ public class WebApp extends WebJsFunc {
     }
 
     public void showActionSheet(JsArgs.ArgsBean args) {
-
-
         ActionSheetDialog actionSheetDialog = new ActionSheetDialog(activity).builder();
         actionSheetDialog.setCancelable(true).setCanceledOnTouchOutside(false).setTitle(args.title);
         for (String option : args.options) {

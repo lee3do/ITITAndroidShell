@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -67,12 +67,11 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="@android:color/white"
-                app:tabTextAppearance="@style/tab_appearance"
-                app:tabTextColor="#EF9A9A"/>
+                android:textSize="14sp"
+                app:tabIndicatorColor="#4a90e2"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="#4a90e2"
+                app:tabTextColor="#6a6a6a"/>
         </LinearLayout>
 
         <LinearLayout

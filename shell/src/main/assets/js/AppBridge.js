@@ -863,12 +863,13 @@ window.nextInvokeCallback=function(callback){
 //page lifecycle
 window.pageLoad=function(args){
     window.pageArgs=args;
+    app.setNavigationBarTitle({
+            title:window.document.title
+    })
     if(window.page&&window.page.pageLoad){
         window.page.pageLoad(args);
     }
-    app.setNavigationBarTitle({
-        title:window.document.title
-    })
+
     if(window.page&&window.page.pageScrollToBottom){
         app.invokeApp('enableLoadMore',{})
     }

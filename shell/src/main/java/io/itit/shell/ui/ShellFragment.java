@@ -32,7 +32,6 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -74,6 +73,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     private static final String Type = "Type";
     private static final String Navigate = "Navigate";
     public LoadingDialog loadingDialog;
+    public boolean showSegment = false;
 
     private String url;
     private String name;
@@ -171,9 +171,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
-        mTab.setTabTextColors(ColorStateList.valueOf(Color.parseColor(ShellApp.appConfig
-                .navigationBarColor)));
-        mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+//        mTab.setTabTextColors(Color.parseColor(ShellApp.appConfig
+//                .navigationBarColor),Color.parseColor(ShellApp.appConfig
+//                .navigationBarColor));
+
+  //      mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
@@ -204,9 +206,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                     ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color
                             .parseColor(page.navigationBarColor)));
 
-                    mTab.setTabTextColors(ColorStateList.valueOf(Color.parseColor(page
-                            .navigationBarColor)));
-                    mTab.setSelectedTabIndicatorColor(Color.parseColor(page.navigationBarColor));
+//                    mTab.setTabTextColors(ColorStateList.valueOf(Color.parseColor(page
+//                            .navigationBarColor)));
+//                    mTab.setSelectedTabIndicatorColor(Color.parseColor(page.navigationBarColor));
                 }
                 if (!StringUtils.isEmpty(page.pageBackgroundColor)) {
                     containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
@@ -345,15 +347,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         });
 
-        wv.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView webView, String s) {
-                super.onReceivedTitle(webView, s);
-                if (StringUtils.isEmpty(name)) {
-                    textView.setText(s);
-                }
-            }
-        });
+
         Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);
         if (url.startsWith("http")) {
             wv.loadUrl(url);
@@ -497,6 +491,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     }
 
     public void setNavigationBarSegment(JsArgs.ArgsBean args) {
+        showSegment = true;
         textView.setText("");
         centerImage.setImageBitmap(null);
         mTab.setVisibility(View.VISIBLE);

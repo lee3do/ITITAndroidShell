@@ -1,68 +1,72 @@
 {
-	"debug": true,
-	"serverRoot1":"http://10.0.0.7:7004",
-	"version":"1.0",
- 	"pageBackgroundColor":"#F5F6F9",
- 	"navigationBarBackgroundColor":"#ffffff",
- 	"navigationBarColor":"#000000",
-	"tabBarTintColor":"#1589fa",
-	"tabBarBackgroundColor":"#f3f3f3",
- 	"tabBarItems":[
- 		{
-			"page": "pages/index.html",
-			"title": "首页",
-			"icon": "image/icons/icon-tab-index.png"
-		},
-		{
-			"page": "pages/news.html",
-			"title": "资讯",
-			"icon": "image/icons/icon-tab-news.png"
-		},
-		{
-			"page": "pages/trade.html",
-			"title": "交易汇总",
-			"icon": "image/icons/icon-tab-trade.png"
-		},
-		{
-			"page": "pages/home.html",
-			"title": "个人中心",
-			"icon": "image/icons/icon-tab-home.png"
-		}
- 	],
-	"pages":[
-		{
-			"page":"pages/index.html",
-            "hideNavigationBar":true
-		},
+    "debug":true,
+    "serverRoot1":"http://10.0.0.5:7004",
+    "version":"1.0",
+    "pageBackgroundColor":"#F5F6F9",
+    "navigationBarBackgroundColor":"#ffffff",
+    "navigationBarColor":"#000000",
+    "tabBarTintColor":"#1589fa",
+    "tabBarBackgroundColor":"#f3f3f3",
+    "tabBarItems":[
         {
-          	"page":"pages/news.html"
+            "page":"pages/index.html",
+            "title":"首页",
+            "icon":"image/icons/icon-tab-index.png"
+        },
+        {
+            "page":"pages/news.html",
+            "title":"资讯",
+            "icon":"image/icons/icon-tab-news.png"
+        },
+        {
+            "page":"pages/trade.html",
+            "title":"交易汇总",
+            "icon":"image/icons/icon-tab-trade.png"
+        },
+        {
+            "page":"pages/home.html",
+            "title":"个人中心",
+            "icon":"image/icons/icon-tab-home.png"
+        }
+    ],
+    "pages":[
+        {
+            "page":"pages/index.html",
+            "hideNavigationBar":true
+        },
+        {
+            "page":"pages/news.html"
         },
         {
             "page":"pages/trade.html",
             "hideNavigationBar":true,
-			"enableBounces":true
+            "enableBounces":true
         },
-		{
-			"page":"pages/home.html",
-			"hideNavigationBar":true,
-			"enableBounces":false
-		},
-		{
-			"page":"pages/login.html",
+        {
+            "page":"pages/home.html",
             "hideNavigationBar":true,
-			"enableBounces":false
-		},
-		{
-			"page":"pages/register.html",
-			"enableBounces":false
-		},
-		{
-			"page":"pages/forget-password.html",
-			"enableBounces":false
-		},
-		{
-			"page":"pages/share.html",
-			"enableBounces":false
-		}
-	]
+            "enableBounces":false
+        },
+        {
+            "page":"pages/login.html",
+            "hideNavigationBar":true,
+            "enableBounces":false
+        },
+        {
+            "page":"pages/register.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/password-forget.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/password-change.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/share.html",
+            "enableBounces":false
+        }
+    ]
 }
