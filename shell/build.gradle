@@ -42,6 +42,7 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-5'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-5'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+//    compile 'com.github.mmin18:realtimeblurview:1.1.0'
 }
 
 apply from: "bintrayUpload.gradle"

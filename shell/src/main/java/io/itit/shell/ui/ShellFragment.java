@@ -162,8 +162,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
 
-        initPullToRefresh(view);
         initWebview(view);
+        initPullToRefresh(view);
 
 
         initTitle(view);
@@ -247,6 +247,12 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             wv.evaluateJavascript("pageScrollToBottom()", null);
             refreshlayout.finishLoadmore(1);//传入false表示加载失败
         });
+
+        //状态栏透明和间距处理
+    //    StatusBarUtil.immersive(getActivity());
+//        StatusBarUtil.setPaddingSmart(getActivity(), wv);
+//        StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
+       // StatusBarUtil.setPaddingSmart(getActivity(), view.findViewById(R.id.blurview));
     }
 
     private void initTitle(View view) {

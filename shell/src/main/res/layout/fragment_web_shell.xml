@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -6,8 +6,92 @@
               android:orientation="vertical"
     >
 
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        android:weightSum="10"
+        >
+
+        <LinearLayout
+            android:id="@+id/empty_top"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0"
+            android:background="#55000000"
+            android:orientation="horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:id="@+id/empty_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#55000000"
+                android:orientation="horizontal"/>
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srlEnableAutoLoadmore="false"
+                app:srlEnableLoadmore="false"
+                app:srlEnableLoadmoreWhenContentNotFull="false"
+                app:srlEnableOverScrollDrag="false"
+                app:srlEnableRefresh="false"
+                >
+
+                <com.tencent.smtt.sdk.WebView
+                    android:id="@+id/wv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+            <LinearLayout
+                android:id="@+id/empty_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#55000000"
+                android:orientation="horizontal"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/empty_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0"
+            android:background="#55000000"
+            android:orientation="horizontal"/>
+
+    </LinearLayout>
+
+    <!--<com.github.mmin18.widget.RealtimeBlurView-->
+        <!--android:id="@+id/blurview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--app:realtimeBlurRadius="10dp"-->
+        <!--app:realtimeOverlayColor="@color/colorPrimary"/>-->
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="?attr/colorPrimary"
@@ -90,79 +174,4 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent"
-        android:orientation="vertical"
-        android:weightSum="10"
-        >
-
-        <LinearLayout
-            android:id="@+id/empty_top"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0"
-            android:background="#55000000"
-            android:orientation="horizontal"/>
-
-        <LinearLayout
-            android:id="@+id/center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <LinearLayout
-                android:id="@+id/empty_left"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:background="#55000000"
-                android:orientation="horizontal"/>
-
-            <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/refreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srlEnableAutoLoadmore="false"
-                app:srlEnableLoadmore="false"
-                app:srlEnableLoadmoreWhenContentNotFull="false"
-                app:srlEnableOverScrollDrag="false"
-                app:srlEnableRefresh="false"
-                >
-
-                <com.tencent.smtt.sdk.WebView
-                    android:id="@+id/wv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-
-            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-            <LinearLayout
-                android:id="@+id/empty_right"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:background="#55000000"
-                android:orientation="horizontal"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/empty_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0"
-            android:background="#55000000"
-            android:orientation="horizontal"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
