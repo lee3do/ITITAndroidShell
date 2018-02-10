@@ -57,6 +57,7 @@ import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
+import io.itit.shell.wxapi.StatusBarUtil;
 import pub.devrel.easypermissions.EasyPermissions;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -162,6 +163,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
 
+
         initWebview(view);
         initPullToRefresh(view);
 
@@ -235,7 +237,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     private void initPullToRefresh(View view) {
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setEnableRefresh(false);
-        refreshLayout.setEnableLoadmore(false);
+        refreshLayout.setEnableLoadmore(true);
         refreshLayout.setEnableOverScrollBounce(true);
 
         refreshLayout.setOnRefreshListener(refreshlayout -> {
@@ -245,14 +247,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         refreshLayout.setOnLoadmoreListener(refreshlayout -> {
             Logger.d("onLoadmore");
             wv.evaluateJavascript("pageScrollToBottom()", null);
-            refreshlayout.finishLoadmore(1);//传入false表示加载失败
+            refreshlayout.finishLoadmore(200);//传入false表示加载失败
         });
 
         //状态栏透明和间距处理
-    //    StatusBarUtil.immersive(getActivity());
-//        StatusBarUtil.setPaddingSmart(getActivity(), wv);
-//        StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
-       // StatusBarUtil.setPaddingSmart(getActivity(), view.findViewById(R.id.blurview));
+        StatusBarUtil.immersive(getActivity());
+        StatusBarUtil.darkMode(getActivity());
+        StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
     }
 
     private void initTitle(View view) {
@@ -315,6 +316,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebview(View view) {
+        if (ShellApp.appConfig.debug) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
         wv = view.findViewById(R.id.wv);
         wv.setHorizontalScrollBarEnabled(false);//水平不显示
         wv.setVerticalScrollBarEnabled(false); //垂直不显示
@@ -342,6 +346,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 for (String jsContent : ShellApp.jsContents) {
                     webView.evaluateJavascript(jsContent, null);
                 }
+                Logger.d(url+"height:"+wv.getHeight());
                 Map<String,Object> queryMap = new HashMap<>();
                 if (!StringUtils.isEmpty(query)) {
                     for (String s : query.split("&")) {
@@ -501,6 +506,15 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         textView.setText("");
         centerImage.setImageBitmap(null);
         mTab.setVisibility(View.VISIBLE);
+        if (mTitles.size() > 5) {
+            mTab.setTabMode(TabLayout.MODE_SCROLLABLE);
+        } else {
+            mTab.setTabMode(TabLayout.MODE_FIXED);
+        }
+        if (!StringUtils.isEmpty(args.color)) {
+            mTab.setTabTextColors(Color.parseColor(args.color),Color.parseColor(args.selectedColor));
+        }
+
         mTitles = args.items;
         mViewPager.setAdapter(new PagerAdapter() {
             @Override

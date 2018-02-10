@@ -73,7 +73,12 @@ public class ShellApp extends Application {
             @Override
             public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
                 //指定为经典Footer，默认是 BallPulseFooter
-                return new ClassicsFooter(context).setDrawableSize(20);
+                ClassicsFooter.REFRESH_FOOTER_PULLUP = "";
+                ClassicsFooter.REFRESH_FOOTER_RELEASE = "";
+                ClassicsFooter.REFRESH_FOOTER_LOADING = "";
+                ClassicsFooter.REFRESH_FOOTER_FINISH = "";
+
+                return new ClassicsFooter(context).setDrawableSize(20).setFinishDuration(500);
             }
         });
     }

@@ -416,9 +416,9 @@ public class WebApp extends WebJsFunc {
         shellFragment.refreshLayout.setEnableLoadmore(true);
     }
 
-    public void showActionSheet(JsArgs.ArgsBean args) {
+    public Boolean showActionSheet(JsArgs.ArgsBean args) {
         ActionSheetDialog actionSheetDialog = new ActionSheetDialog(activity).builder();
-        actionSheetDialog.setCancelable(true).setCanceledOnTouchOutside(false).setTitle(args.title);
+        actionSheetDialog.setCancelable(true).setCanceledOnTouchOutside(false);
         for (String option : args.options) {
             actionSheetDialog.addSheetItem(option, null, which -> {
                 Map<String, Object> res = new HashMap<>();
@@ -427,10 +427,10 @@ public class WebApp extends WebJsFunc {
             });
         }
         actionSheetDialog.show();
+        return false;
     }
 
-    public void showPickerView(JsArgs.ArgsBean args) {
-
+    public Boolean showPickerView(JsArgs.ArgsBean args) {
         OptionsPickerView pvOptions = new OptionsPickerView.Builder(activity, (options1, option2,
                                                                                options3, v) -> {
             Map<String, Object> res1 = new HashMap<>();
@@ -442,9 +442,10 @@ public class WebApp extends WebJsFunc {
         }).setContentTextSize(22).setLineSpacingMultiplier(1.5f).build();
         pvOptions.setPicker(args.items);
         pvOptions.show();
+        return false;
     }
 
-    public void showDatePickerView(JsArgs.ArgsBean args) {
+    public Boolean showDatePickerView(JsArgs.ArgsBean args) {
         if (args.date == null) {
             args.date = new Date().getTime();
         }
@@ -485,6 +486,7 @@ public class WebApp extends WebJsFunc {
             }, date.getYear() + 1900, date.getMonth(), date.getDay());
             dialog.show();
         }
+        return false;
     }
 
     public void hideLoading(JsArgs.ArgsBean args) {

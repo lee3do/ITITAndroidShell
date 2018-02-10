@@ -43,7 +43,6 @@ public class MainFragment extends BaseMainFragment {
         initView(view);
         loadMultipleRootFragment(R.id.fl_tab_container, 0, mFragments);
         RxBus.get().register(this);
-        showHideFragment(mFragments[0]);
         return view;
     }
 

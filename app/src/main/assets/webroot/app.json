@@ -32,7 +32,8 @@
     "pages":[
         {
             "page":"pages/index.html",
-            "hideNavigationBar":true
+            "hideNavigationBar":true,
+            "enableBounces":false
         },
         {
             "page":"pages/news.html"
@@ -40,7 +41,7 @@
         {
             "page":"pages/trade.html",
             "hideNavigationBar":true,
-            "enableBounces":true
+            "enableBounces":false
         },
         {
             "page":"pages/home.html",
@@ -66,6 +67,10 @@
         },
         {
             "page":"pages/share.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/launch.html",
             "enableBounces":false
         }
     ]

@@ -863,15 +863,9 @@ window.nextInvokeCallback=function(callback){
 //page lifecycle
 window.pageLoad=function(args){
     window.pageArgs=args;
-    app.setNavigationBarTitle({
-            title:window.document.title
-    })
+    app.setNavigationBarTitle({title:window.document.title})
     if(window.page&&window.page.pageLoad){
         window.page.pageLoad(args);
-    }
-
-    if(window.page&&window.page.pageScrollToBottom){
-        app.invokeApp('enableLoadMore',{})
     }
     FastClick.attach(window.document.body);
 }
@@ -960,6 +954,16 @@ window.app={
         app.invokeApp('postMessage',{
             name:args.name,
             args:args.args
+        })
+    },
+    //request
+    request:function(obj){
+        app.invokeApp('request',{
+            url:obj.url,
+            method:obj.method,
+            data:obj.data,
+            header:obj.header,
+            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
     //log
@@ -1088,6 +1092,8 @@ window.app={
     setNavigationBarSegment:function(obj){
         app.invokeApp('setNavigationBarSegment',{
             items:obj.items,
+            color:obj.color,
+            selectedColor:obj.selectedColor,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1134,6 +1140,8 @@ window.app={
     *  bottomHalf
     *  fullScreen
     *  custom
+    //
+    *  tapDismiss  点击空白处或者滑动关闭
     */
     presentPage:function(obj){
         app.invokeApp('presentPage',{
@@ -1143,6 +1151,7 @@ window.app={
             navigate:obj.navigate,
             height:obj.height,
             blur:obj.blur,
+            tapDismiss:obj.tapDismiss,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },

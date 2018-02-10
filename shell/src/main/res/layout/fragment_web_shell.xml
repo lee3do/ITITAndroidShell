@@ -90,13 +90,10 @@
         <!--app:realtimeOverlayColor="@color/colorPrimary"/>-->
 
     <android.support.v7.widget.Toolbar
+        style="@style/AppTheme.Toolbar"
         android:id="@+id/toolbar"
-
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
         android:background="?attr/colorPrimary"
         android:paddingRight="20dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
         app:titleTextAppearance="@style/Toolbar_TextAppearance_White">
 
@@ -148,13 +145,13 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 android:textSize="14sp"
                 app:tabIndicatorColor="#4a90e2"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="#4a90e2"
+                app:tabSelectedTextColor="#aaa0e2"
                 app:tabTextColor="#6a6a6a"/>
         </LinearLayout>
 
@@ -168,6 +165,7 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
+
 
 
     <android.support.v4.view.ViewPager
