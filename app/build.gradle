@@ -15,6 +15,13 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "2100277113",
+                XG_ACCESS_KEY: "A25BX2L5RS8I",
+        ]
+
+
+
     }
     buildTypes {
         release {
@@ -34,4 +41,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation project(':shell')
+
 }

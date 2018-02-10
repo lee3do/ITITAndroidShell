@@ -16,5 +16,6 @@ public class App extends ShellApp {
         GuildImageList.add(R.drawable.guide_page3);
 
         startPage = R.drawable.guide_page3;
+        setBugly("fa0a542826");
     }
 }

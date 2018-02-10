@@ -52,6 +52,7 @@ import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WebJsFunc;
 import io.itit.shell.JsShell.WxApp;
+import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
@@ -99,6 +100,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public boolean hidden = true;
     public WebApp webApp;
     public WxApp wxApp;
+    public XgApp xgApp;
 
 
     public ShellFragment() {
@@ -330,8 +332,15 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         webApp = new WebApp(getActivity(), wv, this);
         wv.addJavascriptInterface(webApp, "AppBridge");
 
-        wxApp = new WxApp(getActivity(), wv, this);
-        wv.addJavascriptInterface(wxApp, "WeixinBridge");
+        if (ShellApp.UseWx) {
+            wxApp = new WxApp(getActivity(), wv, this);
+            wv.addJavascriptInterface(wxApp, "WeixinBridge");
+        }
+
+        if (ShellApp.UseXg) {
+            xgApp = new XgApp(getActivity(), wv, this);
+            wv.addJavascriptInterface(xgApp, "XGBridge");
+        }
 
         wv.setWebViewClient(new WebViewClient() {
             @Override

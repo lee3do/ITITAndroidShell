@@ -50,6 +50,9 @@ import me.yokeyword.fragmentation.Fragmentation;
 public class ShellApp extends Application {
     public Boolean useBugly = false;
     public static String appId = "wxd2452b98bd35e114";
+    public static String buglyAppId = "fa0a542826";
+    public static boolean UseWx = true;
+    public static boolean UseXg = true;
     public static IWXAPI msgApi;
     public static List<Integer> GuildImageList = new ArrayList<>();
     public static int startPage;
@@ -191,10 +194,10 @@ public class ShellApp extends Application {
         });
     }
 
-    public void setBugly(String appId) {
+    public void setBugly(String buglyAppId) {
         this.useBugly = true;
-        this.appId = appId;
-        Bugly.init(getApplicationContext(), appId, false);
+        this.buglyAppId = buglyAppId;
+        Bugly.init(getApplicationContext(), buglyAppId, true);
         Fragmentation.builder().handleException(CrashReport::postCatchedException).install();
     }
 
