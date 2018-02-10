@@ -240,6 +240,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         refreshLayout.setEnableLoadmore(true);
         refreshLayout.setEnableOverScrollBounce(true);
 
+
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             // refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             wv.evaluateJavascript("pagePullToRefresh()", null);
@@ -505,17 +506,19 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         showSegment = true;
         textView.setText("");
         centerImage.setImageBitmap(null);
-        mTab.setVisibility(View.VISIBLE);
-        if (mTitles.size() > 5) {
+        mTitles = args.items;
+        if (mTitles.size() > 4) {
             mTab.setTabMode(TabLayout.MODE_SCROLLABLE);
         } else {
             mTab.setTabMode(TabLayout.MODE_FIXED);
         }
+
+        mTab.setVisibility(View.VISIBLE);
         if (!StringUtils.isEmpty(args.color)) {
             mTab.setTabTextColors(Color.parseColor(args.color),Color.parseColor(args.selectedColor));
         }
 
-        mTitles = args.items;
+
         mViewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {

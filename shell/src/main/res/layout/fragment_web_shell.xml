@@ -93,7 +93,6 @@
         style="@style/AppTheme.Toolbar"
         android:id="@+id/toolbar"
         android:background="?attr/colorPrimary"
-        android:paddingRight="20dp"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
         app:titleTextAppearance="@style/Toolbar_TextAppearance_White">
 
@@ -148,9 +147,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 app:tabIndicatorColor="#4a90e2"
-                app:tabMode="fixed"
+                app:tabMode="scrollable"
                 app:tabSelectedTextColor="#aaa0e2"
                 app:tabTextColor="#6a6a6a"/>
         </LinearLayout>
@@ -158,6 +157,7 @@
         <LinearLayout
             android:id="@+id/rightBar"
             android:layout_gravity="right"
+            android:paddingRight="20dp"
             android:gravity="right"
             android:orientation="horizontal"
             android:layout_width="wrap_content"

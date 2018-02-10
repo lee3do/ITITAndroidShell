@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.trinea.android.common.util.PreferencesUtils;
+import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
@@ -68,15 +69,24 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
 
 
     private void copyAssets() {
-        int version = PreferencesUtils.getInt(getApplicationContext(), "VERSION", -1);
-//        //TODO 拷贝，加版本号判断
-        if (true) {
+        boolean needCopy = false;
+        String version = PreferencesUtils.getString(getApplicationContext(), "VERSION", "");
+        if (!StringUtils.isEmpty(version)) {
+            loadAppConfig();
+            if (!ShellApp.appConfig.version.equals(version)) {
+                needCopy = true;
+            }
+        } else {
+            needCopy = true;
+        }
+        if (needCopy) {
             new Thread(() -> {
                 try {
                     Logger.d("copy assets");
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "webroot");
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "js");
                     loadAppConfig();
+                    PreferencesUtils.putString(getApplicationContext(),"VERSION",ShellApp.appConfig.version);
                 } catch (IOException e) {
                     Logger.e(e, "");
                 }
@@ -120,12 +130,13 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         runOnUiThread(() -> {
             getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
                     .LayoutParams.FLAG_FULLSCREEN);
-            if (PreferencesUtils.getBoolean(WelcomeActivity.this, "isFirst", true) && ShellApp
-                    .GuildImageList.size() > 0) {
-                startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
-            } else {
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-            }
+//            if (PreferencesUtils.getBoolean(WelcomeActivity.this, "isFirst", true) && ShellApp
+//                    .GuildImageList.size() > 0) {
+//                startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
+//            } else {
+//
+//            }
+            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
             finish();
         });
     }

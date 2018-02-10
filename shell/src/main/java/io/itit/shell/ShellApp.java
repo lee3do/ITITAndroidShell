@@ -79,6 +79,7 @@ public class ShellApp extends Application {
                 ClassicsFooter.REFRESH_FOOTER_FINISH = "";
 
                 return new ClassicsFooter(context).setDrawableSize(20).setFinishDuration(500);
+              //  return new BallPulseFooter(context);
             }
         });
     }
