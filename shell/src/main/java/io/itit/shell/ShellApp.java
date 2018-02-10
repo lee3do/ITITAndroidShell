@@ -49,6 +49,7 @@ import me.yokeyword.fragmentation.Fragmentation;
 
 public class ShellApp extends Application {
     public Boolean useBugly = false;
+    public static int assertVersion = 0;
     public static String appId = "wxd2452b98bd35e114";
     public static String buglyAppId = "fa0a542826";
     public static boolean UseWx = true;

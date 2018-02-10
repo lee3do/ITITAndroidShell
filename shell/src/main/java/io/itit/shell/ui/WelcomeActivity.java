@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.trinea.android.common.util.PreferencesUtils;
-import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
@@ -70,13 +69,8 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
 
     private void copyAssets() {
         boolean needCopy = false;
-        String version = PreferencesUtils.getString(getApplicationContext(), "VERSION", "");
-        if (!StringUtils.isEmpty(version)) {
-            loadAppConfig();
-            if (!ShellApp.appConfig.version.equals(version)) {
-                needCopy = true;
-            }
-        } else {
+        int version = PreferencesUtils.getInt(getApplicationContext(), "VERSION", -1);
+        if (version!=ShellApp.assertVersion) {
             needCopy = true;
         }
         if (needCopy) {
@@ -86,7 +80,7 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "webroot");
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "js");
                     loadAppConfig();
-                    PreferencesUtils.putString(getApplicationContext(),"VERSION",ShellApp.appConfig.version);
+                    PreferencesUtils.putInt(getApplicationContext(),"VERSION",ShellApp.assertVersion);
                 } catch (IOException e) {
                     Logger.e(e, "");
                 }

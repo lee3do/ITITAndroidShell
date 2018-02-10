@@ -20,6 +20,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.widget.ImageViewCompat;
@@ -43,14 +44,23 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import cn.trinea.android.common.util.FileUtils;
 import cn.trinea.android.common.util.ListUtils;
@@ -315,14 +325,89 @@ public class WebApp extends WebJsFunc {
         evalJs(args.callback);
     }
 
-    public void downloadFile(JsArgs.ArgsBean args) {
+    public Map<String, Object> downloadFile(JsArgs.ArgsBean args) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
-        request.setDestinationInExternalPublicDir("/download/", args.path);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, args.path);
+       // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
                 .DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),args.path);
+        Map<String, Object> res = new HashMap<>();
+        res.put("path", file.getAbsolutePath());
+        return res;
+
     }
 
+    public void unzip(JsArgs.ArgsBean args) throws IOException {
+        ZipFile zfile = new ZipFile(new File(ShellApp.getFileFolderPath(activity), args.path));
+        Enumeration zList = zfile.entries();
+        ZipEntry ze = null;
+        byte[] buf = new byte[1024];
+        while (zList.hasMoreElements()) {
+            ze = (ZipEntry) zList.nextElement();
+            if (ze.isDirectory()) {
+                // Logger.d("ze.getName() = " + ze.getName());
+                String dirstr = ShellApp.getFileFolderPath(activity) + ze.getName();
+                //dirstr.trim();
+                dirstr = new String(dirstr.getBytes("8859_1"), "GB2312");
+                // Log.d("upZipFile", "str = " + dirstr);
+                File f = new File(dirstr);
+                f.mkdir();
+                continue;
+
+            }
+            //  Logger.d("ze.getName() = " + ze.getName());
+            OutputStream os = new BufferedOutputStream(new FileOutputStream(getRealFileName
+                    (ShellApp.getFileFolderPath(activity), ze.getName())));
+            InputStream is = new BufferedInputStream(zfile.getInputStream(ze));
+            int readLen = 0;
+            while ((readLen = is.read(buf, 0, 1024)) != -1) {
+                os.write(buf, 0, readLen);
+            }
+            is.close();
+            os.close();
+        }
+        zfile.close();
+    }
+
+    public static File getRealFileName(String baseDir, String absFileName) {
+        String[] dirs = absFileName.split("/");
+        File ret = new File(baseDir);
+        String substr = null;
+        if (dirs.length > 1) {
+            for (int i = 0; i < dirs.length - 1; i++) {
+                substr = dirs[i];
+                try {
+                    //substr.trim();
+                    substr = new String(substr.getBytes("8859_1"), "GB2312");
+
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                ret = new File(ret, substr);
+
+            }
+            // Logger.d("1ret = " + ret);
+            if (!ret.exists()) ret.mkdirs();
+            substr = dirs[dirs.length - 1];
+            try {
+                //substr.trim();
+                substr = new String(substr.getBytes("8859_1"), "GB2312");
+                // Logger.d("substr = " + substr);
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            ret = new File(ret, substr);
+            // Log.d("upZipFile", "2ret = " + ret);
+            return ret;
+        }
+
+        return ret;
+    }
 
     public void startAudioRecord(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.RECORD_AUDIO};
@@ -331,7 +416,6 @@ public class WebApp extends WebJsFunc {
         } else {
             EasyPermissions.requestPermissions(shellFragment, "请授予录音权限。", 10086, perms);
         }
-
     }
 
     public Map<String, Object> getAudioRecordStatus(JsArgs.ArgsBean args) {
