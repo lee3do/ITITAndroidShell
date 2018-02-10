@@ -23,7 +23,7 @@ public class JsArgs {
          * callback : null
          */
         public int badge;
-        public int id;
+        public String id;
         public Boolean navigate;
         public Boolean visible;
         public Boolean enable;
@@ -35,6 +35,8 @@ public class JsArgs {
         public int height;
         public String title;
         public String name;
+        public long appId;
+        public String appKey;
         public int scene;
         public String text;
         public List<String> titles;

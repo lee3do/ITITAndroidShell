@@ -25,15 +25,32 @@ public class XgApp extends WebJsFunc {
     }
 
     public void setEnableDebug(JsArgs.ArgsBean args) {
-        XGPushConfig.enableDebug(activity,args.enable);
+        XGPushConfig.enableDebug(activity, args.enable);
     }
 
-    public void bind(JsArgs.ArgsBean args) {
+    public void startXG(JsArgs.ArgsBean args) {
+        XGPushConfig.setAccessId(activity,args.appId);
+        XGPushConfig.setAccessKey(activity,args.appKey);
         XGPushManager.registerPush(activity, new XGIOperateCallback() {
             @Override
             public void onSuccess(Object data, int flag) {
                 token = (String) data;
             }
+
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+
+            }
+        });
+    }
+
+    public void bind(JsArgs.ArgsBean args) {
+        XGPushManager.registerPush(activity, args.id, new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+                token = (String) data;
+            }
+
             @Override
             public void onFail(Object data, int errCode, String msg) {
 
@@ -47,6 +64,21 @@ public class XgApp extends WebJsFunc {
             public void onSuccess(Object data, int flag) {
                 token = (String) data;
             }
+
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+
+            }
+        });
+    }
+
+    public void stopXG(JsArgs.ArgsBean args) {
+        XGPushManager.unregisterPush(activity, new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+                token = (String) data;
+            }
+
             @Override
             public void onFail(Object data, int errCode, String msg) {
 
