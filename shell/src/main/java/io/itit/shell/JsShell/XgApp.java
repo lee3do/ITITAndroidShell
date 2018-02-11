@@ -2,6 +2,8 @@ package io.itit.shell.JsShell;
 
 import android.app.Activity;
 
+import com.alibaba.fastjson.JSON;
+import com.orhanobut.logger.Logger;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
@@ -29,19 +31,20 @@ public class XgApp extends WebJsFunc {
     }
 
     public void startXG(JsArgs.ArgsBean args) {
+        Logger.d("startXG:"+ JSON.toJSONString(args));
         XGPushConfig.setAccessId(activity, Long.parseLong(args.appId));
         XGPushConfig.setAccessKey(activity,args.appKey);
-        XGPushManager.registerPush(activity, new XGIOperateCallback() {
-            @Override
-            public void onSuccess(Object data, int flag) {
-                token = (String) data;
-            }
-
-            @Override
-            public void onFail(Object data, int errCode, String msg) {
-
-            }
-        });
+//        XGPushManager.registerPush(activity, new XGIOperateCallback() {
+//            @Override
+//            public void onSuccess(Object data, int flag) {
+//                token = (String) data;
+//            }
+//
+//            @Override
+//            public void onFail(Object data, int errCode, String msg) {
+//
+//            }
+//        });
     }
 
     public void bind(JsArgs.ArgsBean args) {
