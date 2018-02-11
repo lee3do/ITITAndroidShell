@@ -16,10 +16,7 @@ public class App extends ShellApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        GuildImageList.add(R.drawable.guide_page);
-        GuildImageList.add(R.drawable.guide_page2);
-        GuildImageList.add(R.drawable.guide_page3);
-        assertVersion = 6;
+        assertVersion = 7;
         startPage = R.drawable.guide_page3;
         setBugly("fa0a542826");
 

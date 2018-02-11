@@ -8,15 +8,21 @@ window.weixin={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
+    registerApp:function(obj){
+        weixin.invoke('registerApp',{
+            appId:obj.appId,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
     openWXApp:function(obj){
         weixin.invoke('openWXApp',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
     /*
-    WXSceneSession  = 0,        聊天界面    
-    WXSceneTimeline = 1,        朋友圈      
-    WXSceneFavorite = 2,        收藏       
+    WXSceneSession  = 0,        聊天界面
+    WXSceneTimeline = 1,        朋友圈
+    WXSceneFavorite = 2,        收藏
     */
     shareText:function(obj){
         weixin.invoke('shareText',{
@@ -53,7 +59,7 @@ window.weixin={
         weixin.invoke('pay',{
             partnerId:obj.partnerId,
             prepayId:obj.prepayId,
-            package:obj.package,
+            packageValue:obj.package,
             nonceStr:obj.nonceStr,
             timeStamp:obj.timeStamp,
             sign:obj.sign,
@@ -61,4 +67,3 @@ window.weixin={
         })
     },
 }
-

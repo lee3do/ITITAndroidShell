@@ -35,7 +35,7 @@ public class JsArgs {
         public int height;
         public String title;
         public String name;
-        public long appId;
+        public String appId;
         public String appKey;
         public int scene;
         public String text;
@@ -68,5 +68,12 @@ public class JsArgs {
         public List<String> items;
         public String mode;
         public Long date;
+
+        public String partnerId;
+        public String prepayId;
+        public String nonceStr;
+        public String timeStamp;
+        public String sign;
+        public String packageValue;
     }
 }

@@ -29,7 +29,7 @@ public class XgApp extends WebJsFunc {
     }
 
     public void startXG(JsArgs.ArgsBean args) {
-        XGPushConfig.setAccessId(activity,args.appId);
+        XGPushConfig.setAccessId(activity, Long.parseLong(args.appId));
         XGPushConfig.setAccessKey(activity,args.appKey);
         XGPushManager.registerPush(activity, new XGIOperateCallback() {
             @Override

@@ -21,8 +21,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.smtt.sdk.QbSdk;
 
 import java.io.BufferedReader;
@@ -54,7 +52,7 @@ public class ShellApp extends Application {
     public static String buglyAppId = "fa0a542826";
     public static boolean UseWx = true;
     public static boolean UseXg = true;
-    public static IWXAPI msgApi;
+
     public static List<Integer> GuildImageList = new ArrayList<>();
     public static int startPage;
     public static AppConfig appConfig;
@@ -203,14 +201,6 @@ public class ShellApp extends Application {
         Fragmentation.builder().handleException(CrashReport::postCatchedException).install();
     }
 
-    public static IWXAPI getWx(Context context) {
-        if (msgApi == null) {
-            msgApi = WXAPIFactory.createWXAPI(context, appId, true);
-            // 将该app注册到微信
-            msgApi.registerApp(appId);
-        }
-        return msgApi;
-    }
 
     public static String getFileFolderUrl(Context context) {
         return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";

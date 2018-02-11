@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.itit.androidlibrary.Consts;
-import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.WxUtils;
 
 public class ShellWXEntryActivity extends Activity implements IWXAPIEventHandler {
 	IWXAPI api;
@@ -27,7 +27,7 @@ public class ShellWXEntryActivity extends Activity implements IWXAPIEventHandler
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("ITIT","onCreate");
-		api  = ShellApp.getWx(this);
+		api  = WxUtils.msgApi;
 		api.handleIntent(getIntent(), this);
 	}
 

@@ -17,7 +17,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.WxUtils;
 
 /**
  * Created by ntop on 15/9/4.
@@ -28,7 +28,7 @@ public class ShellWXPayEntryActivity extends Activity implements IWXAPIEventHand
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api = ShellApp.getWx(this);
+        api  = WxUtils.msgApi;
         api.handleIntent(getIntent(), this);
     }
 

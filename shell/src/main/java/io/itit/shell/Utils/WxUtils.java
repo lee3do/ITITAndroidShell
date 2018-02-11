@@ -13,6 +13,7 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,11 +25,12 @@ import io.itit.shell.ShellApp;
  */
 
 public class WxUtils {
+    public static IWXAPI msgApi;
 
 
     public static void openWx(Context context) {
-        ComponentName componet = new ComponentName("com.tencent.mm", "com.tencent.mm.ui" + "" + "" +
-                ".LauncherUI");
+        ComponentName componet = new ComponentName("com.tencent.mm", "com.tencent.mm.ui" + "" +
+                "" + ".LauncherUI");
         //pkg 就是第三方应用的包名
         //cls 就是第三方应用的进入的第一个Activity
         Intent intent = new Intent();
@@ -38,7 +40,7 @@ public class WxUtils {
     }
 
     public static void shareUrl(Context context, int scene, String url, String title, String
-            description, String thumbPath, IWXAPI msgApi) {
+            description, String thumbPath) {
         WXWebpageObject wxWebpageObject = new WXWebpageObject();
         wxWebpageObject.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage();
@@ -55,7 +57,7 @@ public class WxUtils {
         msgApi.sendReq(req);
     }
 
-    public static void shareText(int scene, String text, IWXAPI msgApi) {
+    public static void shareText(int scene, String text) {
         WXTextObject textObject = new WXTextObject();
         textObject.text = text;
         WXMediaMessage msg = new WXMediaMessage();
@@ -68,8 +70,7 @@ public class WxUtils {
         msgApi.sendReq(req);
     }
 
-    public static void shareImageFile(Context context, int scene, String path, String thumbPath,
-                                      IWXAPI msgApi) {
+    public static void shareImageFile(Context context, int scene, String path, String thumbPath) {
         Bitmap bmp = BitmapFactory.decodeFile(new File(ShellApp.getFileFolderPath(context), path)
                 .getAbsolutePath());
         Bitmap bmp2 = BitmapFactory.decodeFile(new File(ShellApp.getFileFolderPath(context),
@@ -88,7 +89,7 @@ public class WxUtils {
         msgApi.sendReq(req);
     }
 
-    public static void wxLogin(String state,IWXAPI msgApi) {
+    public static void wxLogin(String state) {
         final SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
         req.state = state;
@@ -106,4 +107,11 @@ public class WxUtils {
         return baos.toByteArray();
     }
 
+    public static void registerApp(String appId, Context context) {
+        if (msgApi == null) {
+            msgApi = WXAPIFactory.createWXAPI(context, appId, true);
+            // 将该app注册到微信
+            msgApi.registerApp(appId);
+        }
+    }
 }

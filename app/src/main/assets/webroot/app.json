@@ -17,8 +17,14 @@
 			"page": "weixin.html",
 			"title": "微信",
 			"icon": "tabbar-icon.png"
-		}
+		},
+        {
+            "page": "xg.html",
+            "title": "信鸽",
+            "icon": "tabbar-icon.png"
+        }
  	],
+    "launchPage1":"index.html",
     "pages":[
         {
              "page":"index.html",
