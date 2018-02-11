@@ -85,6 +85,7 @@ import io.itit.shell.ui.PresentPageActivity;
 import io.itit.shell.ui.ShellFragment;
 import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import okhttp3.MultipartBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -339,6 +340,30 @@ public class WebApp extends WebJsFunc {
 
     }
 
+    public void uploadFile(JsArgs.ArgsBean args) {
+        String path = args.fullpath;
+        String url = args.url;
+        String fileName = args.path;
+        Logger.d("path is " + path + ",URL is " + url);
+        File file = new File(path);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileName);
+//        Call<UploadData> call = appApis.uploadFile(body, url);
+//        call.enqueue(new Callback<UploadData>() {
+//            @Override
+//            public void onResponse(Call<UploadData> call, Response<UploadData> response) {
+//                if (response.body() != null) {
+//                } else {
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UploadData> call, Throwable t) {
+//                Logger.e("uploadFile failed:" + t.getLocalizedMessage());
+//            }
+//        });
+
+    }
+
     public void unzip(JsArgs.ArgsBean args) throws IOException {
         ZipFile zfile = new ZipFile(new File(ShellApp.getFileFolderPath(activity), args.path));
         Enumeration zList = zfile.entries();
@@ -404,6 +429,8 @@ public class WebApp extends WebJsFunc {
             ret = new File(ret, substr);
             // Log.d("upZipFile", "2ret = " + ret);
             return ret;
+        }else {
+            ret = new File(baseDir,absFileName);
         }
 
         return ret;

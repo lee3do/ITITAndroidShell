@@ -20,8 +20,6 @@ android {
                 XG_ACCESS_KEY: "A25BX2L5RS8I",
         ]
 
-
-
     }
     buildTypes {
         release {
