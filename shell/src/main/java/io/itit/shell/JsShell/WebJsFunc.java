@@ -9,6 +9,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import cn.trinea.android.common.util.StringUtils;
@@ -48,7 +49,7 @@ public class WebJsFunc {
                         if (res != null && res instanceof Boolean) {
 
                         } else {
-                            evalJs(arg.args.callback);
+                            evalJs(arg.args.callback,new HashMap());
                         }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
