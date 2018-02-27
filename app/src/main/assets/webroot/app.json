@@ -1,38 +1,75 @@
 {
-	"debug":true,
-	"serverRoot1":"http://localhost:7007",
-	"version":"1.0",
- 	"pageBackgroundColor":"#555555",
- 	"navigationBarBackgroundColor":"#ffff00",
- 	"navigationBarColor":"#ff0000",
-	"tabBarTintColor":"#ff684f",
-	"tabBarBackgroundColor":"#33ff21",
- 	"tabBarItems":[
- 		{
-			"page": "index.html",
-			"title": "首页",
-			"icon": "tabbar-icon.png"
-		},
-		{
-			"page": "weixin.html",
-			"title": "微信",
-			"icon": "tabbar-icon.png"
-		},
+    "debug":true,
+    "serverRoot1":"http://10.0.0.2:7004",
+    "version":"1.0.1",
+    "pageBackgroundColor":"#F5F6F9",
+    "navigationBarBackgroundColor":"#ffffff",
+    "navigationBarColor":"#000000",
+    "tabBarTintColor":"#1589fa",
+    "tabBarBackgroundColor":"#f3f3f3",
+    "tabBarItems":[
         {
-            "page": "xg.html",
-            "title": "信鸽",
-            "icon": "tabbar-icon.png"
+            "page":"pages/index.html",
+            "title":"首页",
+            "icon":"image/icons/icon-tab-index.png"
+        },
+        {
+            "page":"pages/news.html",
+            "title":"资讯",
+            "icon":"image/icons/icon-tab-news.png"
+        },
+        {
+            "page":"pages/trade.html",
+            "title":"交易汇总",
+            "icon":"image/icons/icon-tab-trade.png"
+        },
+        {
+            "page":"pages/home.html",
+            "title":"个人中心",
+            "icon":"image/icons/icon-tab-home.png"
         }
- 	],
-    "launchPage1":"index.html",
+    ],
     "pages":[
         {
-             "page":"index.html",
-             "navigationBarBackgroundColor":"#663333",
-             "navigationBarColor":"#ff0f0f",
-             "pageBackgroundColor":"#ff0000",
-             "hideNavigationBar":false,
-             "enableBounces":true
+            "page":"pages/index.html",
+            "hideNavigationBar":true,
+            "enableBounces":false
+        },
+        {
+            "page":"pages/news.html"
+        },
+        {
+            "page":"pages/trade.html",
+            "hideNavigationBar":true
+        },
+        {
+            "page":"pages/home.html",
+            "hideNavigationBar":true
+        },
+        {
+            "page":"pages/login.html",
+            "hideNavigationBar":true,
+            "enableBounces":false
+        },
+        {
+            "page":"pages/register.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/password-forget.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/password-change.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/share.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/launch.html",
+            "enableBounces":false
         }
     ]
 }

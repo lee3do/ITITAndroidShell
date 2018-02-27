@@ -26,7 +26,8 @@ public class ShellWXEntryActivity extends Activity implements IWXAPIEventHandler
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("ITIT","onCreate");
+		Log.d("ITIT","11111onCreate"+WxUtils.msgApi);
+
 		api  = WxUtils.msgApi;
 		api.handleIntent(getIntent(), this);
 	}

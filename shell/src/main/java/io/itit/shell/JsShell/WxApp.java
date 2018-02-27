@@ -36,8 +36,9 @@ public class WxApp extends WebJsFunc {
     }
 
 
-    public void login(JsArgs.ArgsBean args) {
+    public Boolean login(JsArgs.ArgsBean args) {
         WxUtils.wxLogin(args.state);
+        return false;
     }
 
     public void registerApp(JsArgs.ArgsBean args) {

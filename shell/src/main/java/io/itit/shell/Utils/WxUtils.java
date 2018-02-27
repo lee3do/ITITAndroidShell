@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -108,7 +109,9 @@ public class WxUtils {
     }
 
     public static void registerApp(String appId, Context context) {
+        Logger.d("registerApp1");
         if (msgApi == null) {
+            Logger.d("registerApp2");
             msgApi = WXAPIFactory.createWXAPI(context, appId, true);
             // 将该app注册到微信
             msgApi.registerApp(appId);
