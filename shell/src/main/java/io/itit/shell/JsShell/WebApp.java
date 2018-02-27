@@ -201,68 +201,71 @@ public class WebApp extends WebJsFunc {
     }
 
     public void setNavigationBarItems(JsArgs.ArgsBean args) {
-        shellFragment.leftBar.removeAllViews();
-        shellFragment.rightBar.removeAllViews();
+        activity.runOnUiThread(()->{
+            shellFragment.leftBar.removeAllViews();
+            shellFragment.rightBar.removeAllViews();
 
-        if (!ListUtils.isEmpty(args.images)) {
-            for (String image : args.images) {
-                ImageView imageView = new ImageView(activity);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(CommonUtil
-                        .dipToPixel(33), CommonUtil.dipToPixel(24));
-                if (args.position.equals("left")) {
-                    lp.gravity = Gravity.LEFT;
-                } else if (args.position.equals("right")) {
-                    lp.gravity = Gravity.RIGHT;
-                }
+            if (!ListUtils.isEmpty(args.images)) {
+                for (String image : args.images) {
+                    ImageView imageView = new ImageView(activity);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(CommonUtil
+                            .dipToPixel(33), CommonUtil.dipToPixel(24));
+                    if (args.position.equals("left")) {
+                        lp.gravity = Gravity.LEFT|Gravity.CENTER_VERTICAL;
+                    } else if (args.position.equals("right")) {
+                        lp.gravity = Gravity.RIGHT|Gravity.CENTER_VERTICAL;
+                    }
 
-                imageView.setLayoutParams(lp);
-                imageView.setTag(image);
-                displayImage(image, imageView);
+                    imageView.setLayoutParams(lp);
+                    imageView.setTag(image);
+                    displayImage(image, imageView);
 
-                imageView.setOnClickListener(v -> {
-                    Map<String, Object> res = new HashMap<>();
-                    res.put("value", imageView.getTag());
-                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
-                            (res) + ")", null);
-                });
-                if (args.position.equals("left")) {
-                    shellFragment.leftBar.addView(imageView);
-                } else {
-                    shellFragment.rightBar.addView(imageView);
-                }
-                ImageViewCompat.setImageTintList(imageView, ColorStateList.valueOf(Color
-                        .parseColor(ShellApp.appConfig.navigationBarColor)));
-            }
-        }
-        if (!ListUtils.isEmpty(args.titles)) {
-            for (String title : args.titles) {
-                TextView textView = new TextView(activity);
-                textView.setText(title);
-                textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout
-                        .LayoutParams.WRAP_CONTENT, CommonUtil.dipToPixel(30));
-                if (args.position.equals("left")) {
-                    lp.gravity = Gravity.LEFT;
-                } else if (args.position.equals("right")) {
-                    lp.gravity = Gravity.RIGHT;
-                }
-                textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-                textView.setGravity(Gravity.CENTER);
-                textView.setLayoutParams(lp);
-                textView.setOnClickListener(v -> {
-                    Map<String, Object> res = new HashMap<>();
-                    res.put("value", textView.getText());
-                    webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
-                            (res) + ")", null);
-                });
-                if (args.position.equals("left")) {
-                    shellFragment.leftBar.addView(textView);
-                } else {
-                    shellFragment.rightBar.addView(textView);
+                    imageView.setOnClickListener(v -> {
+                        Map<String, Object> res = new HashMap<>();
+                        res.put("value", imageView.getTag());
+                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
+                                (res) + ")", null);
+                    });
+                    if (args.position.equals("left")) {
+                        shellFragment.leftBar.addView(imageView);
+                    } else {
+                        shellFragment.rightBar.addView(imageView);
+                    }
+                    ImageViewCompat.setImageTintList(imageView, ColorStateList.valueOf(Color
+                            .parseColor(ShellApp.appConfig.navigationBarColor)));
                 }
             }
-        }
+            if (!ListUtils.isEmpty(args.titles)) {
+                for (String title : args.titles) {
+                    TextView textView = new TextView(activity);
+                    textView.setText(title);
+                    textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout
+                            .LayoutParams.WRAP_CONTENT, CommonUtil.dipToPixel(30));
+                    if (args.position.equals("left")) {
+                        lp.gravity = Gravity.LEFT;
+                    } else if (args.position.equals("right")) {
+                        lp.gravity = Gravity.RIGHT;
+                    }
+                    textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                    textView.setGravity(Gravity.CENTER);
+                    textView.setLayoutParams(lp);
+                    textView.setOnClickListener(v -> {
+                        Map<String, Object> res = new HashMap<>();
+                        res.put("value", textView.getText());
+                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
+                                (res) + ")", null);
+                    });
+                    if (args.position.equals("left")) {
+                        shellFragment.leftBar.addView(textView);
+                    } else {
+                        shellFragment.rightBar.addView(textView);
+                    }
+                }
+            }
+        });
+
     }
 
 
@@ -829,6 +832,7 @@ public class WebApp extends WebJsFunc {
 
 
     private void displayImage(String url, ImageView imageView) {
+        Logger.d("displayImage:"+url);
         if (!url.startsWith("http")) {
             File file = new File(ShellApp.getFileFolderPath(activity), url);
             Picasso.with(activity).load(file).into(imageView);
