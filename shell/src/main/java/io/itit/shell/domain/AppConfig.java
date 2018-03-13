@@ -11,7 +11,7 @@ public class AppConfig {
     /**
      * debug : true
      * serverRoot1 : http://localhost:7005
-     * version : 1.0
+     * version : 1
      * pageBackgroundColor : #555555
      * navigationBarBackgroundColor : #ffff00
      * navigationBarColor : #ff0000
@@ -24,7 +24,7 @@ public class AppConfig {
 
     public boolean debug;
     public String serverRoot1;
-    public String version;
+    public int version;
     public String pageBackgroundColor;
     public String navigationBarBackgroundColor;
     public String navigationBarColor;

@@ -43,8 +43,8 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         if (EasyPermissions.hasPermissions(this, perms)) {
             initStartPage();
         } else {
-            EasyPermissions.requestPermissions(this, "为了加快程序运行速度，程序需要读写手机存储权限，请同意以下权限，否则无法正常使用本程序。",
-                    10086, perms);
+            EasyPermissions.requestPermissions(this,
+                    "为了加快程序运行速度，程序需要读写手机存储权限，请同意以下权限，否则无法正常使用本程序。", 10086, perms);
         }
     }
 
@@ -70,9 +70,15 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
     private void copyAssets() {
         boolean needCopy = false;
         int version = PreferencesUtils.getInt(getApplicationContext(), "VERSION", -1);
-        if (version!=ShellApp.assertVersion) {
-            needCopy = true;
+        try {
+            AppUtils.copyAssetFileToFiles(getApplicationContext(), "webroot/app.json");
+            if (version != ShellApp.appConfig.version) {
+                needCopy = true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         if (needCopy) {
             new Thread(() -> {
                 try {
@@ -80,7 +86,8 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "webroot");
                     AppUtils.copyAssetDirToFiles(getApplicationContext(), "js");
                     loadAppConfig();
-                    PreferencesUtils.putInt(getApplicationContext(),"VERSION",ShellApp.assertVersion);
+                    PreferencesUtils.putInt(getApplicationContext(), "VERSION", ShellApp
+                            .appConfig.version);
                 } catch (IOException e) {
                     Logger.e(e, "");
                 }
@@ -92,9 +99,9 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
 
     private void loadAppConfig() {
         ShellApp.loadAppConfig(this);
-        ShellApp.loadAppJs(this,"AppBridge.js");
-        ShellApp.loadAppJs(this,"WeixinBridge.js");
-        ShellApp.loadAppJs(this,"XGBridge.js");
+        ShellApp.loadAppJs(this, "AppBridge.js");
+        ShellApp.loadAppJs(this, "WeixinBridge.js");
+        ShellApp.loadAppJs(this, "XGBridge.js");
         loadFinish();
     }
 

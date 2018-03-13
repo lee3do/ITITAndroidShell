@@ -11,7 +11,6 @@ public class App extends ShellApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        assertVersion = 10;
         startPage = R.drawable.guide_page3;
         setBugly("fa0a542826");
 
