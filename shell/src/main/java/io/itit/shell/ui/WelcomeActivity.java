@@ -11,16 +11,19 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import cn.trinea.android.common.util.PreferencesUtils;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.domain.AppConfig;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -71,13 +74,20 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         boolean needCopy = false;
         int version = PreferencesUtils.getInt(getApplicationContext(), "VERSION", -1);
         try {
-            AppUtils.copyAssetFileToFiles(getApplicationContext(), "webroot/app.json");
-            if (version != ShellApp.appConfig.version) {
+            InputStream is = getApplication().getAssets().open("webroot/app.json");
+            byte[] buffer = new byte[is.available()];
+            is.read(buffer);
+            is.close();
+            AppConfig appConfig = JSON.parseObject(new String(buffer), AppConfig.class);
+            if (version < appConfig.version) {
                 needCopy = true;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
 
         if (needCopy) {
             new Thread(() -> {
