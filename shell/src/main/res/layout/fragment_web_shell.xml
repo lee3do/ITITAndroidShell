@@ -42,6 +42,7 @@
                 android:background="#55000000"
                 android:orientation="horizontal"/>
 
+
             <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/refreshLayout"
@@ -54,11 +55,12 @@
                 app:srlEnableRefresh="false"
                 >
 
-                <com.tencent.smtt.sdk.WebView
+                <io.itit.shell.Utils.MyWebView
                     android:id="@+id/wv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     />
+
 
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

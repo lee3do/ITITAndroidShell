@@ -366,7 +366,6 @@ public class WebApp extends WebJsFunc {
 //                Logger.e("uploadFile failed:" + t.getLocalizedMessage());
 //            }
 //        });
-
     }
 
     public void unzip(JsArgs.ArgsBean args) throws IOException {

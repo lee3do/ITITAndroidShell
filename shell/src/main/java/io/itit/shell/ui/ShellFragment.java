@@ -56,6 +56,7 @@ import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.Locations;
+import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.wxapi.StatusBarUtil;
@@ -85,7 +86,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     private boolean canBack;
     private boolean navigate;
 
-    public WebView wv;
+    public MyWebView wv;
     public Toolbar toolbar;
     public LinearLayout leftBar;
     public LinearLayout rightBar;
@@ -243,18 +244,19 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     private void initPullToRefresh(View view) {
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setEnableRefresh(false);
-        refreshLayout.setEnableLoadmore(true);
+        refreshLayout.setEnableLoadmore(false);
         refreshLayout.setEnableOverScrollBounce(true);
 
 
         refreshLayout.setOnRefreshListener(refreshlayout -> {
-            // refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             wv.evaluateJavascript("pagePullToRefresh()", null);
         });
+
         refreshLayout.setOnLoadmoreListener(refreshlayout -> {
             Logger.d("onLoadmore");
             wv.evaluateJavascript("pageScrollToBottom()", null);
-            refreshlayout.finishLoadmore(200);//传入false表示加载失败
+            refreshlayout.finishLoadmore(100);//传入false表示加载失败
         });
 
         //状态栏透明和间距处理
@@ -373,6 +375,19 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         });
 
+        wv.setOnCustomScroolChangeListener((l, t, oldl, oldt) -> {
+            float webViewContentHeight=wv.getContentHeight() * wv.getScale();
+            //WebView的现高度
+            float webViewCurrentHeight=(wv.getView().getHeight() + wv.getView().getScrollY());
+            Logger.d(webViewContentHeight+"::"+webViewCurrentHeight);
+            if ((webViewContentHeight-webViewCurrentHeight) <= 5) {
+                Logger.d("WebView滑动到了底端");
+                wv.evaluateJavascript("pageScrollToBottom()", null);
+            }
+        });
+
+
+
 
         Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);
         if (url.startsWith("http")) {
@@ -380,6 +395,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         } else {
             wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
         }
+
 
     }
 
