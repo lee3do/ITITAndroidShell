@@ -87,7 +87,6 @@ import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.MultipartBody;
 import pub.devrel.easypermissions.EasyPermissions;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -244,9 +243,9 @@ public class WebApp extends WebJsFunc {
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout
                             .LayoutParams.WRAP_CONTENT, CommonUtil.dipToPixel(30));
                     if (args.position.equals("left")) {
-                        lp.gravity = Gravity.LEFT;
+                        lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
                     } else if (args.position.equals("right")) {
-                        lp.gravity = Gravity.RIGHT;
+                        lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
                     }
                     textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
@@ -330,29 +329,20 @@ public class WebApp extends WebJsFunc {
         evalJs(args.callback);
     }
 
-    public void downloadFile(JsArgs.ArgsBean args) {
-//        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
-//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, args.path);
-//       // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
-//        DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
-//                .DOWNLOAD_SERVICE);
-//        downloadManager.enqueue(request);
-//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment
-// .DIRECTORY_DOWNLOADS),args.path);
-//        Map<String, Object> res = new HashMap<>();
-//        res.put("path", file.getAbsolutePath());
-        RetrofitProvider.getApiInstance().download(args.url).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io()).subscribe(body -> {
+    public boolean downloadFile(JsArgs.ArgsBean args) {
+        RetrofitProvider.getApiInstance().download(args.url).subscribeOn(io.reactivex.schedulers
+                .Schedulers.io()).observeOn(io.reactivex.schedulers.Schedulers.io()).subscribe
+                (body -> {
             File file = new File(ShellApp.getFileFolderPath(activity), args.path);
             InputStream is = body.byteStream();
             IOUtil.saveToFile(is, file);
-            Logger.d("file path:"+file.getAbsolutePath());
+            Logger.d("file path:" + file.getAbsolutePath());
             Map<String, Object> res = new HashMap<>();
             res.put("path", file.getAbsolutePath());
-            evalJs(args.callback,res);
-        });
-        // return res;
+            activity.runOnUiThread(() -> evalJs(args.callback, res));
 
+        });
+        return false;
     }
 
     public void uploadFile(JsArgs.ArgsBean args) {

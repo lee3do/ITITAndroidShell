@@ -333,6 +333,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowFileAccessFromFileURLs(true);
         webApp = new WebApp(getActivity(), wv, this);
         wv.addJavascriptInterface(webApp, "AppBridge");
 

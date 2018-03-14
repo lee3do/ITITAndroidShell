@@ -31,11 +31,22 @@ public class PresentPageActivity extends BaseActivity {
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
                 .ArgsBean.class);
         type = argsBean.type;
-        if(!StringUtils.isEmpty(type)){
-            argsBean.navigate = false;
-            argsBean.visible = false;
+        if (!StringUtils.isEmpty(type) && !type.equals("fullScreen")) {
+            if (argsBean.navigate == null) {
+                argsBean.navigate = false;
+            }
+            if (argsBean.visible == null) {
+                argsBean.visible = false;
+            }
         }
-        Logger.d("type is "+type);
+
+        if (type.equals("fullScreen")) {
+            if (argsBean.navigate == null) {
+                argsBean.navigate = false;
+            }
+        }
+
+        Logger.d("type is " + type);
         if (findFragment(MainFragment.class) == null) {
             mFragment = ShellFragment.newInstance(argsBean, false);
             loadRootFragment(R.id.fl_container, mFragment);
@@ -49,8 +60,8 @@ public class PresentPageActivity extends BaseActivity {
 
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
-        Logger.d("type1 is "+type);
-        if(type.equals(bottomHalf)||type.equals(topHalf)){
+        Logger.d("type1 is " + type);
+        if (type.equals(bottomHalf) || type.equals(topHalf)) {
             return new DefaultVerticalAnimator();
         }
         return super.onCreateFragmentAnimator();

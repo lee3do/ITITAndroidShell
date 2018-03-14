@@ -93,7 +93,6 @@
         android:id="@+id/toolbar"
         style="@style/AppTheme.Toolbar"
         android:background="?attr/colorPrimary"
-        app:contentInsetStart="0dp"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
         app:titleTextAppearance="@style/Toolbar_TextAppearance_White">
 
@@ -103,7 +102,7 @@
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="50dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:layout_alignParentLeft="true"
@@ -164,7 +163,7 @@
             <LinearLayout
                 android:id="@+id/rightBar"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
                 android:gravity="right|center_vertical"
                 android:layout_alignParentRight="true"
