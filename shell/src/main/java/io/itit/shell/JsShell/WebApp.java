@@ -3,7 +3,6 @@ package io.itit.shell.JsShell;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.DownloadManager;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -20,7 +19,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.widget.ImageViewCompat;
@@ -69,9 +67,11 @@ import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.network.http.RetrofitProvider;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.androidlibrary.utils.CommonUtil;
+import io.itit.androidlibrary.utils.IOUtil;
 import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.ActionSheetDialog;
@@ -87,6 +87,7 @@ import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.MultipartBody;
 import pub.devrel.easypermissions.EasyPermissions;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -201,7 +202,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void setNavigationBarItems(JsArgs.ArgsBean args) {
-        activity.runOnUiThread(()->{
+        activity.runOnUiThread(() -> {
             shellFragment.leftBar.removeAllViews();
             shellFragment.rightBar.removeAllViews();
 
@@ -211,9 +212,9 @@ public class WebApp extends WebJsFunc {
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(CommonUtil
                             .dipToPixel(33), CommonUtil.dipToPixel(24));
                     if (args.position.equals("left")) {
-                        lp.gravity = Gravity.LEFT|Gravity.CENTER_VERTICAL;
+                        lp.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
                     } else if (args.position.equals("right")) {
-                        lp.gravity = Gravity.RIGHT|Gravity.CENTER_VERTICAL;
+                        lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
                     }
 
                     imageView.setLayoutParams(lp);
@@ -223,8 +224,8 @@ public class WebApp extends WebJsFunc {
                     imageView.setOnClickListener(v -> {
                         Map<String, Object> res = new HashMap<>();
                         res.put("value", imageView.getTag());
-                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
-                                (res) + ")", null);
+                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
+                                .toJSONString(res) + ")", null);
                     });
                     if (args.position.equals("left")) {
                         shellFragment.leftBar.addView(imageView);
@@ -254,8 +255,8 @@ public class WebApp extends WebJsFunc {
                     textView.setOnClickListener(v -> {
                         Map<String, Object> res = new HashMap<>();
                         res.put("value", textView.getText());
-                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON.toJSONString
-                                (res) + ")", null);
+                        webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
+                                .toJSONString(res) + ")", null);
                     });
                     if (args.position.equals("left")) {
                         shellFragment.leftBar.addView(textView);
@@ -329,17 +330,28 @@ public class WebApp extends WebJsFunc {
         evalJs(args.callback);
     }
 
-    public Map<String, Object> downloadFile(JsArgs.ArgsBean args) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, args.path);
-       // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
-        DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
-                .DOWNLOAD_SERVICE);
-        downloadManager.enqueue(request);
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),args.path);
-        Map<String, Object> res = new HashMap<>();
-        res.put("path", file.getAbsolutePath());
-        return res;
+    public void downloadFile(JsArgs.ArgsBean args) {
+//        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(args.url));
+//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, args.path);
+//       // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+//        DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
+//                .DOWNLOAD_SERVICE);
+//        downloadManager.enqueue(request);
+//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment
+// .DIRECTORY_DOWNLOADS),args.path);
+//        Map<String, Object> res = new HashMap<>();
+//        res.put("path", file.getAbsolutePath());
+        RetrofitProvider.getApiInstance().download(args.url).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io()).subscribe(body -> {
+            File file = new File(ShellApp.getFileFolderPath(activity), args.path);
+            InputStream is = body.byteStream();
+            IOUtil.saveToFile(is, file);
+            Logger.d("file path:"+file.getAbsolutePath());
+            Map<String, Object> res = new HashMap<>();
+            res.put("path", file.getAbsolutePath());
+            evalJs(args.callback,res);
+        });
+        // return res;
 
     }
 
@@ -432,8 +444,8 @@ public class WebApp extends WebJsFunc {
             ret = new File(ret, substr);
             // Log.d("upZipFile", "2ret = " + ret);
             return ret;
-        }else {
-            ret = new File(baseDir,absFileName);
+        } else {
+            ret = new File(baseDir, absFileName);
         }
 
         return ret;
@@ -659,7 +671,7 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");
-        res.put("result", sb.toString());
+        res.put("content", sb.toString());
         return res;
     }
 
@@ -832,7 +844,7 @@ public class WebApp extends WebJsFunc {
 
 
     private void displayImage(String url, ImageView imageView) {
-        Logger.d("displayImage:"+url);
+        Logger.d("displayImage:" + url);
         if (!url.startsWith("http")) {
             File file = new File(ShellApp.getFileFolderPath(activity), url);
             Picasso.with(activity).load(file).into(imageView);

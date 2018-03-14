@@ -1,17 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#00000000"
-              android:orientation="vertical"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:orientation="vertical"
     >
 
 
     <LinearLayout
         android:id="@+id/container"
-        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
         android:background="@color/transparent"
         android:orientation="vertical"
         android:weightSum="10"
@@ -83,87 +83,96 @@
     </LinearLayout>
 
     <!--<com.github.mmin18.widget.RealtimeBlurView-->
-        <!--android:id="@+id/blurview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--app:realtimeBlurRadius="10dp"-->
-        <!--app:realtimeOverlayColor="@color/colorPrimary"/>-->
+    <!--android:id="@+id/blurview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--app:realtimeBlurRadius="10dp"-->
+    <!--app:realtimeOverlayColor="@color/colorPrimary"/>-->
 
     <android.support.v7.widget.Toolbar
-        style="@style/AppTheme.Toolbar"
         android:id="@+id/toolbar"
+        style="@style/AppTheme.Toolbar"
         android:background="?attr/colorPrimary"
+        app:contentInsetStart="0dp"
         app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
         app:titleTextAppearance="@style/Toolbar_TextAppearance_White">
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="35dp"
-            android:layout_height="15dp"
-            android:layout_gravity="left"
-            android:clickable="true"
-            android:scaleType="fitStart"
-            android:src="@drawable/backicon"
-            android:tint="@color/black"
-            android:visibility="gone"
-            />
-        <LinearLayout
-            android:id="@+id/leftBar"
-            android:layout_gravity="left"
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-
-        <LinearLayout
-            android:gravity="center"
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_alignParentLeft="true"
+                android:clickable="true"
+                android:scaleType="center"
+                android:src="@drawable/backicon"
+                android:tint="@color/black"
+                android:visibility="gone"
+                />
+
+            <LinearLayout
+                android:id="@+id/leftBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_toEndOf="@id/back"
+                android:gravity="left"
+                android:orientation="horizontal">
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_centerInParent="true"
                 android:textSize="19sp"/>
 
             <ImageView
                 android:id="@+id/center_image"
                 android:layout_width="29dp"
                 android:layout_height="29dp"
-                android:layout_gravity="center"
+                android:layout_centerInParent="true"
                 android:clickable="true"
                 android:scaleType="fitXY"
                 />
 
-            <android.support.design.widget.TabLayout
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/tab"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:textSize="13sp"
-                app:tabIndicatorColor="#4a90e2"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="#aaa0e2"
-                app:tabTextColor="#6a6a6a"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/rightBar"
-            android:layout_gravity="right|center_vertical"
-            android:gravity="right|center_vertical"
-            android:orientation="horizontal"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content">
-        </LinearLayout>
+
+                <android.support.design.widget.TabLayout
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="center"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    app:tabIndicatorColor="#4a90e2"
+                    app:tabMode="scrollable"
+                    app:tabSelectedTextColor="#aaa0e2"
+                    app:tabTextColor="#6a6a6a"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rightBar"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:gravity="right|center_vertical"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+            </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
-
 
 
     <android.support.v4.view.ViewPager

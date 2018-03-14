@@ -179,7 +179,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 //                .navigationBarColor),Color.parseColor(ShellApp.appConfig
 //                .navigationBarColor));
 
-  //      mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+        //      mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig
+        // .navigationBarColor));
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
@@ -188,8 +189,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (canBack) {
             // initToolbarNav(toolbar);
             backView.setVisibility(View.VISIBLE);
-            backView.setOnClickListener(v -> _mActivity.onBackPressed());
+            backView.setOnClickListener(v -> {
+                _mActivity.onBackPressed();
+            });
         }
+
         ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
                 (ShellApp.appConfig.navigationBarColor)));
         if (!navigate) {
@@ -278,7 +282,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void loginSuccess(String message) {
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
-        wxApp.evalJs(wxApp.argsBean.callback,res);
+        wxApp.evalJs(wxApp.argsBean.callback, res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
@@ -356,11 +360,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 for (String jsContent : ShellApp.jsContents) {
                     webView.evaluateJavascript(jsContent, null);
                 }
-                Logger.d(url+"height:"+wv.getHeight());
-                Map<String,Object> queryMap = new HashMap<>();
+                Logger.d(url + "height:" + wv.getHeight());
+                Map<String, Object> queryMap = new HashMap<>();
                 if (!StringUtils.isEmpty(query)) {
                     for (String s : query.split("&")) {
-                        queryMap.put(s.split("=")[0],s.split("=")[1]);
+                        queryMap.put(s.split("=")[0], s.split("=")[1]);
                     }
                 }
                 webView.evaluateJavascript("pageLoad(" + JSON.toJSONString(queryMap) + ")", null);
@@ -455,7 +459,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (isShow) {
             loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
         } else {
-            if (loadingDialog==null) {
+            if (loadingDialog == null) {
                 return;
             }
             loadingDialog.hide();
@@ -524,7 +528,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         mTab.setVisibility(View.VISIBLE);
         if (!StringUtils.isEmpty(args.color)) {
-            mTab.setTabTextColors(Color.parseColor(args.color),Color.parseColor(args.selectedColor));
+            mTab.setTabTextColors(Color.parseColor(args.color), Color.parseColor(args
+                    .selectedColor));
         }
 
 
@@ -602,7 +607,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             Intent intent = new Intent(getActivity(), ScanQrActivity.class);
             startActivity(intent);
         }
-
 
 
     }

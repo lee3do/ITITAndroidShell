@@ -49,9 +49,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation files('libs/tbs_sdk.jar')
-    compile 'io.itit:androidlibrary:2.0.3'
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-5'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-5'
+    compile 'io.itit:androidlibrary:2.0.4'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
 
     compile 'com.tencent.xinge:xinge:3.2.0-release'
     compile 'com.tencent.wup:wup:1.0.0.E-release'

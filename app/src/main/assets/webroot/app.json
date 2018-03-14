@@ -1,7 +1,7 @@
 {
     "debug":true,
-    "serverRoot1":"http://10.0.0.2:7004",
-    "version":1,
+    "serverRootLocal":"http://10.0.0.3:7004",
+    "version":9,
     "pageBackgroundColor":"#F5F6F9",
     "navigationBarBackgroundColor":"#ffffff",
     "navigationBarColor":"#000000",
@@ -44,7 +44,8 @@
         },
         {
             "page":"pages/home.html",
-            "hideNavigationBar":true
+            "hideNavigationBar":true,
+            "enableBounces":false
         },
         {
             "page":"pages/login.html",

@@ -44,6 +44,7 @@ public class PresentPageActivity extends BaseActivity {
 
     @Override
     public void onBackPressedSupport() {
+        super.onBackPressedSupport();
     }
 
     @Override
