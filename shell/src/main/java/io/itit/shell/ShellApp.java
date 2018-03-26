@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
+import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ITITApplication;
 import io.itit.androidlibrary.utils.PicassoImageLoader;
@@ -201,11 +202,22 @@ public class ShellApp extends Application {
 
 
     public static String getFileFolderUrl(Context context) {
-        return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
+        Logger.d(ShellApp.appConfig.serverRootLocal);
+        if(StringUtils.isEmpty(ShellApp.appConfig.serverRootLocal)){
+            return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
+        }else{
+            return ShellApp.appConfig.serverRootLocal + File.separator;
+        }
+
     }
 
     public static String getFileFolderPath(Context context) {
-        return context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
+        Logger.d(ShellApp.appConfig.serverRootLocal);
+        if(StringUtils.isEmpty(ShellApp.appConfig.serverRootLocal)){
+            return context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
+        }else{
+            return ShellApp.appConfig.serverRootLocal + File.separator;
+        }
     }
 
 

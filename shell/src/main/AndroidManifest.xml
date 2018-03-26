@@ -14,7 +14,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            >
         </activity>
         <activity
             android:name=".ui.ShowImageActivity"
@@ -27,18 +27,20 @@
             android:name=".ui.GuideActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            >
         </activity>
         <activity
             android:name=".ui.WelcomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            >
         </activity>
         <activity
             android:name=".ui.PresentPageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NewTransparent">
+            android:theme="@style/NewTransparent"
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
 
         <activity
@@ -46,7 +48,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".wxapi.ShellWXPayEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

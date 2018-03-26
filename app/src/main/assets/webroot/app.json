@@ -1,50 +1,56 @@
 {
     "debug":true,
-    "serverRootLocal":"http://10.0.0.3:7004",
-    "version":10,
+    "serverRootLocal":"http://10.0.0.18:7003",
+    "version":1,
     "pageBackgroundColor":"#F5F6F9",
     "navigationBarBackgroundColor":"#ffffff",
     "navigationBarColor":"#000000",
-    "tabBarTintColor":"#1589fa",
+    "tabBarTintColor":"#e4007f",
     "tabBarBackgroundColor":"#f3f3f3",
     "tabBarItems":[
         {
             "page":"pages/index.html",
-            "title":"首页",
+            "title":"礼贸通",
             "icon":"image/icons/icon-tab-index.png"
         },
         {
-            "page":"pages/news.html",
-            "title":"资讯",
-            "icon":"image/icons/icon-tab-news.png"
+            "page":"pages/gift.html",
+            "title":"礼品",
+            "icon":"image/icons/icon-tab-gift.png"
         },
         {
-            "page":"pages/trade.html",
-            "title":"交易汇总",
-            "icon":"image/icons/icon-tab-trade.png"
+            "page":"pages/inquery-list.html",
+            "title":"询盘",
+            "icon":"image/icons/icon-tab-inquiry.png"
+        },
+        {
+            "page":"pages/cart.html",
+            "title":"购物车",
+            "icon":"image/icons/icon-tab-cart.png"
         },
         {
             "page":"pages/home.html",
-            "title":"个人中心",
+            "title":"我的",
             "icon":"image/icons/icon-tab-home.png"
         }
     ],
     "pages":[
+       
         {
-            "page":"pages/index.html",
+            "page":"pages/home.html",
             "hideNavigationBar":true,
             "enableBounces":false
         },
         {
-            "page":"pages/news.html"
+            "page":"pages/gift.html",
+            "enableBounces":false
         },
         {
-            "page":"pages/trade.html",
-            "hideNavigationBar":true
+            "page":"pages/cart.html",
+            "enableBounces":false
         },
         {
-            "page":"pages/home.html",
-            "hideNavigationBar":true,
+            "page":"pages/message-info.html",
             "enableBounces":false
         },
         {
@@ -65,12 +71,14 @@
             "enableBounces":false
         },
         {
-            "page":"pages/share.html",
+            "page":"pages/launch.html",
             "enableBounces":false
         },
         {
-            "page":"pages/launch.html",
+            "page":"pages/order-pay.html",
             "enableBounces":false
         }
+        
+        
     ]
 }
