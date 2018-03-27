@@ -305,10 +305,11 @@ public class WebApp extends WebJsFunc {
         }
     }
 
-    public void showImagePicker(JsArgs.ArgsBean args) {
+    public boolean showImagePicker(JsArgs.ArgsBean args) {
         ImagePicker.getInstance().setSelectLimit(args.limit);
         Intent intent = new Intent(activity, ImageGridActivity.class);
         shellFragment.startActivityForResult(intent, 10086);
+        return false;
     }
 
 
