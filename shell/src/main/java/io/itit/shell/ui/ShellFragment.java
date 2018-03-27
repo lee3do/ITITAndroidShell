@@ -336,6 +336,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
+        if(ShellApp.appConfig.debug){
+            webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            wv.clearCache(true);
+        }
+
         webApp = new WebApp(getActivity(), wv, this);
         wv.addJavascriptInterface(webApp, "AppBridge");
 
