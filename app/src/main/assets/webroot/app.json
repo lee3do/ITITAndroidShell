@@ -1,6 +1,6 @@
 {
     "debug":true,
-    "serverRootLocal":"http://10.0.0.18:7003",
+    "serverRoot1":"http://10.0.0.9:7004",
     "version":1,
     "pageBackgroundColor":"#F5F6F9",
     "navigationBarBackgroundColor":"#ffffff",
@@ -35,18 +35,21 @@
         }
     ],
     "pages":[
-       
         {
             "page":"pages/home.html",
             "hideNavigationBar":true,
             "enableBounces":false
         },
         {
-            "page":"pages/gift.html",
-            "enableBounces":false
+            "page":"pages/gift.html"
         },
         {
             "page":"pages/cart.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/search.html",
+            "hideNavigationBar":true,
             "enableBounces":false
         },
         {
@@ -60,6 +63,10 @@
         },
         {
             "page":"pages/register.html",
+            "enableBounces":false
+        },
+        {
+            "page":"pages/address-edit.html",
             "enableBounces":false
         },
         {
@@ -77,8 +84,10 @@
         {
             "page":"pages/order-pay.html",
             "enableBounces":false
+        },
+        {
+            "page":"pages/address-choose.html",
+            "enableBounces":false
         }
-        
-        
     ]
 }

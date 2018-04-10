@@ -8,7 +8,6 @@ import com.orhanobut.logger.Logger;
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
-import io.itit.shell.Utils.AndroidBug5497Workaround;
 import io.itit.shell.domain.JsArgs;
 import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
@@ -27,7 +26,7 @@ public class PresentPageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidBug5497Workaround.assistActivity(this);
+//        AndroidBug5497Workaround.assistActivity(this);
         setContentView(R.layout.activity_present_page);
         setSwipeBackEnable(false);
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs

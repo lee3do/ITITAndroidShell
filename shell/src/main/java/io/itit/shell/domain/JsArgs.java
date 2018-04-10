@@ -33,6 +33,7 @@ public class JsArgs {
         public double latitude;
         public double longitude;
         public int height;
+        public int select;
         public String title;
         public String name;
         public String appId;

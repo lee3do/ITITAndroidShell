@@ -14,7 +14,6 @@ import io.itit.shell.ui.ShellFragment;
  */
 
 public class WxApp extends WebJsFunc {
-
     public WxApp(Activity activity, WebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }
@@ -34,7 +33,6 @@ public class WxApp extends WebJsFunc {
     public void shareURL(JsArgs.ArgsBean args) {
         WxUtils.shareUrl(activity,args.scene,args.url,args.title,args.description,args.thumbPath);
     }
-
 
     public Boolean login(JsArgs.ArgsBean args) {
         WxUtils.wxLogin(args.state);

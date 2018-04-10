@@ -67,6 +67,7 @@ import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import es.dmoral.toasty.Toasty;
 import io.itit.androidlibrary.Consts;
+import io.itit.androidlibrary.network.domain.UploadData;
 import io.itit.androidlibrary.network.http.RetrofitProvider;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.AppUtils;
@@ -85,8 +86,13 @@ import io.itit.shell.ui.PresentPageActivity;
 import io.itit.shell.ui.ShellFragment;
 import io.itit.shell.ui.ShowImageActivity;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -295,13 +301,14 @@ public class WebApp extends WebJsFunc {
 
     public void presentPage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, PresentPageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("ext", JSON.toJSONString(args));
         activity.startActivity(intent);
     }
 
     public void dismissPage(JsArgs.ArgsBean args) {
         if (activity instanceof PresentPageActivity) {
-            activity.finish();
+            activity.finishAndRemoveTask();
         }
     }
 
@@ -318,6 +325,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void popPage(JsArgs.ArgsBean args) {
+        shellFragment.wv.destroy();
         shellFragment.pop();
     }
 
@@ -346,27 +354,43 @@ public class WebApp extends WebJsFunc {
         return false;
     }
 
-    public void uploadFile(JsArgs.ArgsBean args) {
+    public boolean uploadFile(JsArgs.ArgsBean args) {
         String path = args.fullpath;
         String url = args.url;
         String fileName = args.path;
         Logger.d("path is " + path + ",URL is " + url);
         File file = new File(path);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileName);
-//        Call<UploadData> call = appApis.uploadFile(body, url);
-//        call.enqueue(new Callback<UploadData>() {
-//            @Override
-//            public void onResponse(Call<UploadData> call, Response<UploadData> response) {
-//                if (response.body() != null) {
-//                } else {
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UploadData> call, Throwable t) {
-//                Logger.e("uploadFile failed:" + t.getLocalizedMessage());
-//            }
-//        });
+        RequestBody requestFile = RequestBody.create(MediaType.parse
+                ("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileName,requestFile);
+        Call<UploadData> call =  RetrofitProvider.getApiInstance().uploadFile(body, url);
+        call.enqueue(new Callback<UploadData>() {
+            @Override
+            public void onResponse(Call<UploadData> call, Response<UploadData> response) {
+                if (response.body() != null) {
+                    if(!response.body().success){
+                        ToastUtils.show(activity,"上传失败！");
+                        return;
+                    }
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("response", JSON.toJSONString(response.body()));
+                    evalJs(args.callback, res);
+                } else {
+                    ToastUtils.show(activity,"上传失败！");
+                    Map<String, Object> res = new HashMap<>();
+                    evalJs(args.callback, res);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadData> call, Throwable t) {
+                Logger.e("uploadFile failed:" + t.getLocalizedMessage());
+                ToastUtils.show(activity,"上传失败！");
+                Map<String, Object> res = new HashMap<>();
+                evalJs(args.callback, res);
+            }
+        });
+        return false;
     }
 
     public void unzip(JsArgs.ArgsBean args) throws IOException {
@@ -558,6 +582,7 @@ public class WebApp extends WebJsFunc {
         }).setContentTextSize(22).setLineSpacingMultiplier(1.5f).build();
         pvOptions.setPicker(args.items);
         pvOptions.show();
+        pvOptions.setSelectOptions(args.select);
         return false;
     }
 
