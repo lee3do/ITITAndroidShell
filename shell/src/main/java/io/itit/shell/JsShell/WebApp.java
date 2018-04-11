@@ -231,7 +231,7 @@ public class WebApp extends WebJsFunc {
 
                     imageView.setOnClickListener(v -> {
                         Map<String, Object> res = new HashMap<>();
-                        res.put("value", imageView.getTag());
+                        res.put("item", imageView.getTag());
                         Logger.d("Click:" + "pageNavigationItemClicked(" + JSON.toJSONString(res)
                                 + ")");
                         webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
@@ -264,7 +264,7 @@ public class WebApp extends WebJsFunc {
                     textView.setLayoutParams(lp);
                     textView.setOnClickListener(v -> {
                         Map<String, Object> res = new HashMap<>();
-                        res.put("value", textView.getText());
+                        res.put("item", textView.getText());
                         webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
                                 .toJSONString(res) + ")", null);
                     });
