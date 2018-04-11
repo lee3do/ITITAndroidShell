@@ -37,6 +37,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.itit
         }
+        debug {
+            signingConfig signingConfigs.itit
+        }
     }
     dexOptions {
         maxProcessCount 8
@@ -50,5 +53,4 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation project(':shell')
-
 }

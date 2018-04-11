@@ -59,7 +59,7 @@ window.weixin={
         weixin.invoke('pay',{
             partnerId:obj.partnerId,
             prepayId:obj.prepayId,
-            packageValue:obj.package,
+            packageValue:obj.packageValue,
             nonceStr:obj.nonceStr,
             timeStamp:obj.timeStamp,
             sign:obj.sign,

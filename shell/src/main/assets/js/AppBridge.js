@@ -943,6 +943,7 @@ window.app={
                                                             })
         }else{
             //android
+            console.log("AndroidPostMessage",JSON.stringify({'func':func,'args':args}));
             window[bridge].postMessage(JSON.stringify({'func':func,'args':args}))
         }
     },

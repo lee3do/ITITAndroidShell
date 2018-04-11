@@ -2,6 +2,8 @@ package io.itit.shell.JsShell;
 
 import android.app.Activity;
 
+import com.alibaba.fastjson.JSON;
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.smtt.sdk.WebView;
 
@@ -48,7 +50,7 @@ public class WxApp extends WebJsFunc {
         res.put("isWXAppInstalled",AppUtils.isInstalled(activity,"com.tencent.mm"));
         res.put("isWXAppSupport",WxUtils.msgApi.getWXAppSupportAPI());
         res.put("version",  AppUtils.getVersionName(activity,"com.tencent.mm"));
-
+        res.put("appId", WxUtils.appId);
         return res;
     }
 
@@ -58,13 +60,14 @@ public class WxApp extends WebJsFunc {
 
     public void pay(JsArgs.ArgsBean args) {
         PayReq request = new PayReq();
-        request.packageValue = args.packageValue;
+        request.packageValue = "Sign=WXPay";
         request.prepayId = args.prepayId;
         request.partnerId = args.partnerId;
         request.nonceStr = args.nonceStr;
         request.timeStamp = args.timeStamp;
         request.sign = args.sign;
-
+        request.appId = WxUtils.appId;
+        Logger.d(JSON.toJSONString(request));
         WxUtils.msgApi.sendReq(request);
     }
 
