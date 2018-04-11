@@ -5,6 +5,10 @@ import android.app.Activity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.smtt.sdk.WebView;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.shell.Utils.WxUtils;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.ui.ShellFragment;
@@ -37,6 +41,15 @@ public class WxApp extends WebJsFunc {
     public Boolean login(JsArgs.ArgsBean args) {
         WxUtils.wxLogin(args.state);
         return false;
+    }
+
+    public Map<String, Object> getInfo(JsArgs.ArgsBean args){
+        Map<String, Object> res = new HashMap<>();
+        res.put("isWXAppInstalled",AppUtils.isInstalled(activity,"com.tencent.mm"));
+        res.put("isWXAppSupport",WxUtils.msgApi.getWXAppSupportAPI());
+        res.put("version",  AppUtils.getVersionName(activity,"com.tencent.mm"));
+
+        return res;
     }
 
     public void registerApp(JsArgs.ArgsBean args) {
