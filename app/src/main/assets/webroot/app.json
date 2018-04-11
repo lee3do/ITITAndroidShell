@@ -1,6 +1,6 @@
 {
     "debug":true,
-    "serverRoot1":"http://10.0.0.9:7004",
+    "serverRoot1":"http://10.0.0.3:7004",
     "version":1,
     "pageBackgroundColor":"#F5F6F9",
     "navigationBarBackgroundColor":"#ffffff",

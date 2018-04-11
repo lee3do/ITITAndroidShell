@@ -53,6 +53,7 @@ public class JsArgs {
         public String content;
         public String url;
         public String urls;
+        public String format;
         public String path;
         public String fullpath;
         public String description;

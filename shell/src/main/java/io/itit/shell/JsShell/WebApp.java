@@ -19,6 +19,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.widget.ImageViewCompat;
@@ -93,6 +94,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by Lee_3do on 2017/12/25.
@@ -229,6 +232,8 @@ public class WebApp extends WebJsFunc {
                     imageView.setOnClickListener(v -> {
                         Map<String, Object> res = new HashMap<>();
                         res.put("value", imageView.getTag());
+                        Logger.d("Click:" + "pageNavigationItemClicked(" + JSON.toJSONString(res)
+                                + ")");
                         webView.evaluateJavascript("pageNavigationItemClicked(" + JSON
                                 .toJSONString(res) + ")", null);
                     });
@@ -357,26 +362,53 @@ public class WebApp extends WebJsFunc {
     public boolean uploadFile(JsArgs.ArgsBean args) {
         String path = args.fullpath;
         String url = args.url;
-        String fileName = args.path;
         Logger.d("path is " + path + ",URL is " + url);
         File file = new File(path);
-        RequestBody requestFile = RequestBody.create(MediaType.parse
-                ("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileName,requestFile);
-        Call<UploadData> call =  RetrofitProvider.getApiInstance().uploadFile(body, url);
+        if (StringUtils.isEmpty(args.format) || !args.format.equals("jpeg")) {
+            uploadFile(file, args);
+            return false;
+        }
+        Luban.with(activity).load(file).setTargetDir(activity.getExternalFilesDir(Environment
+                .DIRECTORY_DCIM).getAbsolutePath()).
+                setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        Logger.v("压缩开始");
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        Logger.v("压缩结束" + file.getAbsolutePath());
+                        uploadFile(file, args);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Logger.e(throwable, "压缩失败");
+                    }
+                }).launch();
+
+
+        return false;
+    }
+
+    private void uploadFile(File file, JsArgs.ArgsBean args) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", args.path, requestFile);
+        Call<UploadData> call = RetrofitProvider.getApiInstance().uploadFile(body, args.url);
         call.enqueue(new Callback<UploadData>() {
             @Override
             public void onResponse(Call<UploadData> call, Response<UploadData> response) {
                 if (response.body() != null) {
-                    if(!response.body().success){
-                        ToastUtils.show(activity,"上传失败！");
+                    if (!response.body().success) {
+                        ToastUtils.show(activity, "上传失败！");
                         return;
                     }
                     Map<String, Object> res = new HashMap<>();
                     res.put("response", JSON.toJSONString(response.body()));
                     evalJs(args.callback, res);
                 } else {
-                    ToastUtils.show(activity,"上传失败！");
+                    ToastUtils.show(activity, "上传失败！");
                     Map<String, Object> res = new HashMap<>();
                     evalJs(args.callback, res);
                 }
@@ -385,12 +417,11 @@ public class WebApp extends WebJsFunc {
             @Override
             public void onFailure(Call<UploadData> call, Throwable t) {
                 Logger.e("uploadFile failed:" + t.getLocalizedMessage());
-                ToastUtils.show(activity,"上传失败！");
+                ToastUtils.show(activity, "上传失败！");
                 Map<String, Object> res = new HashMap<>();
                 evalJs(args.callback, res);
             }
         });
-        return false;
     }
 
     public void unzip(JsArgs.ArgsBean args) throws IOException {
