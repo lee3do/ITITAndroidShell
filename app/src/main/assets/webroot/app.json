@@ -1,7 +1,8 @@
 {
     "debug":true,
-    "serverRoot1":"http://10.0.0.3:7004",
-    "version":1,
+    "serverRoot1":"http://10.0.0.31:7003",
+    "serverRootLocal":"http://10.0.0.31:7003",
+    "version":2,
     "pageBackgroundColor":"#F5F6F9",
     "navigationBarBackgroundColor":"#ffffff",
     "navigationBarColor":"#000000",

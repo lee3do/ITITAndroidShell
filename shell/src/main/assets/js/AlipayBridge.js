@@ -1,0 +1,19 @@
+window.alipay={
+    invoke:function(func,args){
+        app.invoke('AlipayBridge',func,args);
+    },
+    //
+    getInfo:function(obj){
+        alipay.invoke('getInfo',{
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    pay:function(obj){
+        alipay.invoke('pay',{
+            orderString:obj.orderString,
+            fromScheme:obj.fromScheme,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+}
+

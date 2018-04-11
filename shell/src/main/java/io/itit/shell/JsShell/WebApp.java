@@ -359,7 +359,7 @@ public class WebApp extends WebJsFunc {
         return false;
     }
 
-    public boolean uploadFile(JsArgs.ArgsBean args) {
+    public Boolean uploadFile(JsArgs.ArgsBean args) {
         String path = args.fullpath;
         String url = args.url;
         Logger.d("path is " + path + ",URL is " + url);

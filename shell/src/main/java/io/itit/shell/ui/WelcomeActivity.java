@@ -112,6 +112,7 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         ShellApp.loadAppJs(this, "AppBridge.js");
         ShellApp.loadAppJs(this, "WeixinBridge.js");
         ShellApp.loadAppJs(this, "XGBridge.js");
+        ShellApp.loadAppJs(this, "AlipayBridge.js");
         loadFinish();
     }
 

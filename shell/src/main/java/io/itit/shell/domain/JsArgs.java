@@ -63,6 +63,7 @@ public class JsArgs {
         public String type;
         public String message;
         public String callback;
+        public String orderString;
         public String key;
         public Object value;
         public Map<String,Object> args;

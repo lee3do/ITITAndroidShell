@@ -49,6 +49,7 @@ import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
+import io.itit.shell.JsShell.AlipayApp;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WebJsFunc;
 import io.itit.shell.JsShell.WxApp;
@@ -102,7 +103,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public WebApp webApp;
     public WxApp wxApp;
     public XgApp xgApp;
-
+    public AlipayApp alipayApp;
 
     public ShellFragment() {
         // Required empty public constructor
@@ -352,6 +353,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (ShellApp.UseXg) {
             xgApp = new XgApp(getActivity(), wv, this);
             wv.addJavascriptInterface(xgApp, "XGBridge");
+        }
+
+        if (ShellApp.UseWx) {
+            alipayApp = new AlipayApp(getActivity(), wv, this);
+            wv.addJavascriptInterface(alipayApp, "AlipayBridge");
         }
 
         wv.setWebViewClient(new WebViewClient() {
