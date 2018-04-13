@@ -11,7 +11,7 @@ public class App extends ShellApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        startPage = R.drawable.guide_page3;
+        startPage = R.drawable.start;
         setBugly("fa0a542826");
 
 //        XGPushConfig.enableDebug(this,true);

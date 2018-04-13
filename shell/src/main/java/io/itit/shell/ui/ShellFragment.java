@@ -289,7 +289,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
-    public void paySuccess(String message) {
+    public void paySuccess(Integer message) {
         Logger.d("paySuccess");
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
@@ -363,7 +363,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             wv.addJavascriptInterface(xgApp, "XGBridge");
         }
 
-        if (ShellApp.UseWx) {
+        if (ShellApp.UseAli) {
             alipayApp = new AlipayApp(getActivity(), wv, this);
             wv.addJavascriptInterface(alipayApp, "AlipayBridge");
         }

@@ -4,11 +4,11 @@ package io.itit.shell.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -58,7 +58,7 @@ public class ShellWXPayEntryActivity extends Activity implements IWXAPIEventHand
         String code = "";
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
            // UnityPlayer.UnitySendMessage("Canvas","callNativeResult", JSON.toJSONString(resMap));
-            Log.d("ITIT", JSON.toJSONString(resp));
+            Logger.d(JSON.toJSONString(resp));
 
             RxBus.get().post(Consts.BusAction.PAY_FINISH,resp.errCode);
             switch (resp.errCode) {

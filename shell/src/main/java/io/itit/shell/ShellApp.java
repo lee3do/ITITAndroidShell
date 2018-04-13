@@ -50,6 +50,7 @@ public class ShellApp extends Application {
     public Boolean useBugly = false;
     public static String buglyAppId = "fa0a542826";
     public static boolean UseWx = true;
+    public static boolean UseAli = true;
     public static boolean UseXg = true;
 
     public static List<Integer> GuildImageList = new ArrayList<>();
