@@ -4,12 +4,14 @@ import android.app.Activity;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.sdk.app.PayTask;
+import com.orhanobut.logger.Logger;
 import com.tencent.smtt.sdk.WebView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import io.itit.androidlibrary.utils.AppUtils;
+import io.itit.shell.domain.AliPayRes;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.ui.ShellFragment;
 
@@ -33,10 +35,10 @@ public class AlipayApp extends WebJsFunc {
         Runnable payRunnable = () -> {
             PayTask alipay = new PayTask(activity);
             Map<String, String> result = alipay.payV2(orderInfo,true);
-            Map<String,String> res1 = (Map<String, String>) JSON.parse(result.get("result"));
-            Map<String,String> res2 = (Map<String, String>) JSON.parse(res1.get("alipay_trade_app_pay_response"));
+            Logger.d(JSON.toJSONString(result));
+            AliPayRes res1 = JSON.parseObject(result.get("result"),AliPayRes.class);
             Map<String, String> res = new HashMap<>();
-            res.put("code", res2.get("code"));
+            res.put("code", res1.alipay_trade_app_pay_response.code);
             evalJs(args.callback, res);
         };
         // 必须异步调用
