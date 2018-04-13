@@ -288,6 +288,14 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         wxApp.evalJs(wxApp.argsBean.callback, res);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
+    public void paySuccess(String message) {
+        Logger.d("paySuccess");
+        Map<String, Object> res = new HashMap<>();
+        res.put("code", message);
+        wxApp.evalJs(WebJsFunc.payCallback,res);
+    }
+
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
     public void pageMessage(String message) {
         Logger.d("pageMessage" + message);

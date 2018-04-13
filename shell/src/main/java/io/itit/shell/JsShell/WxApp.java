@@ -20,6 +20,7 @@ import io.itit.shell.ui.ShellFragment;
  */
 
 public class WxApp extends WebJsFunc {
+
     public WxApp(Activity activity, WebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }
@@ -58,7 +59,7 @@ public class WxApp extends WebJsFunc {
         WxUtils.registerApp(args.appId, activity);
     }
 
-    public void pay(JsArgs.ArgsBean args) {
+    public Boolean pay(JsArgs.ArgsBean args) {
         PayReq request = new PayReq();
         request.packageValue = "Sign=WXPay";
         request.prepayId = args.prepayId;
@@ -68,7 +69,9 @@ public class WxApp extends WebJsFunc {
         request.sign = args.sign;
         request.appId = WxUtils.appId;
         Logger.d(JSON.toJSONString(request));
+        payCallback = args.callback;
         WxUtils.msgApi.sendReq(request);
+        return false;
     }
 
 

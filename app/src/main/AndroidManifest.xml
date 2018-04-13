@@ -35,6 +35,13 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppNoTitleTheme">
         </activity>
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppNoTitleTheme">
+        </activity>
     </application>
 
 </manifest>

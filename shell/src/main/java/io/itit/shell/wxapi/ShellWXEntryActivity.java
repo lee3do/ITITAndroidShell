@@ -76,6 +76,7 @@ public class ShellWXEntryActivity extends Activity implements IWXAPIEventHandler
 					Map<String,String> resMap = new HashMap<>();
 					resMap.put("funcName","weixinShare");
 					resMap.put("errCode",resp.errCode+"");
+
 					//UnityPlayer.UnitySendMessage("Canvas","callNativeResult", JSON.toJSONString(resMap));
 					//share
 					break;

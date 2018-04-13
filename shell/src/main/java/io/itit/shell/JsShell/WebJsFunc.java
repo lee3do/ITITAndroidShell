@@ -27,6 +27,8 @@ public class WebJsFunc {
     public ShellFragment shellFragment;
     public static JsArgs.ArgsBean argsBean;
 
+    public static String payCallback;
+
     public WebJsFunc(Activity activity, WebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;
         this.webView = webView;

@@ -8,15 +8,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.hwangjr.rxbus.RxBus;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import io.itit.androidlibrary.Consts;
 import io.itit.shell.Utils.WxUtils;
 
 /**
@@ -58,11 +57,10 @@ public class ShellWXPayEntryActivity extends Activity implements IWXAPIEventHand
         int result = 0;
         String code = "";
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            Map<String,String> resMap = new HashMap<>();
-            resMap.put("funcName","weixinPay");
-            resMap.put("errCode",resp.errCode+"");
            // UnityPlayer.UnitySendMessage("Canvas","callNativeResult", JSON.toJSONString(resMap));
             Log.d("ITIT", JSON.toJSONString(resp));
+
+            RxBus.get().post(Consts.BusAction.PAY_FINISH,resp.errCode);
             switch (resp.errCode) {
                 case BaseResp.ErrCode.ERR_OK:
                     Toast.makeText(getApplicationContext(), "支付成功！", Toast.LENGTH_SHORT).show();
