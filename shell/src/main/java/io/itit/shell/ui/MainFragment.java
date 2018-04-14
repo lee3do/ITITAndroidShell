@@ -18,6 +18,7 @@ import io.itit.androidlibrary.widget.BottomBar;
 import io.itit.androidlibrary.widget.BottomBarTab;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.AndroidBug54971Workaround;
 import io.itit.shell.domain.AppConfig;
 import io.itit.shell.domain.JsArgs;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -40,9 +41,11 @@ public class MainFragment extends BaseMainFragment {
             savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
         initView(view);
         loadMultipleRootFragment(R.id.fl_tab_container, 0, mFragments);
         RxBus.get().register(this);
+        AndroidBug54971Workaround.assistActivity(view.findViewById(R.id.frame_layout));
         return view;
     }
 

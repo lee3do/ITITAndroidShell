@@ -56,6 +56,7 @@ import io.itit.shell.JsShell.WxApp;
 import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.AndroidBug54971Workaround;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.AppConfig;
@@ -151,6 +152,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             type = getArguments().getString(Type, "");
             height = getArguments().getInt("height", 400);
         }
+
     }
 
 
@@ -158,6 +160,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_web_shell, container, false);
+
         mTab = view.findViewById(R.id.tab);
         mViewPager = view.findViewById(R.id.viewPager);
         ImageView backView = view.findViewById(R.id.back);
@@ -169,7 +172,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
 
         initWebview(view);
+
         initPullToRefresh(view);
+
 
 
         initTitle(view);
@@ -234,7 +239,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 break;
             }
         }
-
+        AndroidBug54971Workaround.assistActivity(view.findViewById(R.id.rl_layout));
         return attachToSwipeBack(view);
     }
 

@@ -27,7 +27,6 @@ public class PresentPageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        AndroidBug5497Workaround.assistActivity(this);
         setContentView(R.layout.activity_present_page);
         setSwipeBackEnable(false);
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
