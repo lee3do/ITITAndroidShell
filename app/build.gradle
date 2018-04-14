@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
     signingConfigs {
         itit {
             keyAlias 'itit'
@@ -15,7 +14,6 @@ android {
             storePassword '0321670'
         }
     }
-
     defaultConfig {
         applicationId "io.itit.androidshell"
         minSdkVersion 21
@@ -45,6 +43,18 @@ android {
         maxProcessCount 8
         javaMaxHeapSize "4g"
         jumboMode true
+    }
+    buildToolsVersion '27.0.3'
+
+    flavorDimensions "names"
+    productFlavors {
+        lzhb {
+            buildConfigField "String", "name", "\"lzhb\""
+            manifestPlaceholders = [
+                    app_name     : "礼貌通",
+            ]
+            signingConfig signingConfigs.itit
+        }
     }
 }
 
