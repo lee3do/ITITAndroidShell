@@ -35,6 +35,8 @@ public class JsArgs {
         public int height;
         public int select;
         public String title;
+        public Map<String,Object> data;
+        public Map<String,Object> header;
         public String name;
         public String appId;
         public String appKey;
@@ -70,6 +72,7 @@ public class JsArgs {
         public List<String> options;
         public List<String> items;
         public String mode;
+        public String method;
         public Long date;
 
         public String partnerId;

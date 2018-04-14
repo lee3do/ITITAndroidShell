@@ -1,6 +1,7 @@
 package io.itit.shell.JsShell;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -129,6 +130,30 @@ public class WebApp extends WebJsFunc {
         }
     }
 
+    @SuppressLint("CheckResult")
+    public Boolean request(JsArgs.ArgsBean args) {
+        if (args.method.toLowerCase().equals("post")) {
+
+            RetrofitProvider.getApiInstance().httpPost(args.url, args.data).subscribeOn(io
+                    .reactivex.schedulers.Schedulers.io()).observeOn(io.reactivex.android
+                    .schedulers.AndroidSchedulers.mainThread()).subscribe(body -> {
+
+                Map<String, Object> res = new HashMap<>();
+                res.put("data", new String(body.bytes()));
+                res.put("code", 200);
+                evalJs(args.callback, res);
+            }, error -> {
+                Logger.e(error, "request");
+                Map<String, Object> res = new HashMap<>();
+                res.put("code", 400);
+                evalJs(args.callback, res);
+            });
+        } else {
+
+        }
+
+        return false;
+    }
 
     public void getLocation(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
