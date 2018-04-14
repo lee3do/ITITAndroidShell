@@ -16,6 +16,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleTheme"
+            android:windowSoftInputMode="adjustResize"
             >
         </activity>
         <activity
@@ -43,6 +44,7 @@
             android:theme="@style/NewTransparent"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
+
             >
         </activity>
 

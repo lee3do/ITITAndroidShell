@@ -8,6 +8,7 @@ import com.orhanobut.logger.Logger;
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
+import io.itit.shell.Utils.AndroidBug5497Workaround;
 import io.itit.shell.domain.JsArgs;
 import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
@@ -51,6 +52,11 @@ public class PresentPageActivity extends BaseActivity {
         if (findFragment(MainFragment.class) == null) {
             mFragment = ShellFragment.newInstance(argsBean, false);
             loadRootFragment(R.id.fl_container, mFragment);
+        }
+        try {
+            AndroidBug5497Workaround.assistActivity(this);
+        }catch (Exception ignored){
+            Logger.e(ignored,"PresentPageActivity");
         }
     }
 

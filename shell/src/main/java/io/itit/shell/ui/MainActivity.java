@@ -2,8 +2,11 @@ package io.itit.shell.ui;
 
 import android.os.Bundle;
 
+import com.orhanobut.logger.Logger;
+
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
+import io.itit.shell.Utils.AndroidBug5497Workaround;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
@@ -20,6 +23,12 @@ public class MainActivity extends BaseActivity {
             mFragment = new MainFragment();
             loadRootFragment(R.id.fl_container, mFragment);
         }
+        try {
+            AndroidBug5497Workaround.assistActivity(this);
+        }catch (Exception ignored){
+            Logger.e(ignored,"MainActivity");
+        }
+
     }
 
     @Override
