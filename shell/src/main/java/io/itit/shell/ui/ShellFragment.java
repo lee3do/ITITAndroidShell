@@ -303,7 +303,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
     public void pageMessage(String message) {
-        Logger.d("pageMessage" + message);
+        Logger.d("pageMessage:" +url+","+ message);
         wv.evaluateJavascript("pageMessage(" + message + ")", null);
     }
 
@@ -334,6 +334,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void onDestroy() {
         super.onDestroy();
         RxBus.get().unregister(this);
+        Logger.d("onDestroy:" +url);
         wv.evaluateJavascript("pageUnload()", null);
     }
 
