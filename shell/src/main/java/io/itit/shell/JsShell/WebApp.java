@@ -133,11 +133,7 @@ public class WebApp extends WebJsFunc {
     @SuppressLint("CheckResult")
     public Boolean request(JsArgs.ArgsBean args) {
         if (args.method.toLowerCase().equals("post")) {
-
-            RetrofitProvider.getApiInstance().httpPost(args.url, args.data).subscribeOn(io
-                    .reactivex.schedulers.Schedulers.io()).observeOn(io.reactivex.android
-                    .schedulers.AndroidSchedulers.mainThread()).subscribe(body -> {
-
+            RetrofitProvider.post(args.url, args.data,args.header,body -> {
                 Map<String, Object> res = new HashMap<>();
                 res.put("data", new String(body.bytes()));
                 res.put("code", 200);
@@ -149,7 +145,17 @@ public class WebApp extends WebJsFunc {
                 evalJs(args.callback, res);
             });
         } else {
-
+            RetrofitProvider.get(args.url, args.data,args.header,body -> {
+                Map<String, Object> res = new HashMap<>();
+                res.put("data", new String(body.bytes()));
+                res.put("code", 200);
+                evalJs(args.callback, res);
+            }, error -> {
+                Logger.e(error, "request");
+                Map<String, Object> res = new HashMap<>();
+                res.put("code", 400);
+                evalJs(args.callback, res);
+            });
         }
 
         return false;
