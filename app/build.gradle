@@ -18,8 +18,8 @@ android {
         applicationId "io.itit.androidshell"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.itit
@@ -52,11 +52,10 @@ android {
         }
         variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
             //这个修改输出APK的文件名
-            apkData.outputFileName = "App-" +
+            apkData.outputFileName =
                     variant.flavorName + "_" +
                     variant.buildType.name + "_" +
-                    variant.versionName + "_" +
-                    variant.signingConfig.name +
+                    variant.versionCode  +
                     ".apk"
         }
     }

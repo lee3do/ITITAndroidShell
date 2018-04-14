@@ -520,10 +520,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                     strings.add(image.path);
                 }
                 List<String> imagePath = new ArrayList<>();
-                Luban.with(getActivity()).load(strings).ignoreBy((int) (300 * WebJsFunc.argsBean
-                        .quality)).
-                        setTargetDir(getActivity().getExternalFilesDir(Environment
-                                .DIRECTORY_DCIM).getAbsolutePath()).
+                Luban.with(getActivity()).load(strings).setTargetDir(getActivity()
+                        .getExternalFilesDir(Environment.DIRECTORY_DCIM).getAbsolutePath()).
                         setCompressListener(new OnCompressListener() {
                             @Override
                             public void onStart() {
