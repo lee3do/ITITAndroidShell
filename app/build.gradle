@@ -66,7 +66,7 @@ android {
             applicationId "com.lzhb.app"
             buildConfigField "String", "name", "\"lzhb\""
             manifestPlaceholders = [
-                    app_name     : "礼貌通",
+                    app_name     : "礼贸通",
             ]
             signingConfig signingConfigs.itit
             dimension "names"
