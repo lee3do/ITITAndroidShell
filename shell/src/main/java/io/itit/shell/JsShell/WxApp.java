@@ -71,6 +71,7 @@ public class WxApp extends WebJsFunc {
         request.appId = WxUtils.appId;
         Logger.d(JSON.toJSONString(request));
         payCallback = args.callback;
+        Logger.d("pay:"+args.callback+","+shellFragment.url);
         WxUtils.msgApi.sendReq(request);
         return false;
     }

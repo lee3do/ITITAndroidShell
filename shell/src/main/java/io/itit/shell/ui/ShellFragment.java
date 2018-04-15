@@ -79,7 +79,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public LoadingDialog loadingDialog;
     public boolean showSegment = false;
 
-    private String url;
+    public String url;
     private String name;
     private String type;
     private String query;
@@ -141,6 +141,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         RxBus.get().register(this);
         if (getArguments() != null) {
             url = getArguments().getString(Url);
@@ -150,6 +151,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             query = getArguments().getString("query", "");
             type = getArguments().getString(Type, "");
             height = getArguments().getInt("height", 400);
+            Logger.d("shell fragment create:"+url);
         }
 
     }
@@ -295,7 +297,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
     public void paySuccess(Integer message) {
-        Logger.d("paySuccess:"+message+","+wxApp.payCallback);
+        Logger.d("paySuccess:"+message+","+wxApp.payCallback+","+url);
         if(StringUtils.isEmpty(wxApp.payCallback)){
             return;
         }
