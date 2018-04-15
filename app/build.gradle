@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "io.itit.androidshell"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 24
 
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -68,6 +68,8 @@ android {
             dimension "names"
             versionCode 2
             versionName "1.0.1"
+            minSdkVersion 21
+            targetSdkVersion 24
         }
         wyhk {
             applicationId "com.wyhk.app"
@@ -81,6 +83,8 @@ android {
             dimension "names"
             versionCode 2
             versionName "1.0.1"
+            minSdkVersion 21
+            targetSdkVersion 24
         }
         itittest {
             buildConfigField "String", "name", "\"test\""
@@ -93,6 +97,8 @@ android {
             dimension "names"
             versionCode 2
             versionName "1.0.1"
+            minSdkVersion 21
+            targetSdkVersion 24
         }
     }
 

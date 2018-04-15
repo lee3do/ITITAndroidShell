@@ -52,7 +52,9 @@ public class WebJsFunc {
                         if (res != null && res instanceof Boolean) {
 
                         } else {
-                            evalJs(arg.args.callback,new HashMap());
+                            if(arg.args.callback!=null){
+                                evalJs(arg.args.callback,new HashMap());
+                            }
                         }
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
