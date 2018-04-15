@@ -12,7 +12,14 @@ public class App extends ShellApp {
     public void onCreate() {
         super.onCreate();
         startPage = R.drawable.start;
-        setBugly("fa0a542826");
+        if (BuildConfig.name.equals("lzhb")) {
+            setBugly("fa0a542826");
+        }
+
+
+        if (BuildConfig.name.equals("wyhk")) {
+            setBugly("fbaaf6bcba");
+        }
 
 //        XGPushConfig.enableDebug(this,true);
 //        XGPushConfig.setAccessId(this,2100277113);
