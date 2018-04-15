@@ -295,7 +295,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
     public void paySuccess(Integer message) {
-        Logger.d("paySuccess");
+        Logger.d("paySuccess:"+message+","+wxApp.payCallback);
+        if(StringUtils.isEmpty(wxApp.payCallback)){
+            return;
+        }
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
         wxApp.evalJs(wxApp.payCallback,res);

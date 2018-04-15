@@ -203,7 +203,6 @@ public class ShellApp extends Application {
 
 
     public static String getFileFolderUrl(Context context) {
-        Logger.d(ShellApp.appConfig.serverRootLocal);
         if(StringUtils.isEmpty(ShellApp.appConfig.serverRootLocal)){
             return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
         }else{
