@@ -352,6 +352,7 @@ public class WebApp extends WebJsFunc {
         ImagePicker.getInstance().setSelectLimit(args.limit);
         Intent intent = new Intent(activity, ImageGridActivity.class);
         shellFragment.startActivityForResult(intent, 10086);
+        uploadCallback = args.callback;
         return false;
     }
 

@@ -535,7 +535,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                                 if (imagePath.size() == strings.size()) {
                                     Map<String, Object> res = new HashMap<>();
                                     res.put("paths", imagePath);
-                                    webApp.evalJs(webApp.argsBean.callback, res);
+                                    webApp.evalJs(webApp.uploadCallback, res);
                                 }
 
                             }
