@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.itit.shell.JsShell.WebApp;
-import io.itit.shell.JsShell.WebJsFunc;
 
 /**
  * 位置信息的Utils
@@ -89,7 +88,7 @@ public class Locations  {
                 res.put("success", true);
                 res.put("latitude", location.getLatitude());
                 res.put("longitude", location.getLongitude());
-                webApp.evalJs(WebJsFunc.locationCallback, res);
+                webApp.evalJs(webApp.locationCallback, res);
                 // Logger.d("onLocationChanged location:" + getLocation());
             }
         }

@@ -51,7 +51,6 @@ import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.AlipayApp;
 import io.itit.shell.JsShell.WebApp;
-import io.itit.shell.JsShell.WebJsFunc;
 import io.itit.shell.JsShell.WxApp;
 import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
@@ -288,6 +287,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
     public void loginSuccess(String message) {
+        Logger.d("loginSuccess");
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
         wxApp.evalJs(wxApp.loginCallback, res);
@@ -298,7 +298,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         Logger.d("paySuccess");
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
-        wxApp.evalJs(WebJsFunc.payCallback,res);
+        wxApp.evalJs(wxApp.payCallback,res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})

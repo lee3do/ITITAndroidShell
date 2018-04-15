@@ -26,11 +26,11 @@ public class WebJsFunc {
     public WebView webView;
     public ShellFragment shellFragment;
 
-    public static String payCallback;
-    public static String uploadCallback;
-    public static String loginCallback;
-    public static String scanCallback;
-    public static String locationCallback;
+    public String payCallback;
+    public String uploadCallback;
+    public String loginCallback;
+    public String scanCallback;
+    public String locationCallback;
 
     public WebJsFunc(Activity activity, WebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;
