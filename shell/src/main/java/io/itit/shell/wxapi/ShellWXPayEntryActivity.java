@@ -56,6 +56,7 @@ public class ShellWXPayEntryActivity extends Activity implements IWXAPIEventHand
     public void onResp(BaseResp resp) {
         int result = 0;
         String code = "";
+        Logger.d(JSON.toJSONString(resp));
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
            // UnityPlayer.UnitySendMessage("Canvas","callNativeResult", JSON.toJSONString(resMap));
             Logger.d(JSON.toJSONString(resp));
