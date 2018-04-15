@@ -163,10 +163,10 @@ public class WebApp extends WebJsFunc {
 
     public void getLocation(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-
+        locationCallback = args.callback;
         if (EasyPermissions.hasPermissions(activity, perms)) {
             ToastUtils.show(activity, "定位中");
-            Locations.location.init(activity, this, args);
+            Locations.location.init(activity, this);
         } else {
             EasyPermissions.requestPermissions(shellFragment, "请授予定位权限。", 10086, perms);
         }
@@ -582,7 +582,7 @@ public class WebApp extends WebJsFunc {
 
     public void scanQRCode(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.CAMERA};
-
+        scanCallback = args.callback;
         if (EasyPermissions.hasPermissions(activity, perms)) {
             Intent intent = new Intent(activity, ScanQrActivity.class);
             activity.startActivity(intent);

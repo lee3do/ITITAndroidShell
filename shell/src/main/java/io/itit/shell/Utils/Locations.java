@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.itit.shell.JsShell.WebApp;
-import io.itit.shell.domain.JsArgs;
+import io.itit.shell.JsShell.WebJsFunc;
 
 /**
  * 位置信息的Utils
@@ -28,14 +28,13 @@ public class Locations  {
      *
      * @param context
      * @param webApp
-     * @param args
      */
-    public  void init(Activity context, WebApp webApp, JsArgs.ArgsBean args) {
-        getLocation(context,webApp,args);
+    public  void init(Activity context, WebApp webApp) {
+        getLocation(context,webApp);
     }
 
     @SuppressLint("MissingPermission")
-    private static void getLocation(Activity context, WebApp webApp, JsArgs.ArgsBean args) {
+    private static void getLocation(Activity context, WebApp webApp) {
         Logger.d("init location");
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         LocationProvider gpsProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
@@ -45,13 +44,13 @@ public class Locations  {
         if (gpsProvider != null) {
             Logger.d("GPS_PROVIDER location");
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new
-                    MyLocationListener(webApp, args), null);
+                    MyLocationListener(webApp), null);
 
         }
         if (netWorkProvider != null) {
             Logger.d("NETWORK_PROVIDER location");
             locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new
-                    MyLocationListener(webApp, args), null);
+                    MyLocationListener(webApp), null);
         } else {
             Logger.e("failed location");
         }
@@ -59,11 +58,9 @@ public class Locations  {
 
     public static class MyLocationListener implements LocationListener {
         private WebApp webApp;
-        private JsArgs.ArgsBean args;
 
-        public MyLocationListener(WebApp webApp, JsArgs.ArgsBean args) {
+        public MyLocationListener(WebApp webApp) {
             this.webApp = webApp;
-            this.args = args;
         }
 
         // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
@@ -92,7 +89,7 @@ public class Locations  {
                 res.put("success", true);
                 res.put("latitude", location.getLatitude());
                 res.put("longitude", location.getLongitude());
-                webApp.evalJs(args.callback, res);
+                webApp.evalJs(WebJsFunc.locationCallback, res);
                 // Logger.d("onLocationChanged location:" + getLocation());
             }
         }

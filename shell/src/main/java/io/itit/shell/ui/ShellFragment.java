@@ -290,7 +290,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void loginSuccess(String message) {
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
-        wxApp.evalJs(wxApp.argsBean.callback, res);
+        wxApp.evalJs(wxApp.loginCallback, res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
@@ -311,7 +311,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void scanSuccess(String message) {
         Map<String, Object> res = new HashMap<>();
         res.put("text", message);
-        webApp.evalJs(webApp.argsBean.callback, res);
+        webApp.evalJs(webApp.scanCallback, res);
     }
 
     @Override
@@ -639,7 +639,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
             ToastUtils.show(getActivity(), "定位中");
-            Locations.location.init(getActivity(), webApp, webApp.argsBean);
+            Locations.location.init(getActivity(), webApp);
         }
 
 

@@ -93,10 +93,6 @@ public class ShellWXEntryActivity extends Activity implements IWXAPIEventHandler
 					code = ((SendAuth.Resp) resp).code;
 					Toast.makeText(getApplicationContext(), "登录成功！", Toast.LENGTH_SHORT).show();
 					Log.d("ITIT",code);
-					Map<String,String> resMap = new HashMap<>();
-					resMap.put("funcName","weixinLogin");
-					resMap.put("errCode","0");
-					resMap.put("code",code);
 					RxBus.get().post(Consts.BusAction.LoginSuccess,code);
 					//UnityPlayer.UnitySendMessage("Canvas","callNativeResult", JSON.toJSONString(resMap));
 					//login

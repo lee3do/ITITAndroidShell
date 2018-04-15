@@ -25,10 +25,12 @@ public class WebJsFunc {
     public BaseActivity activity;
     public WebView webView;
     public ShellFragment shellFragment;
-    public static JsArgs.ArgsBean argsBean;
 
     public static String payCallback;
     public static String uploadCallback;
+    public static String loginCallback;
+    public static String scanCallback;
+    public static String locationCallback;
 
     public WebJsFunc(Activity activity, WebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;
@@ -44,7 +46,6 @@ public class WebJsFunc {
             Method m = this.getClass().getMethod(arg.func, JsArgs.ArgsBean.class);
             activity.runOnUiThread(() -> {
                 try {
-                    argsBean = arg.args;
                     Object res = m.invoke(this, arg.args);//yes
                     if (res != null && res instanceof Map) {
                         evalJs(arg.args.callback, (Map) res);
