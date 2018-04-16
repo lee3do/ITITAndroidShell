@@ -59,7 +59,10 @@ public class PresentPageActivity extends BaseActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public void onBackPressedSupport() {

@@ -41,6 +41,8 @@
         <activity
             android:name=".ui.PresentPageActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/NewTransparent"
             android:windowSoftInputMode="adjustResize"
             >
