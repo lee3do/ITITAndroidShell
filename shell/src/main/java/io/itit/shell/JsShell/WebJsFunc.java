@@ -72,10 +72,8 @@ public class WebJsFunc {
             return;
         }
         Logger.d("evaljs:"+callback+","+JSON.toJSONString(args));
-        if (!StringUtils.isEmpty(callback)) {
-            webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
+        webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
                     .toJSONString(args) + ")", null);
-        }
     }
 
     public void evalJs(String callback) {
@@ -83,8 +81,6 @@ public class WebJsFunc {
             return;
         }
         Logger.d("evaljs0:"+JSON.toJSONString(callback));
-        if (!StringUtils.isEmpty(callback)) {
-            webView.evaluateJavascript("shellInvokeCallback('" + callback + "')", null);
-        }
+        webView.evaluateJavascript("shellInvokeCallback('" + callback + "')", null);
     }
 }

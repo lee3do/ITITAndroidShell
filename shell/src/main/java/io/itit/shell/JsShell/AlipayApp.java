@@ -37,10 +37,13 @@ public class AlipayApp extends WebJsFunc {
                 PayTask alipay = new PayTask(activity);
                 Map<String, String> result = alipay.payV2(orderInfo,true);
                 Logger.d(JSON.toJSONString(result));
-                AliPayRes res1 = JSON.parseObject(result.get("result"),AliPayRes.class);
-                Map<String, String> res = new HashMap<>();
-                res.put("code", res1.alipay_trade_app_pay_response.code);
-                evalJs(args.callback, res);
+                activity.runOnUiThread(() -> {
+                    AliPayRes res1 = JSON.parseObject(result.get("result"),AliPayRes.class);
+                    Map<String, String> res = new HashMap<>();
+                    res.put("code", res1.alipay_trade_app_pay_response.code);
+                    evalJs(args.callback, res);
+                });
+
             }catch (Exception e){
                 Logger.e(e,"pay");
             }
