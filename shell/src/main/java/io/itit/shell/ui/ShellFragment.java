@@ -127,6 +127,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         return fragment;
     }
 
+
     public static ShellFragment newInstance(String url, String name, boolean canBack) {
         ShellFragment fragment = new ShellFragment();
         Bundle args = new Bundle();
@@ -386,7 +387,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Logger.d(ShellApp.getFileFolderUrl(getContext()) + url);
-                view.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
+                if (url.startsWith("http")||url.startsWith("https")) {
+                    wv.loadUrl(url);
+                } else {
+                    wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
+                }
                 return true;
             }
 
@@ -422,8 +427,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
 
 
-        Logger.d("url is " + ShellApp.getFileFolderUrl(getContext()) + url);
-        if (url.startsWith("http")) {
+        Logger.d("url is " +  url);
+        if (url.startsWith("http")||url.startsWith("https")) {
             wv.loadUrl(url);
         } else {
             wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);

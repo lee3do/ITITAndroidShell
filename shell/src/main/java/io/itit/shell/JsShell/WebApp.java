@@ -312,6 +312,9 @@ public class WebApp extends WebJsFunc {
 
 
     public void pushPage(JsArgs.ArgsBean args) {
+        if (args.url!=null&&(args.url.startsWith("http")||args.url.startsWith("https"))) {
+            return;
+        }
         if (shellFragment.getParentFragment() instanceof MainFragment) {
             ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance
                     (args, true));
@@ -323,8 +326,12 @@ public class WebApp extends WebJsFunc {
 
     public void showWebView(JsArgs.ArgsBean args) {
         args.navigate = true;
-        ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance(args,
-                true));
+        if (shellFragment.getParentFragment() instanceof MainFragment) {
+            ((MainFragment) shellFragment.getParentFragment()).start(ShellFragment.newInstance
+                    (args, true));
+        } else {
+            shellFragment.start(ShellFragment.newInstance(args, true));
+        }
     }
 
     public void enablePullToRefresh(JsArgs.ArgsBean args) {
