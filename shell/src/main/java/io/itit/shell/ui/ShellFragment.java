@@ -289,7 +289,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
     public void loginSuccess(String message) {
-        Logger.d("loginSuccess");
+        Logger.d("loginSuccess"+message+","+wxApp.loginCallback+","+url+wv.toString());
+        if(StringUtils.isEmpty(wxApp.loginCallback)){
+            return;
+        }
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
         wxApp.evalJs(wxApp.loginCallback, res);
@@ -297,7 +300,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
     public void paySuccess(Integer message) {
-        Logger.d("paySuccess:"+message+","+wxApp.payCallback+","+url);
+        Logger.d("paySuccess:"+message+","+wxApp.payCallback+","+url+wv.toString());
         if(StringUtils.isEmpty(wxApp.payCallback)){
             return;
         }

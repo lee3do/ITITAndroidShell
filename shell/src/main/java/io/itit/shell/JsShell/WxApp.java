@@ -43,6 +43,7 @@ public class WxApp extends WebJsFunc {
 
     public Boolean login(JsArgs.ArgsBean args) {
         loginCallback = args.callback;
+        Logger.d("login:"+args.callback+","+shellFragment.url+webView.toString());
         WxUtils.wxLogin(args.state);
         return false;
     }
@@ -71,7 +72,7 @@ public class WxApp extends WebJsFunc {
         request.appId = WxUtils.appId;
         Logger.d(JSON.toJSONString(request));
         payCallback = args.callback;
-        Logger.d("pay:"+args.callback+","+shellFragment.url);
+        Logger.d("pay:"+args.callback+","+shellFragment.url+webView.toString());
         WxUtils.msgApi.sendReq(request);
         return false;
     }

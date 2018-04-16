@@ -42,9 +42,7 @@
             android:name=".ui.PresentPageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NewTransparent"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
-
             >
         </activity>
 

@@ -337,14 +337,13 @@ public class WebApp extends WebJsFunc {
 
     public void presentPage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, PresentPageActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("ext", JSON.toJSONString(args));
         activity.startActivity(intent);
     }
 
     public void dismissPage(JsArgs.ArgsBean args) {
         if (activity instanceof PresentPageActivity) {
-            activity.finishAndRemoveTask();
+            activity.finish();
         }
     }
 
