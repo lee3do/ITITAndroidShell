@@ -24,9 +24,9 @@ public class AlipayApp extends WebJsFunc {
         super(activity, webView, shellFragment);
     }
 
-    public Map<String, Object> getInfo(JsArgs.ArgsBean args){
+    public Map<String, Object> getInfo(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
-        res.put("version",  AppUtils.getVersionName(activity,"com.eg.android.AlipayGphone"));
+        res.put("version", AppUtils.getVersionName(activity, "com.eg.android.AlipayGphone"));
         return res;
     }
 
@@ -35,17 +35,16 @@ public class AlipayApp extends WebJsFunc {
         Runnable payRunnable = () -> {
             try {
                 PayTask alipay = new PayTask(activity);
-                Map<String, String> result = alipay.payV2(orderInfo,true);
+                Map<String, String> result = alipay.payV2(orderInfo, true);
                 Logger.d(JSON.toJSONString(result));
-                activity.runOnUiThread(() -> {
-                    AliPayRes res1 = JSON.parseObject(result.get("result"),AliPayRes.class);
-                    Map<String, String> res = new HashMap<>();
-                    res.put("code", res1.alipay_trade_app_pay_response.code);
-                    evalJs(args.callback, res);
-                });
 
-            }catch (Exception e){
-                Logger.e(e,"pay");
+                AliPayRes res1 = JSON.parseObject(result.get("result"), AliPayRes.class);
+                Map<String, String> res = new HashMap<>();
+                res.put("code", res1.alipay_trade_app_pay_response.code);
+                evalJs(args.callback, res);
+
+            } catch (Exception e) {
+                Logger.e(e, "pay");
             }
         };
         // 必须异步调用
