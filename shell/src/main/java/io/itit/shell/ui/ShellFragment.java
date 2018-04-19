@@ -665,6 +665,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     }
 
     @Override
+    public boolean onBackPressedSupport() {
+        return !canBack;
+    }
+
+    @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
         if (list.contains(Manifest.permission.RECORD_AUDIO)) {
             Toast.makeText(getActivity(), "您拒绝给予权限,无法正常录音!", Toast.LENGTH_LONG).show();

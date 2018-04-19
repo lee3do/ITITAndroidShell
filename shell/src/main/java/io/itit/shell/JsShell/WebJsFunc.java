@@ -44,22 +44,24 @@ public class WebJsFunc {
         JsArgs arg = JSON.parseObject(value, JsArgs.class);
         try {
             Method m = this.getClass().getMethod(arg.func, JsArgs.ArgsBean.class);
-            try {
-                Object res = m.invoke(this, arg.args);//yes
-                if (res != null && res instanceof Map) {
-                    evalJs(arg.args.callback, (Map) res);
-                } else {
-                    if (res != null && res instanceof Boolean) {
-
+            activity.runOnUiThread(() -> {
+                try {
+                    Object res = m.invoke(this, arg.args);//yes
+                    if (res != null && res instanceof Map) {
+                        evalJs(arg.args.callback, (Map) res);
                     } else {
-                        if (arg.args.callback != null) {
-                            evalJs(arg.args.callback, new HashMap());
+                        if (res != null && res instanceof Boolean) {
+
+                        } else {
+                            if (arg.args.callback != null) {
+                                evalJs(arg.args.callback, new HashMap());
+                            }
                         }
                     }
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    Logger.e(e, "");
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                Logger.e(e, "");
-            }
+            });
         } catch (NoSuchMethodException e) {
             Logger.e(e, "");
         }
@@ -70,8 +72,10 @@ public class WebJsFunc {
             return;
         }
         Logger.d("evaljs:" + callback + "," + JSON.toJSONString(args));
-        activity.runOnUiThread(() -> webView.evaluateJavascript("shellInvokeCallback('" +
-                callback + "'," + JSON.toJSONString(args) + ")", null));
+        activity.runOnUiThread(() -> {
+            webView.evaluateJavascript("shellInvokeCallback('" + callback + "'," + JSON
+                    .toJSONString(args) + ")", null);
+        });
     }
 
     public void evalJs(String callback) {
@@ -79,7 +83,8 @@ public class WebJsFunc {
             return;
         }
         Logger.d("evaljs0:" + JSON.toJSONString(callback));
-        activity.runOnUiThread(() -> webView.evaluateJavascript("shellInvokeCallback('" +
-                callback + "')", null));
+        activity.runOnUiThread(() -> {
+            webView.evaluateJavascript("shellInvokeCallback('" + callback + "')", null);
+        });
     }
 }
