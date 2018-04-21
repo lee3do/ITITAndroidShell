@@ -335,7 +335,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void enablePullToRefresh(JsArgs.ArgsBean args) {
-        shellFragment.enableRefresh(true);
+        shellFragment.enableRefresh(args.enable);
     }
 
     public void stopPullToRefresh(JsArgs.ArgsBean args) {
