@@ -894,13 +894,13 @@ args={
     body:{} //message body
 }
 args.name
-    pageMessage //其它页面发送的消息
-    variableChanged //setVariable 以后调用
-    UIApplicationUserDidTakeScreenshot //用户截图
-    UIKeyboardDidShow //键盘显示
-    UIKeyboardDidHide //键盘隐藏
-    UIApplicationWillResignActive //应用切换到后台
-    UIApplicationDidBecomeActive //应用恢复到前台
+    pageMessage //å¶å®é¡µé¢åéçæ¶æ¯
+    variableChanged //setVariable ä»¥åè°ç¨
+    UIApplicationUserDidTakeScreenshot //ç¨æ·æªå¾
+    UIKeyboardDidShow //é®çæ¾ç¤º
+    UIKeyboardDidHide //é®çéè
+    UIApplicationWillResignActive //åºç¨åæ¢å°åå°
+    UIApplicationDidBecomeActive //åºç¨æ¢å¤å°åå°
 */
 window.pageMessage=function(args){
     if(window.page&&window.page.pageMessage){
@@ -943,14 +943,13 @@ window.app={
                                                             })
         }else{
             //android
-            console.log("AndroidPostMessage",JSON.stringify({'func':func,'args':args}));
             window[bridge].postMessage(JSON.stringify({'func':func,'args':args}))
         }
     },
     invokeApp:function(func,args){
          app.invoke('AppBridge',func,args);
     },
-    //发送消息
+    //åéæ¶æ¯
     postMessage:function(args){
         app.invokeApp('postMessage',{
             name:args.name,
@@ -982,7 +981,7 @@ window.app={
     *type info error success
     *
     */
-    //显示toast
+    //æ¾ç¤ºtoast
     showToast:function(obj){
         if (typeof obj == "string"){
             obj={
@@ -994,15 +993,15 @@ window.app={
             message:obj.message
         })
     },
-    //显示loading
+    //æ¾ç¤ºloading
     showLoading:function(){
         app.invokeApp('showLoading',{})
     },
-    //隐藏loading
+    //éèloading
     hideLoading:function(){
         app.invokeApp('hideLoading',{})
     },
-    //显示对话框
+    //æ¾ç¤ºå¯¹è¯æ¡
     showModal:function(obj){
         app.invokeApp('showModal',{
             title:obj.title,
@@ -1010,7 +1009,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //显示选择sheet
+    //æ¾ç¤ºéæ©sheet
     showActionSheet:function(obj){
         app.invokeApp('showActionSheet',{
             title:obj.title,
@@ -1019,19 +1018,19 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //查询系统信息
+    //æ¥è¯¢ç³»ç»ä¿¡æ¯
     getSystemInfo:function(obj){
         app.invokeApp('getSystemInfo',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //查询网络状态
+    //æ¥è¯¢ç½ç»ç¶æ
     getNetworkType:function(obj){
         app.invokeApp('getNetworkType',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //设置变量
+    //è®¾ç½®åé
     setVariable:function(obj){
         app.invokeApp('setVariable',{
            key:obj.key,
@@ -1039,21 +1038,21 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //返回变量
+    //è¿ååé
     getVariable:function(obj){
         app.invokeApp('getVariable',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //返回存储
+    //è¿åå­å¨
     removeVariable:function(obj){
         app.invokeApp('removeVariable',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //设置存储
+    //è®¾ç½®å­å¨
     setStorage:function(obj){
         app.invokeApp('setStorage',{
            key:obj.key,
@@ -1061,27 +1060,27 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //返回存储
+    //è¿åå­å¨
     getStorage:function(obj){
         app.invokeApp('getStorage',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //返回存储
+    //è¿åå­å¨
     removeStorage:function(obj){
         app.invokeApp('removeStorage',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //存储信息
+    //å­å¨ä¿¡æ¯
     getStorageInfo:function(obj){
         app.invokeApp('getStorageInfo',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //标题栏标题
+    //æ é¢æ æ é¢
     setNavigationBarTitle:function(obj){
         app.invokeApp('setNavigationBarTitle',{
            title:obj.title,
@@ -1124,7 +1123,7 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //入栈
+    //å¥æ 
     pushPage:function(obj){
         app.invokeApp('pushPage',{
            path:obj.path,
@@ -1132,7 +1131,7 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //模态显示页面
+    //æ¨¡ææ¾ç¤ºé¡µé¢
     /*
     *  type
     *  alert
@@ -1142,7 +1141,7 @@ window.app={
     *  fullScreen
     *  custom
     //
-    *  tapDismiss  点击空白处或者滑动关闭
+    *  tapDismiss  ç¹å»ç©ºç½å¤æèæ»å¨å³é­
     */
     presentPage:function(obj){
         app.invokeApp('presentPage',{
@@ -1156,25 +1155,25 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //弹出页面
+    //å¼¹åºé¡µé¢
     popPage:function(obj){
         app.invokeApp('popPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //弹出到根
+    //å¼¹åºå°æ ¹
     popToRootPage:function(obj){
         app.invokeApp('popToRootPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //关闭打开的窗口
+    //å³é­æå¼ççªå£
     dismissPage:function(obj){
         app.invokeApp('dismissPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //页面滑动回弹
+    //é¡µé¢æ»å¨åå¼¹
     enableBounces:function(obj){
         app.invokeApp('enableBounces',{
             enable:obj.enable,
@@ -1192,7 +1191,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //tabbar 徽标
+    //tabbar å¾½æ 
     setTabBarBadge:function(obj){
         app.invokeApp('setTabBarBadge',{
             badge:obj.badge,
@@ -1200,14 +1199,14 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //app小红点
+    //appå°çº¢ç¹
     setApplicationBadge:function(obj){
         app.invokeApp('setApplicationBadge',{
             badge:obj.badge,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //当前gps信息
+    //å½ågpsä¿¡æ¯
     getLocation:function(obj){
         app.invokeApp('getLocation',{
             callback:nextInvokeCallback(obj?obj.callback:null)
@@ -1227,7 +1226,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //预览图片
+    //é¢è§å¾ç
     previewImage:function(obj){
         app.invokeApp('previewImage',{
             urls:obj.urls,
@@ -1250,7 +1249,7 @@ window.app={
         })
     },
     //
-    //fullpath 指定的是文件的绝对路径
+    //fullpath æå®çæ¯æä»¶çç»å¯¹è·¯å¾
     //
     uploadFile:function(obj){
         app.invokeApp('uploadFile',{
@@ -1366,8 +1365,12 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
+    /**
+     * å¢å booleanå¼(å¤çandroidç«¯å¨å±é¡µé¢ä¸ï¼æ»å¨è°ç¨èµ·ä¸æå·æ°é®é¢)
+     */
     enablePullToRefresh:function(obj){
         app.invokeApp('enablePullToRefresh',{
+            enable:!obj||obj.enable!==false,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1375,13 +1378,14 @@ window.app={
     type:photo video all
     source:both  camera photo
     format: png jpeg
-    quality: 0 - 1 jpeg 有效
+    quality: 0 - 1 jpeg ææ
     */
     showImagePicker:function(obj){
         app.invokeApp('showImagePicker',{
             type:obj.type,
             source:obj.source,
             limit:obj.limit,
+            width:obj.width,
             format:obj.format,
             quality:obj.quality,
             callback:nextInvokeCallback(obj?obj.callback:null)
@@ -1402,7 +1406,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //相对路径
+    //ç¸å¯¹è·¯å¾
     unzip:function(obj){
         app.invokeApp('unzip',{
             path:obj.path,
@@ -1411,8 +1415,8 @@ window.app={
         })
     },
     //
-    //duration 单位秒
-    //录制结束后 会回调callback 返回录制的文件地址
+    //duration åä½ç§
+    //å½å¶ç»æå ä¼åè°callback è¿åå½å¶çæä»¶å°å
     //
     startAudioRecord:function(obj){
         app.invokeApp('startAudioRecord',{

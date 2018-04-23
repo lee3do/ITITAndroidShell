@@ -82,6 +82,7 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
             if (version < appConfig.version) {
                 needCopy = true;
             }
+            Logger.d("old version:"+version+";new Version :"+appConfig.version);
         } catch (IOException e) {
             e.printStackTrace();
         }
