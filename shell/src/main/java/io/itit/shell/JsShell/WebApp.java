@@ -779,7 +779,7 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> isFileExists(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         File file = new File(ShellApp.getFileFolderPath(activity), args.path);
-        res.put("result", file.exists());
+        res.put("exist", file.exists());
         return res;
     }
 
