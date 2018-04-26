@@ -203,20 +203,20 @@ public class ShellApp extends Application {
 
 
     public static String getFileFolderUrl(Context context) {
-        if(StringUtils.isEmpty(ShellApp.appConfig.serverRootLocal)){
+        if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
             return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
         }else{
-            return ShellApp.appConfig.serverRootLocal + File.separator;
+            return ShellApp.appConfig.serverRoot + File.separator;
         }
 
     }
 
     public static String getFileFolderPath(Context context) {
-//        Logger.d(ShellApp.appConfig.serverRootLocal);
-        if(StringUtils.isEmpty(ShellApp.appConfig.serverRootLocal)){
+//        Logger.d(ShellApp.appConfig.serverRoot);
+        if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
             return context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
         }else{
-            return ShellApp.appConfig.serverRootLocal + File.separator;
+            return ShellApp.appConfig.serverRoot + File.separator;
         }
     }
 

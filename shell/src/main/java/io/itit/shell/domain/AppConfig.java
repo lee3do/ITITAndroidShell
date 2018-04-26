@@ -23,7 +23,7 @@ public class AppConfig {
      */
 
     public boolean debug;
-    public String serverRootLocal;
+    public String serverRoot;
     public int version;
     public String pageBackgroundColor;
     public String navigationBarBackgroundColor;
