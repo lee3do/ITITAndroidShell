@@ -346,6 +346,12 @@ public class WebApp extends WebJsFunc {
         shellFragment.stopPullToRefresh();
     }
 
+    public void showRootViewController(JsArgs.ArgsBean args){
+
+        activity.startActivity(new Intent(activity, MainActivity.class));
+        activity.finish();
+    }
+
     public void presentPage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, PresentPageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -20,10 +20,12 @@ import java.io.InputStream;
 import java.util.List;
 
 import cn.trinea.android.common.util.PreferencesUtils;
+import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.utils.AppUtils;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.domain.AppConfig;
+import io.itit.shell.domain.JsArgs;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -144,19 +146,26 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         runOnUiThread(() -> {
             getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
                     .LayoutParams.FLAG_FULLSCREEN);
-//            if (PreferencesUtils.getBoolean(WelcomeActivity.this, "isFirst", true) && ShellApp
-//                    .GuildImageList.size() > 0) {
-//                startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
-//            } else {
-//
-//            }
-            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+
+            if(StringUtils.isEmpty(ShellApp.appConfig.launchPage)){
+                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+            }else{
+                JsArgs.ArgsBean argsBean = new JsArgs.ArgsBean();
+                argsBean.type = "fullScreen";
+                argsBean.url = ShellApp.appConfig.launchPage;
+
+                Intent intent = new Intent(WelcomeActivity.this, PresentPageActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("ext", JSON.toJSONString(argsBean));
+                WelcomeActivity.this.startActivity(intent);
+            }
+
             finish();
         });
     }
 
     protected long getDuaration() {
-        return 3000;
+        return 300;
     }
 
 }

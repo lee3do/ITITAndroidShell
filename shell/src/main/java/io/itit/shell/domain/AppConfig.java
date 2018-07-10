@@ -24,6 +24,7 @@ public class AppConfig {
 
     public boolean debug;
     public String serverRoot;
+    public String launchPage;
     public int version;
     public String pageBackgroundColor;
     public String navigationBarBackgroundColor;

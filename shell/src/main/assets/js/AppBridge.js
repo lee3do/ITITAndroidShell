@@ -894,13 +894,13 @@ args={
     body:{} //message body
 }
 args.name
-    pageMessage //å¶å®é¡µé¢åéçæ¶æ¯
-    variableChanged //setVariable ä»¥åè°ç¨
-    UIApplicationUserDidTakeScreenshot //ç¨æ·æªå¾
-    UIKeyboardDidShow //é®çæ¾ç¤º
-    UIKeyboardDidHide //é®çéè
-    UIApplicationWillResignActive //åºç¨åæ¢å°åå°
-    UIApplicationDidBecomeActive //åºç¨æ¢å¤å°åå°
+    pageMessage //其它页面发送的消息
+    variableChanged //setVariable 以后调用
+    UIApplicationUserDidTakeScreenshot //用户截图
+    UIKeyboardDidShow //键盘显示
+    UIKeyboardDidHide //键盘隐藏
+    UIApplicationWillResignActive //应用切换到后台
+    UIApplicationDidBecomeActive //应用恢复到前台
 */
 window.pageMessage=function(args){
     if(window.page&&window.page.pageMessage){
@@ -949,7 +949,7 @@ window.app={
     invokeApp:function(func,args){
          app.invoke('AppBridge',func,args);
     },
-    //åéæ¶æ¯
+    //发送消息
     postMessage:function(args){
         app.invokeApp('postMessage',{
             name:args.name,
@@ -963,7 +963,16 @@ window.app={
             method:obj.method,
             data:obj.data,
             header:obj.header,
+            body:obj.body,
             callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    showRootViewController:function(obj){
+        app.invokeApp('showRootViewController',{})
+    },
+    screenshotToAlbum:function(obj){
+        app.invokeApp('screenshotToAlbum',{
+             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
     //log
@@ -981,7 +990,7 @@ window.app={
     *type info error success
     *
     */
-    //æ¾ç¤ºtoast
+    //显示toast
     showToast:function(obj){
         if (typeof obj == "string"){
             obj={
@@ -993,15 +1002,21 @@ window.app={
             message:obj.message
         })
     },
-    //æ¾ç¤ºloading
-    showLoading:function(){
-        app.invokeApp('showLoading',{})
+    //显示loading
+    showLoading:function(args){
+        if(args==null){
+            args={};
+        }
+        app.invokeApp('showLoading',{
+                      images:args.images,
+                      timeInterval:args.timeInterval
+        })
     },
-    //éèloading
+    //隐藏loading
     hideLoading:function(){
         app.invokeApp('hideLoading',{})
     },
-    //æ¾ç¤ºå¯¹è¯æ¡
+    //显示对话框
     showModal:function(obj){
         app.invokeApp('showModal',{
             title:obj.title,
@@ -1009,7 +1024,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //æ¾ç¤ºéæ©sheet
+    //显示选择sheet
     showActionSheet:function(obj){
         app.invokeApp('showActionSheet',{
             title:obj.title,
@@ -1018,19 +1033,19 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //æ¥è¯¢ç³»ç»ä¿¡æ¯
+    //查询系统信息
     getSystemInfo:function(obj){
         app.invokeApp('getSystemInfo',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //æ¥è¯¢ç½ç»ç¶æ
+    //查询网络状态
     getNetworkType:function(obj){
         app.invokeApp('getNetworkType',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è®¾ç½®åé
+    //设置变量
     setVariable:function(obj){
         app.invokeApp('setVariable',{
            key:obj.key,
@@ -1038,21 +1053,21 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è¿ååé
+    //返回变量
     getVariable:function(obj){
         app.invokeApp('getVariable',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è¿åå­å¨
+    //返回存储
     removeVariable:function(obj){
         app.invokeApp('removeVariable',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è®¾ç½®å­å¨
+    //设置存储
     setStorage:function(obj){
         app.invokeApp('setStorage',{
            key:obj.key,
@@ -1060,27 +1075,27 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è¿åå­å¨
+    //返回存储
     getStorage:function(obj){
         app.invokeApp('getStorage',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //è¿åå­å¨
+    //返回存储
     removeStorage:function(obj){
         app.invokeApp('removeStorage',{
             key:obj.key,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å­å¨ä¿¡æ¯
+    //存储信息
     getStorageInfo:function(obj){
         app.invokeApp('getStorageInfo',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //æ é¢æ æ é¢
+    //标题栏标题
     setNavigationBarTitle:function(obj){
         app.invokeApp('setNavigationBarTitle',{
            title:obj.title,
@@ -1123,7 +1138,7 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å¥æ 
+    //入栈
     pushPage:function(obj){
         app.invokeApp('pushPage',{
            path:obj.path,
@@ -1131,7 +1146,7 @@ window.app={
            callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //æ¨¡ææ¾ç¤ºé¡µé¢
+    //模态显示页面
     /*
     *  type
     *  alert
@@ -1141,7 +1156,7 @@ window.app={
     *  fullScreen
     *  custom
     //
-    *  tapDismiss  ç¹å»ç©ºç½å¤æèæ»å¨å³é­
+    *  tapDismiss  点击空白处或者滑动关闭
     */
     presentPage:function(obj){
         app.invokeApp('presentPage',{
@@ -1155,25 +1170,25 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å¼¹åºé¡µé¢
+    //弹出页面
     popPage:function(obj){
         app.invokeApp('popPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å¼¹åºå°æ ¹
+    //弹出到根
     popToRootPage:function(obj){
         app.invokeApp('popToRootPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å³é­æå¼ççªå£
+    //关闭打开的窗口
     dismissPage:function(obj){
         app.invokeApp('dismissPage',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //é¡µé¢æ»å¨åå¼¹
+    //页面滑动回弹
     enableBounces:function(obj){
         app.invokeApp('enableBounces',{
             enable:obj.enable,
@@ -1191,7 +1206,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //tabbar å¾½æ 
+    //tabbar 徽标
     setTabBarBadge:function(obj){
         app.invokeApp('setTabBarBadge',{
             badge:obj.badge,
@@ -1199,14 +1214,14 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //appå°çº¢ç¹
+    //app小红点
     setApplicationBadge:function(obj){
         app.invokeApp('setApplicationBadge',{
             badge:obj.badge,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //å½ågpsä¿¡æ¯
+    //当前gps信息
     getLocation:function(obj){
         app.invokeApp('getLocation',{
             callback:nextInvokeCallback(obj?obj.callback:null)
@@ -1226,10 +1241,12 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //é¢è§å¾ç
+    //预览图片
     previewImage:function(obj){
         app.invokeApp('previewImage',{
             urls:obj.urls,
+            type:obj.type,
+            contents:obj.contents,
             index:obj.index,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
@@ -1237,6 +1254,7 @@ window.app={
     saveImageToAlbum:function(obj){
         app.invokeApp('saveImageToAlbum',{
             path:obj.path,
+            content:obj.content,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1249,7 +1267,7 @@ window.app={
         })
     },
     //
-    //fullpath æå®çæ¯æä»¶çç»å¯¹è·¯å¾
+    //fullpath 指定的是文件的绝对路径
     //
     uploadFile:function(obj){
         app.invokeApp('uploadFile',{
@@ -1271,9 +1289,18 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
+    getFileAttribute:function(obj){
+        app.invokeApp('getFileAttribute',{
+            path:obj.path,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
     readFile:function(obj){
         app.invokeApp('readFile',{
             path:obj.path,
+            type:obj.type,
+            offset:obj.offset,
+            length:obj.length,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1366,11 +1393,11 @@ window.app={
         })
     },
     /**
-     * å¢å booleanå¼(å¤çandroidç«¯å¨å±é¡µé¢ä¸ï¼æ»å¨è°ç¨èµ·ä¸æå·æ°é®é¢)
+     * 增加boolean值(处理android端全屏页面下，滑动调用起下拉刷新问题)
      */
     enablePullToRefresh:function(obj){
         app.invokeApp('enablePullToRefresh',{
-            enable:!obj||obj.enable!==false,
+            enable: !obj || obj.enable!==false,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1378,7 +1405,7 @@ window.app={
     type:photo video all
     source:both  camera photo
     format: png jpeg
-    quality: 0 - 1 jpeg ææ
+    quality: 0 - 1 jpeg 有效
     */
     showImagePicker:function(obj){
         app.invokeApp('showImagePicker',{
@@ -1406,7 +1433,7 @@ window.app={
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
-    //ç¸å¯¹è·¯å¾
+    //相对路径
     unzip:function(obj){
         app.invokeApp('unzip',{
             path:obj.path,
@@ -1415,12 +1442,51 @@ window.app={
         })
     },
     //
-    //duration åä½ç§
-    //å½å¶ç»æå ä¼åè°callback è¿åå½å¶çæä»¶å°å
+    //视频录制
+    //
+    startCaptureSession:function(obj){
+        app.invokeApp('startCaptureSession',{
+            width:obj.width,
+            height:obj.height,
+            x:obj.x,
+            y:obj.y,
+            position:obj.position,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    stopCaptureSession:function(obj){
+        app.invokeApp('stopCaptureSession',{
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    pauseCaptureSession:function(obj){
+        app.invokeApp('pauseCaptureSession',{
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    resumeCaptureSession:function(obj){
+        app.invokeApp('resumeCaptureSession',{
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    capturePicture:function(obj){
+        app.invokeApp('capturePicture',{
+            quality:obj.quality,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    //
+    //duration 单位秒
+    //录制结束后 会回调callback 返回录制的文件地址
     //
     startAudioRecord:function(obj){
         app.invokeApp('startAudioRecord',{
             duration:obj.duration,
+            format:obj.format,
+            rate:obj.rate,
+            channel:obj.channel,
+            mode:obj.mode,
+            finishCallback:nextInvokeCallback(obj?obj.finishCallback:null),
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1436,6 +1502,18 @@ window.app={
     },
     getAudioRecordStatus:function(obj){
         app.invokeApp('getAudioRecordStatus',{
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    playAudio:function(obj){
+        app.invokeApp('playAudio',{
+            path:obj.path,
+            content:obj.content,
+            callback:nextInvokeCallback(obj?obj.callback:null)
+        })
+    },
+    stopAudio:function(obj){
+        app.invokeApp('stopAudio',{
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
@@ -1465,6 +1543,7 @@ window.app={
     showWebView:function(obj){
         app.invokeApp('showWebView',{
             url:obj.url,
+            type:obj.type,
             callback:nextInvokeCallback(obj?obj.callback:null)
         })
     },
