@@ -23,6 +23,7 @@ public class AppConfig {
      */
 
     public boolean debug;
+    public boolean darkMode=false;
     public String serverRoot;
     public String launchPage;
     public int version;

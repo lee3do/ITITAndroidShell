@@ -41,7 +41,6 @@ public class MainFragment extends BaseMainFragment {
             savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
         initView(view);
         loadMultipleRootFragment(R.id.fl_tab_container, 0, mFragments);
         RxBus.get().register(this);
@@ -55,6 +54,10 @@ public class MainFragment extends BaseMainFragment {
 
     private void initBar(View view) {
         bottomBar = view.findViewById(R.id.bottomBar);
+        if (ShellApp.appConfig.tabBarItems.size() == 1) {
+            bottomBar.setVisibility(View.GONE);
+            view.findViewById(R.id.line).setVisibility(View.GONE);
+        }
         mFragments = new SupportFragment[ShellApp.appConfig.tabBarItems.size()];
         for (int i = 0; i < ShellApp.appConfig.tabBarItems.size(); i++) {
             AppConfig.TabBarItemsBean tab = ShellApp.appConfig.tabBarItems.get(i);

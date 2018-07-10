@@ -84,12 +84,10 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
             if (version < appConfig.version) {
                 needCopy = true;
             }
-            Logger.d("old version:"+version+";new Version :"+appConfig.version);
+            Logger.d("old version:" + version + ";new Version :" + appConfig.version);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
 
 
         if (needCopy) {
@@ -147,9 +145,11 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
             getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
                     .LayoutParams.FLAG_FULLSCREEN);
 
-            if(StringUtils.isEmpty(ShellApp.appConfig.launchPage)){
+            if (StringUtils.isEmpty(ShellApp.appConfig.launchPage)) {
+
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-            }else{
+
+            } else {
                 JsArgs.ArgsBean argsBean = new JsArgs.ArgsBean();
                 argsBean.type = "fullScreen";
                 argsBean.url = ShellApp.appConfig.launchPage;

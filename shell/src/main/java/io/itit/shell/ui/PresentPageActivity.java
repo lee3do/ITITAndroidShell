@@ -28,9 +28,15 @@ public class PresentPageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_present_page);
-        setSwipeBackEnable(false);
+
+
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
                 .ArgsBean.class);
+        boolean canBack = false;
+        if (argsBean.nopresent!=null&&argsBean.nopresent) {
+            canBack = true;
+        }
+        setSwipeBackEnable(canBack);
         type = argsBean.type;
         if (!StringUtils.isEmpty(type) && !type.equals("fullScreen")) {
             if (argsBean.navigate == null) {
@@ -49,13 +55,13 @@ public class PresentPageActivity extends BaseActivity {
 
         Logger.d("type is " + type);
         if (findFragment(MainFragment.class) == null) {
-            mFragment = ShellFragment.newInstance(argsBean, false);
+            mFragment = ShellFragment.newInstance(argsBean, canBack);
             loadRootFragment(R.id.fl_container, mFragment);
         }
         try {
             AndroidBug5497Workaround.assistActivity(this);
-        }catch (Exception ignored){
-            Logger.e(ignored,"PresentPageActivity");
+        } catch (Exception ignored) {
+            Logger.e(ignored, "PresentPageActivity");
         }
     }
 

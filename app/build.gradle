@@ -86,6 +86,21 @@ android {
             minSdkVersion 21
             targetSdkVersion 24
         }
+        txai {
+            applicationId "com.tecent.ailab"
+            buildConfigField "String", "name", "\"AiLab\""
+            manifestPlaceholders = [
+                    app_name     : "腾讯AI",
+                    XG_ACCESS_ID : "",
+                    XG_ACCESS_KEY: "",
+            ]
+            signingConfig signingConfigs.itit
+            dimension "names"
+            versionCode 2
+            versionName "1.0.1"
+            minSdkVersion 21
+            targetSdkVersion 24
+        }
         itittest {
             buildConfigField "String", "name", "\"test\""
             manifestPlaceholders = [

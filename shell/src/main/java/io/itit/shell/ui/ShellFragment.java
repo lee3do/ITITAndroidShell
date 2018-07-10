@@ -269,7 +269,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         //状态栏透明和间距处理
         StatusBarUtil.immersive(getActivity());
-        StatusBarUtil.darkMode(getActivity());
+        StatusBarUtil.darkMode(getActivity(), !ShellApp.appConfig.darkMode);
         StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
     }
 

@@ -27,6 +27,7 @@ public class JsArgs {
         public Boolean navigate;
         public Boolean visible;
         public Boolean enable;
+        public Boolean nopresent;
         public int index;
         public int limit;
         public double quality;
