@@ -791,7 +791,7 @@ public class WebApp extends WebJsFunc {
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 30, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             return Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
         } catch (Exception e) {
             return "";
@@ -803,6 +803,7 @@ public class WebApp extends WebJsFunc {
         if (args.type.equals("base64")) {
             String base64 = readFileAsBase64((String)
                     getFilePath(args).get("url"));
+            Logger.d("length:"+base64.length());
             res.put("content", base64);
         } else {
             StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");
