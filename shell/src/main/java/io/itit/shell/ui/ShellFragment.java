@@ -205,7 +205,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
                 (ShellApp.appConfig.navigationBarColor)));
-        if (!navigate) {
+        Logger.d("statusBarHidden:"+ShellApp.appConfig.statusBarHidden);
+        if (!navigate || (ShellApp.appConfig.statusBarHidden!=null&&ShellApp.appConfig.statusBarHidden)) {
             toolbar.setVisibility(View.GONE);
         }
         initSize(view);
@@ -272,9 +273,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         if (ShellApp.appConfig.statusBarStyle != null && ShellApp.appConfig.statusBarStyle.equals
                 ("light")) {
-            StatusBarUtil.darkMode(getActivity(), true);
-        } else {
             StatusBarUtil.darkMode(getActivity(), false);
+        } else {
+            StatusBarUtil.darkMode(getActivity(), true);
         }
 
         StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
@@ -284,7 +285,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         textView = view.findViewById(R.id.toolbar_title);
         textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
         textView.setText(name);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,ShellApp.appConfig.navigationBarTitleFontSize);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ShellApp.appConfig
+                .navigationBarTitleFontSize);
 
     }
 

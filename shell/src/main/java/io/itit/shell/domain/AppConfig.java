@@ -23,6 +23,7 @@ public class AppConfig {
      */
 
     public boolean debug;
+    public Boolean statusBarHidden;
     public String statusBarStyle;
     public String serverRoot;
     public String launchPage;
