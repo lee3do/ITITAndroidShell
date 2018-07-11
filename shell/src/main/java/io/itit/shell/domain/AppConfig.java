@@ -23,13 +23,15 @@ public class AppConfig {
      */
 
     public boolean debug;
-    public boolean darkMode=false;
+    public String statusBarStyle;
     public String serverRoot;
     public String launchPage;
     public int version;
     public String pageBackgroundColor;
     public String navigationBarBackgroundColor;
     public String navigationBarColor;
+    public String navigationBarTitleColor;
+    public int navigationBarTitleFontSize;
     public String tabBarTintColor;
     public String tabBarBackgroundColor;
     public List<TabBarItemsBean> tabBarItems;

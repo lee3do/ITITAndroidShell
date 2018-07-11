@@ -15,6 +15,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,7 +153,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             query = getArguments().getString("query", "");
             type = getArguments().getString(Type, "");
             height = getArguments().getInt("height", 400);
-            Logger.d("shell fragment create:"+url);
+            Logger.d("shell fragment create:" + url);
         }
 
     }
@@ -176,7 +177,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         initWebview(view);
 
         initPullToRefresh(view);
-
 
 
         initTitle(view);
@@ -269,14 +269,23 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         //状态栏透明和间距处理
         StatusBarUtil.immersive(getActivity());
-        StatusBarUtil.darkMode(getActivity(), !ShellApp.appConfig.darkMode);
+
+        if (ShellApp.appConfig.statusBarStyle != null && ShellApp.appConfig.statusBarStyle.equals
+                ("light")) {
+            StatusBarUtil.darkMode(getActivity(), true);
+        } else {
+            StatusBarUtil.darkMode(getActivity(), false);
+        }
+
         StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
     }
 
     private void initTitle(View view) {
         textView = view.findViewById(R.id.toolbar_title);
-        textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+        textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
         textView.setText(name);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,ShellApp.appConfig.navigationBarTitleFontSize);
+
     }
 
     @Override
@@ -290,8 +299,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
     public void loginSuccess(String message) {
-        Logger.d("loginSuccess"+message+","+wxApp.loginCallback+","+url+wv.toString());
-        if(StringUtils.isEmpty(wxApp.loginCallback)){
+        Logger.d("loginSuccess" + message + "," + wxApp.loginCallback + "," + url + wv.toString());
+        if (StringUtils.isEmpty(wxApp.loginCallback)) {
             return;
         }
         Map<String, Object> res = new HashMap<>();
@@ -301,18 +310,18 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.PAY_FINISH)})
     public void paySuccess(Integer message) {
-        Logger.d("paySuccess:"+message+","+wxApp.payCallback+","+url+wv.toString());
-        if(StringUtils.isEmpty(wxApp.payCallback)){
+        Logger.d("paySuccess:" + message + "," + wxApp.payCallback + "," + url + wv.toString());
+        if (StringUtils.isEmpty(wxApp.payCallback)) {
             return;
         }
         Map<String, Object> res = new HashMap<>();
         res.put("code", message);
-        wxApp.evalJs(wxApp.payCallback,res);
+        wxApp.evalJs(wxApp.payCallback, res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.REC_MSG)})
     public void pageMessage(String message) {
-        Logger.d("pageMessage:" +url+","+ message);
+        Logger.d("pageMessage:" + url + "," + message);
         wv.evaluateJavascript("pageMessage(" + message + ")", null);
     }
 
@@ -343,7 +352,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void onDestroy() {
         super.onDestroy();
         RxBus.get().unregister(this);
-        Logger.d("onDestroy:" +url);
+        Logger.d("onDestroy:" + url);
         wv.evaluateJavascript("pageUnload()", null);
     }
 
@@ -360,7 +369,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
-        if(ShellApp.appConfig.debug){
+        if (ShellApp.appConfig.debug) {
             webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
             wv.clearCache(true);
         }
@@ -387,7 +396,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Logger.d(ShellApp.getFileFolderUrl(getContext()) + url);
-                if (url.startsWith("http")||url.startsWith("https")) {
+                if (url.startsWith("http") || url.startsWith("https")) {
                     wv.loadUrl(url);
                 } else {
                     wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
@@ -414,21 +423,19 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         });
 
         wv.setOnCustomScroolChangeListener((l, t, oldl, oldt) -> {
-            float webViewContentHeight=wv.getContentHeight() * wv.getScale();
+            float webViewContentHeight = wv.getContentHeight() * wv.getScale();
             //WebView的现高度
-            float webViewCurrentHeight=(wv.getView().getHeight() + wv.getView().getScrollY());
-            Logger.d(webViewContentHeight+"::"+webViewCurrentHeight);
-            if ((webViewContentHeight-webViewCurrentHeight) <= 5) {
+            float webViewCurrentHeight = (wv.getView().getHeight() + wv.getView().getScrollY());
+            Logger.d(webViewContentHeight + "::" + webViewCurrentHeight);
+            if ((webViewContentHeight - webViewCurrentHeight) <= 5) {
                 Logger.d("WebView滑动到了底端");
                 wv.evaluateJavascript("pageScrollToBottom()", null);
             }
         });
 
 
-
-
-        Logger.d("url is " +  url);
-        if (url.startsWith("http")||url.startsWith("https")) {
+        Logger.d("url is " + url);
+        if (url.startsWith("http") || url.startsWith("https")) {
             wv.loadUrl(url);
         } else {
             wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
