@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -24,6 +25,7 @@ import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.widget.ImageViewCompat;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -46,6 +48,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -133,7 +136,7 @@ public class WebApp extends WebJsFunc {
     @SuppressLint("CheckResult")
     public Boolean request(JsArgs.ArgsBean args) {
         if (args.method.toLowerCase().equals("post")) {
-            if (StringUtils.isEmpty(args.body)) {
+            if (args.body==null) {
                 RetrofitProvider.post(args.url, args.data, args.header, body -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("data", new String(body.bytes()));
@@ -146,7 +149,7 @@ public class WebApp extends WebJsFunc {
                     evalJs(args.callback, res);
                 });
             } else {
-                RetrofitProvider.postWithBody(args.url, args.data, args
+                RetrofitProvider.postWithBody(args.url,  args
                         .header, args.body,body -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("data", new String(body.bytes()));
@@ -783,12 +786,22 @@ public class WebApp extends WebJsFunc {
         }
         return res;
     }
+    public static String readFileAsBase64(String path) {
 
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 30, baos);
+            return Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         if (args.type.equals("base64")) {
-            String base64 = io.itit.androidlibrary.utils.FileUtils.readFileAsBase64((String)
+            String base64 = readFileAsBase64((String)
                     getFilePath(args).get("url"));
             res.put("content", base64);
         } else {
