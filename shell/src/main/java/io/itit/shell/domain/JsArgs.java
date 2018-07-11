@@ -24,6 +24,7 @@ public class JsArgs {
          */
         public int badge;
         public String id;
+        public String body;
         public Boolean navigate;
         public Boolean visible;
         public Boolean enable;

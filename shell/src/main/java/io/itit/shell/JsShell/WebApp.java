@@ -133,19 +133,35 @@ public class WebApp extends WebJsFunc {
     @SuppressLint("CheckResult")
     public Boolean request(JsArgs.ArgsBean args) {
         if (args.method.toLowerCase().equals("post")) {
-            RetrofitProvider.post(args.url, args.data,args.header,body -> {
-                Map<String, Object> res = new HashMap<>();
-                res.put("data", new String(body.bytes()));
-                res.put("code", 200);
-                evalJs(args.callback, res);
-            }, error -> {
-                Logger.e(error, "request");
-                Map<String, Object> res = new HashMap<>();
-                res.put("code", 400);
-                evalJs(args.callback, res);
-            });
+            if (StringUtils.isEmpty(args.body)) {
+                RetrofitProvider.post(args.url, args.data, args.header, body -> {
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("data", new String(body.bytes()));
+                    res.put("code", 200);
+                    evalJs(args.callback, res);
+                }, error -> {
+                    Logger.e(error, "request");
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("code", 400);
+                    evalJs(args.callback, res);
+                });
+            } else {
+                RetrofitProvider.postWithBody(args.url, args.data, args
+                        .header, args.body,body -> {
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("data", new String(body.bytes()));
+                    res.put("code", 200);
+                    evalJs(args.callback, res);
+                }, error -> {
+                    Logger.e(error, "request");
+                    Map<String, Object> res = new HashMap<>();
+                    res.put("code", 400);
+                    evalJs(args.callback, res);
+                });
+            }
+
         } else {
-            RetrofitProvider.get(args.url, args.data,args.header,body -> {
+            RetrofitProvider.get(args.url, args.data, args.header, body -> {
                 Map<String, Object> res = new HashMap<>();
                 res.put("data", new String(body.bytes()));
                 res.put("code", 200);
@@ -312,7 +328,7 @@ public class WebApp extends WebJsFunc {
 
 
     public void pushPage(JsArgs.ArgsBean args) {
-        if (args.url!=null&&(args.url.startsWith("http")||args.url.startsWith("https"))) {
+        if (args.url != null && (args.url.startsWith("http") || args.url.startsWith("https"))) {
             return;
         }
         if (shellFragment.getParentFragment() instanceof MainFragment) {
@@ -335,7 +351,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void enablePullToRefresh(JsArgs.ArgsBean args) {
-        if (args.enable==null) {
+        if (args.enable == null) {
             shellFragment.enableRefresh(true);
             return;
         }
@@ -346,7 +362,7 @@ public class WebApp extends WebJsFunc {
         shellFragment.stopPullToRefresh();
     }
 
-    public void showRootViewController(JsArgs.ArgsBean args){
+    public void showRootViewController(JsArgs.ArgsBean args) {
 
         activity.startActivity(new Intent(activity, MainActivity.class));
         activity.finish();
@@ -758,15 +774,28 @@ public class WebApp extends WebJsFunc {
         if (file.exists()) {
             res.put("url", file.getAbsolutePath());
         } else {
-            res.put("url", ShellApp.getFileFolderUrl(activity) + args.path);
+            file = new File(args.path);
+            if (file.exists()) {
+                res.put("url", file.getAbsolutePath());
+            } else {
+                res.put("url", ShellApp.getFileFolderUrl(activity) + args.path);
+            }
         }
         return res;
     }
 
+
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
-        StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");
-        res.put("content", sb.toString());
+        if (args.type.equals("base64")) {
+            String base64 = io.itit.androidlibrary.utils.FileUtils.readFileAsBase64((String)
+                    getFilePath(args).get("url"));
+            res.put("content", base64);
+        } else {
+            StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");
+            res.put("content", sb.toString());
+        }
+
         return res;
     }
 
