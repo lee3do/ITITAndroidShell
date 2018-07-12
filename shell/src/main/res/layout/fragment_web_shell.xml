@@ -60,11 +60,11 @@
                     android:id="@+id/wv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layerType="software"
                     />
 
 
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
             <LinearLayout
                 android:id="@+id/empty_right"

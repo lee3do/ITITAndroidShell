@@ -23,6 +23,10 @@ public class JsArgs {
          * callback : null
          */
         public int badge;
+        public int width;
+        public int height;
+        public int x;
+        public int y;
         public String id;
         public String body;
         public Boolean navigate;
@@ -34,7 +38,6 @@ public class JsArgs {
         public double quality;
         public double latitude;
         public double longitude;
-        public int height;
         public int select;
         public String title;
         public Map<String,Object> data;

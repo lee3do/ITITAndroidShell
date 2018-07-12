@@ -32,7 +32,7 @@ public class AppConfig {
     public String navigationBarBackgroundColor;
     public String navigationBarColor;
     public String navigationBarTitleColor;
-    public int navigationBarTitleFontSize;
+    public Integer navigationBarTitleFontSize;
     public String tabBarTintColor;
     public String tabBarBackgroundColor;
     public List<TabBarItemsBean> tabBarItems;

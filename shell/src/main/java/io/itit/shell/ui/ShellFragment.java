@@ -8,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -57,6 +58,7 @@ import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.AndroidBug54971Workaround;
+import io.itit.shell.Utils.CameraPreview;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.AppConfig;
@@ -174,12 +176,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         centerImage = view.findViewById(R.id.center_image);
         wv = view.findViewById(R.id.wv);
 
-
-
         initPullToRefresh(view);
 
-
         initTitle(view);
+
+       // initSurfaceView(view);
 
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
@@ -217,7 +218,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 }
                 if (page.disableHwui != null && page.disableHwui) {
                     Logger.d("set software layer");
-                    wv.setLayerType(WebView.LAYER_TYPE_SOFTWARE,new android.graphics.Paint());
+ //                   wv.setVisibility(View.GONE);
+//                    wv = view.findViewById(R.id.wv1);
+//                    wv.setVisibility(View.VISIBLE);
+
                 }
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
                     toolbar.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
@@ -246,9 +250,19 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 break;
             }
         }
-        initWebview(view);
+        new Handler().postDelayed(()->{
+            initWebview(view);
+        },100);
+
         AndroidBug54971Workaround.assistActivity(view.findViewById(R.id.rl_layout));
         return attachToSwipeBack(view);
+    }
+
+    private void initSurfaceView(View view) {
+        CameraPreview mPreview = new CameraPreview(getActivity());
+        LinearLayout preview = (LinearLayout) view.findViewById(R.id.container);
+        preview.addView(mPreview);
+
     }
 
     public void enableRefresh(boolean value) {
@@ -288,10 +302,17 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     private void initTitle(View view) {
         textView = view.findViewById(R.id.toolbar_title);
-        textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
+        if(!StringUtils.isEmpty(ShellApp.appConfig.navigationBarTitleColor)){
+            textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
+        }
+
+        if(ShellApp.appConfig.navigationBarTitleFontSize!=null){
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ShellApp.appConfig
+                    .navigationBarTitleFontSize);
+        }
+
         textView.setText(name);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ShellApp.appConfig
-                .navigationBarTitleFontSize);
+
 
     }
 
@@ -375,6 +396,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setTextZoom(100);
         webSettings.setAllowFileAccessFromFileURLs(true);
         if (ShellApp.appConfig.debug) {
             webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
