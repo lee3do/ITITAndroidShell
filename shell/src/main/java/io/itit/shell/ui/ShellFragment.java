@@ -37,6 +37,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.wonderkiln.camerakit.CameraView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,9 +47,11 @@ import java.util.Map;
 
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
+import cn.trinea.android.common.util.ViewUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.ui.ScanQrActivity;
+import io.itit.androidlibrary.utils.CommonUtil;
 import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.AlipayApp;
@@ -58,7 +61,6 @@ import io.itit.shell.JsShell.XgApp;
 import io.itit.shell.R;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.AndroidBug54971Workaround;
-import io.itit.shell.Utils.CameraPreview;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.AppConfig;
@@ -107,6 +109,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public WxApp wxApp;
     public XgApp xgApp;
     public AlipayApp alipayApp;
+    public CameraView cameraView;
 
     public ShellFragment() {
         // Required empty public constructor
@@ -175,12 +178,12 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
         wv = view.findViewById(R.id.wv);
+        cameraView = view.findViewById(R.id.camera);
 
         initPullToRefresh(view);
 
         initTitle(view);
 
-       // initSurfaceView(view);
 
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
@@ -206,8 +209,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
                 (ShellApp.appConfig.navigationBarColor)));
-        Logger.d("statusBarHidden:"+ShellApp.appConfig.statusBarHidden);
-        if (!navigate || (ShellApp.appConfig.statusBarHidden!=null&&ShellApp.appConfig.statusBarHidden)) {
+        Logger.d("statusBarHidden:" + ShellApp.appConfig.statusBarHidden);
+        if (!navigate || (ShellApp.appConfig.statusBarHidden != null && ShellApp.appConfig
+                .statusBarHidden)) {
             toolbar.setVisibility(View.GONE);
         }
         initSize(view);
@@ -218,7 +222,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 }
                 if (page.disableHwui != null && page.disableHwui) {
                     Logger.d("set software layer");
- //                   wv.setVisibility(View.GONE);
+                    //                   wv.setVisibility(View.GONE);
 //                    wv = view.findViewById(R.id.wv1);
 //                    wv.setVisibility(View.VISIBLE);
 
@@ -250,19 +254,47 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 break;
             }
         }
-        new Handler().postDelayed(()->{
+        new Handler().postDelayed(() -> {
             initWebview(view);
-        },100);
+        }, 100);
 
         AndroidBug54971Workaround.assistActivity(view.findViewById(R.id.rl_layout));
         return attachToSwipeBack(view);
     }
 
-    private void initSurfaceView(View view) {
-        CameraPreview mPreview = new CameraPreview(getActivity());
-        LinearLayout preview = (LinearLayout) view.findViewById(R.id.container);
-        preview.addView(mPreview);
+    public void startCaptureSession(JsArgs.ArgsBean argsBean) {
+        cameraView.setVisibility(View.VISIBLE);
+        cameraView.start();
+        if (argsBean.position.equals("back")) {
+            cameraView.setFacing(0);
+        } else {
+            cameraView.setFacing(1);
+        }
+        ViewUtils.setViewHeight(cameraView, CommonUtil.dipToPixel(argsBean.height));
+    }
 
+    public void capturePicture(JsArgs.ArgsBean argsBean) {
+        Logger.d("capturePicture");
+        cameraView.captureImage(event -> {
+            Logger.d("capturePicture callback");
+            Logger.d(event);
+        });
+
+    }
+
+    public void pauseCaptureSession(JsArgs.ArgsBean argsBean) {
+        new Handler().postDelayed(() -> {
+            cameraView.setVisibility(View.GONE);
+        }, 100);
+    }
+
+    public void resumeCaptureSession(JsArgs.ArgsBean argsBean) {
+        cameraView.setVisibility(View.VISIBLE);
+    }
+
+    public void stopCaptureSession(JsArgs.ArgsBean argsBean) {
+        cameraView.setVisibility(View.GONE);
+        cameraView.stop();
     }
 
     public void enableRefresh(boolean value) {
@@ -302,11 +334,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     private void initTitle(View view) {
         textView = view.findViewById(R.id.toolbar_title);
-        if(!StringUtils.isEmpty(ShellApp.appConfig.navigationBarTitleColor)){
+        if (!StringUtils.isEmpty(ShellApp.appConfig.navigationBarTitleColor)) {
             textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
         }
 
-        if(ShellApp.appConfig.navigationBarTitleFontSize!=null){
+        if (ShellApp.appConfig.navigationBarTitleFontSize != null) {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, ShellApp.appConfig
                     .navigationBarTitleFontSize);
         }

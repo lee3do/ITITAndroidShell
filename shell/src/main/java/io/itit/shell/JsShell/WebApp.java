@@ -827,6 +827,31 @@ public class WebApp extends WebJsFunc {
         return bitmap;
     }
 
+    public void startCaptureSession(JsArgs.ArgsBean args){
+        shellFragment.startCaptureSession(args);
+    }
+
+    public void pauseCaptureSession(JsArgs.ArgsBean args){
+
+        shellFragment.stopCaptureSession(args);
+    }
+
+    public void resumeCaptureSession(JsArgs.ArgsBean args){
+        shellFragment.startCaptureSession(args);
+    }
+
+    public void stopCaptureSession(JsArgs.ArgsBean args){
+        shellFragment.stopCaptureSession(args);
+    }
+
+    public Boolean capturePicture(JsArgs.ArgsBean args){
+        activity.runOnUiThread(() -> {
+            shellFragment.capturePicture(args);
+        });
+
+        return false;
+    }
+
     public Map<String, Object> screenshotToAlbum(JsArgs.ArgsBean args) {
         MediaStore.Images.Media.insertImage(activity.getContentResolver(), shotActivity(activity), "itit", "io.ITIT.io");
         Map<String, Object> res = new HashMap<>();

@@ -7,16 +7,21 @@
                 android:id="@+id/rl_layout"
     >
 
+<FrameLayout
+    android:layout_below="@id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
         android:background="@color/transparent"
         android:orientation="vertical"
         android:weightSum="10"
         >
+
+
 
         <LinearLayout
             android:id="@+id/empty_top"
@@ -85,6 +90,13 @@
             android:orientation="horizontal"/>
 
     </LinearLayout>
+    <com.wonderkiln.camerakit.CameraView
+        android:visibility="gone"
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:adjustViewBounds="true" />
+</FrameLayout>
 
     <!--<com.github.mmin18.widget.RealtimeBlurView-->
     <!--android:id="@+id/blurview"-->
