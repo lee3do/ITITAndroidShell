@@ -40,7 +40,6 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
         Picasso.with(this).load(ShellApp.startPage).into(welcome);
         initPermission();
 
-
     }
 
     public void initPermission() {

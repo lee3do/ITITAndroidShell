@@ -172,9 +172,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         rightBar = view.findViewById(R.id.rightBar);
         toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
+        wv = view.findViewById(R.id.wv);
 
 
-        initWebview(view);
 
         initPullToRefresh(view);
 
@@ -215,6 +215,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 if (page.hideNavigationBar != null && page.hideNavigationBar) {
                     toolbar.setVisibility(View.GONE);
                 }
+                if (page.disableHwui != null && page.disableHwui) {
+                    Logger.d("set software layer");
+                    wv.setLayerType(WebView.LAYER_TYPE_SOFTWARE,new android.graphics.Paint());
+                }
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
                     toolbar.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
                     mTab.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
@@ -242,6 +246,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 break;
             }
         }
+        initWebview(view);
         AndroidBug54971Workaround.assistActivity(view.findViewById(R.id.rl_layout));
         return attachToSwipeBack(view);
     }
@@ -363,7 +368,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (ShellApp.appConfig.debug) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
-        wv = view.findViewById(R.id.wv);
+
         wv.setHorizontalScrollBarEnabled(false);//水平不显示
         wv.setVerticalScrollBarEnabled(false); //垂直不显示
 

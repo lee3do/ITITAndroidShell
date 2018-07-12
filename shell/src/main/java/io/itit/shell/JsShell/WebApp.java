@@ -16,6 +16,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -796,6 +797,40 @@ public class WebApp extends WebJsFunc {
         } catch (Exception e) {
             return "";
         }
+    }
+
+
+    /**
+     * 根据指定的Activity截图（带空白的状态栏）
+     *
+     * @param context 要截图的Activity
+     * @return Bitmap
+     */
+    public static Bitmap shotActivity(Activity context) {
+        View view = context.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.setDrawingCacheEnabled(false);
+        view.destroyDrawingCache();
+        return bitmap;
+    }
+
+    private Bitmap captureWebView() {
+        float scale = webView.getScale();
+        int width = webView.getWidth();
+        int height = (int) (webView.getHeight() * scale);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        webView.draw(canvas);
+        return bitmap;
+    }
+
+    public Map<String, Object> screenshotToAlbum(JsArgs.ArgsBean args) {
+        MediaStore.Images.Media.insertImage(activity.getContentResolver(), shotActivity(activity), "itit", "io.ITIT.io");
+        Map<String, Object> res = new HashMap<>();
+        return res;
     }
 
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {

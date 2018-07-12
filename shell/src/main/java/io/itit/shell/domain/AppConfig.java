@@ -58,5 +58,6 @@ public class AppConfig {
         public String pageBackgroundColor;
         public Boolean hideNavigationBar;
         public Boolean enableBounces;
+        public Boolean disableHwui;
     }
 }
