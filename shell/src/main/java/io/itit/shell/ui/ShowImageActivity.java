@@ -84,8 +84,11 @@ public class ShowImageActivity extends FragmentActivity {
             container.addView(imageView);
             String url = imagesUrls.get(position);
             if (!url.startsWith("http")) {
-                File file = new File(ShellApp.getFileFolderPath(getApplicationContext()), url);
-                Logger.d(file.exists());
+                File file = new File(url);
+                if(!file.exists()){
+                    file = new File(ShellApp.getFileFolderPath(getApplicationContext()), url);
+                }
+                Logger.d(file.exists()+":"+file.getAbsolutePath());
                 Picasso.with(ShowImageActivity.this).load(file).into(imageView);
             } else {
                 Picasso.with(ShowImageActivity.this).load(imagesUrls.get(position)).into(imageView);

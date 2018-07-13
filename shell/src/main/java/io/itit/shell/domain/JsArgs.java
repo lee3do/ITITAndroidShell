@@ -55,6 +55,7 @@ public class JsArgs {
         public String source;
         public String dest;
         public List<String> images;
+        public List<String> contents;
         public String image;
         public String selectedColor;
         public String color;

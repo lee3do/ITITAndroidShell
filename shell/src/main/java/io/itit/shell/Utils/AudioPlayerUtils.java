@@ -7,21 +7,23 @@ import android.util.Base64;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  */
- 
+
 public class AudioPlayerUtils {
-   
+
     private MediaPlayer mediaPlayer;
     /*-1:初始状态，0:播放完毕，1播放中*/
     public static int playStatus = -1;
     File tempFile = null;
- 
+
     private AudioPlayerUtils() {
     }
- 
+
     private static AudioPlayerUtils poolUtils = null;
+
     public static AudioPlayerUtils getInstance() {
         if (poolUtils == null) {
             poolUtils = new AudioPlayerUtils();
@@ -29,25 +31,24 @@ public class AudioPlayerUtils {
         poolUtils.init();
         return poolUtils;
     }
- 
+
     /*
-    * 初始化mediaPlayer
-    * */
+     * 初始化mediaPlayer
+     * */
     private void init() {
-        if (mediaPlayer == null)
-            mediaPlayer = new MediaPlayer();
+        if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
     }
- 
- 
- 
+
+
     /**
      * 播放base64数据类型的声音数据
+     *
      * @param context：测试时需要传，正式使用时可不传
      * @param base64Str
      */
     public void playBase64(final Context context, String base64Str) {
         try {
-            tempFile=base64ToFile(base64Str);
+            tempFile = base64ToFile(base64Str, ".mp3");
 //            tempFile = base64ToFile(encodeBase64File(context));
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +97,7 @@ public class AudioPlayerUtils {
             e.printStackTrace();
         }
     }
- 
+
 //    /**
 //     * 将本地audio文件转为base64字符串
 //     *（没有数据时，可用本地文件转base64来作为测试数据）
@@ -117,37 +118,36 @@ public class AudioPlayerUtils {
 //        inputStream.close();
 //        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
 //    }
- 
+
     /**
      * 将base64字符转换成临时音乐文件
      */
-    private File base64ToFile(String base64Str) {
+    public File base64ToFile(String base64Str, String suffix) {
         FileOutputStream outputStream = null;
-        if (tempFile == null || !tempFile.exists())
+        try {
+            tempFile = File.createTempFile(Math.random() + "temp" + new Date().getTime(), suffix);
+            byte[] audioByte = Base64.decode(base64Str, Base64.DEFAULT);
+            if (tempFile != null) {
+                outputStream = new FileOutputStream(tempFile);
+                outputStream.write(audioByte, 0, audioByte.length);
+                outputStream.flush();
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                tempFile = File.createTempFile("temp", ".mp3");
-                byte[] audioByte = Base64.decode(base64Str, Base64.DEFAULT);
-                if (tempFile != null) {
-                    outputStream = new FileOutputStream(tempFile);
-                    outputStream.write(audioByte, 0, audioByte.length);
+                if (outputStream != null) {
                     outputStream.flush();
                     outputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (outputStream != null) {
-                        outputStream.flush();
-                        outputStream.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
+        }
         return tempFile;
     }
- 
+
     /**
      * 停止播放，在activity不可见时，停止播放
      */
@@ -178,7 +178,7 @@ public class AudioPlayerUtils {
         }
 
         int duration = mp.getDuration();
-        if(mp != null) {
+        if (mp != null) {
             mp.stop();
             mp.release();
             mp = null;

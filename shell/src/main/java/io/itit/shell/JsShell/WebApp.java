@@ -50,6 +50,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -202,9 +203,21 @@ public class WebApp extends WebJsFunc {
 
     public void previewImage(JsArgs.ArgsBean args) {
         Intent intent = new Intent(activity, ShowImageActivity.class);
-        ArrayList<String> images = new ArrayList<>();
-        intent.putExtra("URL", args.urls);
-        intent.putExtra("POS", args.index);
+        if (args.type.equals("base64")) {
+            List<String> images = new ArrayList<>();
+            for (int i = 0; i < args.contents.size(); i++) {
+                File file = AudioPlayerUtils.getInstance().base64ToFile(args.contents.get(i), ".png");
+                images.add(file.getAbsolutePath());
+            }
+
+            intent.putExtra("URL", JSON.toJSONString(images));
+            intent.putExtra("POS", 0);
+        } else {
+            intent.putExtra("URL", args.urls);
+            intent.putExtra("POS", args.index);
+        }
+
+
         activity.startActivity(intent);
     }
 
@@ -547,13 +560,12 @@ public class WebApp extends WebJsFunc {
 
 
     public Map<String, Object> playAudio(JsArgs.ArgsBean args) {
-        AudioPlayerUtils.getInstance().playBase64(activity,args.content);
-        Logger.d("length:"+AudioPlayerUtils.getInstance().getRecordLong());
+        AudioPlayerUtils.getInstance().playBase64(activity, args.content);
+        Logger.d("length:" + AudioPlayerUtils.getInstance().getRecordLong());
         Map<String, Object> res = new HashMap<>();
-        res.put("duration",AudioPlayerUtils.getInstance().getRecordLong());
+        res.put("duration", AudioPlayerUtils.getInstance().getRecordLong());
         return res;
     }
-
 
 
     public Map<String, Object> stopAudioRecord(JsArgs.ArgsBean args) {
@@ -564,24 +576,35 @@ public class WebApp extends WebJsFunc {
     }
 
     public void saveImageToAlbum(JsArgs.ArgsBean args) {
-        Picasso.with(activity).load(args.path).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap, "pic",
+        if(!StringUtils.isEmpty(args.content)){
+            File file = AudioPlayerUtils.getInstance().base64ToFile(args.content, ".png");
+            try {
+                MediaStore.Images.Media.insertImage(activity.getContentResolver(), file.getAbsolutePath(), "pic",
                         "description");
-                ToastUtils.show(activity, "图片保存成功");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
+        }else{
+            Picasso.with(activity).load(args.path).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap, "pic",
+                            "description");
+                    ToastUtils.show(activity, "图片保存成功");
+                }
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
 
-            }
+                }
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 
     public boolean showModal(JsArgs.ArgsBean args) {
@@ -784,12 +807,12 @@ public class WebApp extends WebJsFunc {
                 }
                 in.close();
             } catch (IOException e) {
-                Logger.e(e,"");
+                Logger.e(e, "");
                 e.printStackTrace();
             }
             return Base64.encodeToString(data, Base64.NO_WRAP);
         } catch (Exception e) {
-            Logger.e(e,"");
+            Logger.e(e, "");
             return "";
         }
     }
