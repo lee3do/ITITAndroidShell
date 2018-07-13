@@ -419,7 +419,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void showLoading(JsArgs.ArgsBean args) {
-        shellFragment.showLoading(true);
+        shellFragment.showLoading(true,args.images,args.timeInterval);
         evalJs(args.callback);
     }
 
@@ -731,7 +731,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void hideLoading(JsArgs.ArgsBean args) {
-        shellFragment.showLoading(false);
+        shellFragment.showLoading(false,null, 0);
         evalJs(args.callback);
     }
 

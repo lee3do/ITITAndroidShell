@@ -54,6 +54,7 @@ public class JsArgs {
         public String position;
         public String source;
         public String dest;
+        public int timeInterval;
         public List<String> images;
         public List<String> contents;
         public String image;

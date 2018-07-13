@@ -52,7 +52,6 @@ import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.CommonUtil;
-import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.AlipayApp;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WxApp;
@@ -80,7 +79,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     private static final String CanBack = "canback";
     private static final String Type = "Type";
     private static final String Navigate = "Navigate";
-    public LoadingDialog loadingDialog;
+    public LoadingProgressDialog loadingDialog;
     public boolean showSegment = false;
 
     public String url;
@@ -583,10 +582,14 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     }
 
 
-    public void showLoading(Boolean isShow) {
+    public void showLoading(Boolean isShow, List<String> images, int timeInterval) {
         Logger.d("isShow:" + isShow);
         if (isShow) {
-            loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
+           // loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
+            loadingDialog =new LoadingProgressDialog(getActivity(),
+                    "正在加载中...",images,timeInterval);
+            loadingDialog.show();
+
         } else {
             if (loadingDialog == null) {
                 return;
