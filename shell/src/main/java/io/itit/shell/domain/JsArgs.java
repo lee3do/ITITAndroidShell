@@ -86,5 +86,7 @@ public class JsArgs {
         public String timeStamp;
         public String sign;
         public String packageValue;
+
+        public Integer rate;
     }
 }
