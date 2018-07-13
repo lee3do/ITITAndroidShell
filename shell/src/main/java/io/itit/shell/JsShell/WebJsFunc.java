@@ -31,6 +31,7 @@ public class WebJsFunc {
     public String loginCallback;
     public String scanCallback;
     public String locationCallback;
+    public String audioFinishCallback;
 
     public WebJsFunc(Activity activity, WebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;

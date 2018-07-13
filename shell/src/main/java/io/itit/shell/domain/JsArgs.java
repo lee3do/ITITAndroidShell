@@ -23,6 +23,9 @@ public class JsArgs {
          * callback : null
          */
         public int badge;
+        public int duration;
+        public Integer offset;
+        public Integer length;
         public int width;
         public int height;
         public int x;
@@ -70,6 +73,7 @@ public class JsArgs {
         public String type;
         public String message;
         public String callback;
+        public String finishCallback;
         public String orderString;
         public String key;
         public Object value;

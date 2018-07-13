@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -49,13 +48,12 @@ import com.tencent.smtt.sdk.WebView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -137,7 +135,7 @@ public class WebApp extends WebJsFunc {
     @SuppressLint("CheckResult")
     public Boolean request(JsArgs.ArgsBean args) {
         if (args.method.toLowerCase().equals("post")) {
-            if (args.body==null) {
+            if (args.body == null) {
                 RetrofitProvider.post(args.url, args.data, args.header, body -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("data", new String(body.bytes()));
@@ -150,8 +148,7 @@ public class WebApp extends WebJsFunc {
                     evalJs(args.callback, res);
                 });
             } else {
-                RetrofitProvider.postWithBody(args.url,  args
-                        .header, args.body,body -> {
+                RetrofitProvider.postWithBody(args.url, args.header, args.body, body -> {
                     Map<String, Object> res = new HashMap<>();
                     res.put("data", new String(body.bytes()));
                     res.put("code", 200);
@@ -512,7 +509,8 @@ public class WebApp extends WebJsFunc {
 
             }
             //  Logger.d("ze.getName() = " + ze.getName());
-            OutputStream os = new BufferedOutputStream(new FileOutputStream(getRealFileName
+            OutputStream os = new BufferedOutputStream(new FileOutputStream(io.itit
+                    .androidlibrary.utils.FileUtils.getRealFileName
                     (ShellApp.getFileFolderPath(activity), ze.getName())));
             InputStream is = new BufferedInputStream(zfile.getInputStream(ze));
             int readLen = 0;
@@ -525,53 +523,18 @@ public class WebApp extends WebJsFunc {
         zfile.close();
     }
 
-    public static File getRealFileName(String baseDir, String absFileName) {
-        String[] dirs = absFileName.split("/");
-        File ret = new File(baseDir);
-        String substr = null;
-        if (dirs.length > 1) {
-            for (int i = 0; i < dirs.length - 1; i++) {
-                substr = dirs[i];
-                try {
-                    //substr.trim();
-                    substr = new String(substr.getBytes("8859_1"), "GB2312");
 
-                } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                ret = new File(ret, substr);
-
-            }
-            // Logger.d("1ret = " + ret);
-            if (!ret.exists()) ret.mkdirs();
-            substr = dirs[dirs.length - 1];
-            try {
-                //substr.trim();
-                substr = new String(substr.getBytes("8859_1"), "GB2312");
-                // Logger.d("substr = " + substr);
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            ret = new File(ret, substr);
-            // Log.d("upZipFile", "2ret = " + ret);
-            return ret;
-        } else {
-            ret = new File(baseDir, absFileName);
-        }
-
-        return ret;
-    }
-
-    public void startAudioRecord(JsArgs.ArgsBean args) {
+    public Map<String, Object> startAudioRecord(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.RECORD_AUDIO};
+        Map<String, Object> res = new HashMap<>();
         if (EasyPermissions.hasPermissions(activity, perms)) {
-            VoiceRecorder.getInstance().startRecording();
+            this.audioFinishCallback = args.callback;
+            VoiceRecorder.getInstance().startRecording(args.duration);
+            res.put("path", VoiceRecorder.getInstance().getVoiceFilePath());
         } else {
             EasyPermissions.requestPermissions(shellFragment, "请授予录音权限。", 10086, perms);
         }
+        return res;
     }
 
     public Map<String, Object> getAudioRecordStatus(JsArgs.ArgsBean args) {
@@ -583,6 +546,7 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> stopAudioRecord(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         res.put("path", VoiceRecorder.getInstance().stopRecoding());
+        evalJs(this.audioFinishCallback, new HashMap());
         return res;
     }
 
@@ -787,13 +751,27 @@ public class WebApp extends WebJsFunc {
         }
         return res;
     }
-    public static String readFileAsBase64(String path) {
+
+    public static String readFileAsBase64(String path, Integer length, Integer offset) {
 
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-            return Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
+            InputStream in = null;
+            byte[] data = null;
+            // 读取文件字节数组
+            try {
+                in = new FileInputStream(path);
+                if(length!=null&&offset!=null){
+                    data = new byte[length];
+                    in.read(data,offset,length);
+                }else{
+                    data = new byte[in.available()];
+                    in.read(data);
+                }
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Base64.encodeToString(data, Base64.NO_WRAP);
         } catch (Exception e) {
             return "";
         }
@@ -811,7 +789,8 @@ public class WebApp extends WebJsFunc {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
 
-        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getMeasuredWidth()
+                , view.getMeasuredHeight());
         view.setDrawingCacheEnabled(false);
         view.destroyDrawingCache();
         return bitmap;
@@ -827,24 +806,31 @@ public class WebApp extends WebJsFunc {
         return bitmap;
     }
 
-    public void startCaptureSession(JsArgs.ArgsBean args){
+    public void startCaptureSession(JsArgs.ArgsBean args) {
         shellFragment.startCaptureSession(args);
     }
 
-    public void pauseCaptureSession(JsArgs.ArgsBean args){
+    public void pauseCaptureSession(JsArgs.ArgsBean args) {
 
         shellFragment.stopCaptureSession(args);
     }
 
-    public void resumeCaptureSession(JsArgs.ArgsBean args){
+    public void resumeCaptureSession(JsArgs.ArgsBean args) {
         shellFragment.startCaptureSession(args);
     }
 
-    public void stopCaptureSession(JsArgs.ArgsBean args){
+    public void stopCaptureSession(JsArgs.ArgsBean args) {
         shellFragment.stopCaptureSession(args);
     }
 
-    public Boolean capturePicture(JsArgs.ArgsBean args){
+    public Map<String, Object> getFileAttribute(JsArgs.ArgsBean args) {
+        long size = FileUtils.getFileSize(args.path);
+        Map<String, Object> res = new HashMap<>();
+        res.put("size", size);
+        return res;
+    }
+
+    public Boolean capturePicture(JsArgs.ArgsBean args) {
         activity.runOnUiThread(() -> {
             shellFragment.capturePicture(args);
         });
@@ -853,7 +839,8 @@ public class WebApp extends WebJsFunc {
     }
 
     public Map<String, Object> screenshotToAlbum(JsArgs.ArgsBean args) {
-        MediaStore.Images.Media.insertImage(activity.getContentResolver(), shotActivity(activity), "itit", "io.ITIT.io");
+        MediaStore.Images.Media.insertImage(activity.getContentResolver(), shotActivity(activity)
+                , "itit", "io.ITIT.io");
         Map<String, Object> res = new HashMap<>();
         return res;
     }
@@ -861,9 +848,8 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         if (args.type.equals("base64")) {
-            String base64 = readFileAsBase64((String)
-                    getFilePath(args).get("url"));
-            Logger.d("length:"+base64.length());
+            String base64 = readFileAsBase64((String) getFilePath(args).get("url"),args.length,args.offset);
+            Logger.d("length:" + base64.length());
             res.put("content", base64);
         } else {
             StringBuilder sb = FileUtils.readFile((String) getFilePath(args).get("url"), "UTF-8");

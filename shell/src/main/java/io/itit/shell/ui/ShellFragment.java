@@ -715,7 +715,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     @Override
     public void onPermissionsGranted(int i, List<String> list) {
         if (list.contains(Manifest.permission.RECORD_AUDIO)) {
-            VoiceRecorder.getInstance().startRecording();
+            VoiceRecorder.getInstance().startRecording(0);
         }
 
         if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
