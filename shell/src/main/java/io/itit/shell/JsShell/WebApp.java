@@ -81,6 +81,7 @@ import io.itit.androidlibrary.utils.NetWorkUtil;
 import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.ActionSheetDialog;
 import io.itit.shell.ShellApp;
+import io.itit.shell.Utils.AudioPlayerUtils;
 import io.itit.shell.Utils.Locations;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
@@ -510,8 +511,8 @@ public class WebApp extends WebJsFunc {
             }
             //  Logger.d("ze.getName() = " + ze.getName());
             OutputStream os = new BufferedOutputStream(new FileOutputStream(io.itit
-                    .androidlibrary.utils.FileUtils.getRealFileName
-                    (ShellApp.getFileFolderPath(activity), ze.getName())));
+                    .androidlibrary.utils.FileUtils.getRealFileName(ShellApp.getFileFolderPath
+                            (activity), ze.getName())));
             InputStream is = new BufferedInputStream(zfile.getInputStream(ze));
             int readLen = 0;
             while ((readLen = is.read(buf, 0, 1024)) != -1) {
@@ -543,6 +544,17 @@ public class WebApp extends WebJsFunc {
         res.put("isRecording", VoiceRecorder.getInstance().isRecording());
         return res;
     }
+
+
+    public Map<String, Object> playAudio(JsArgs.ArgsBean args) {
+        AudioPlayerUtils.getInstance().playBase64(activity,args.content);
+        Logger.d("length:"+AudioPlayerUtils.getInstance().getRecordLong());
+        Map<String, Object> res = new HashMap<>();
+        res.put("duration",AudioPlayerUtils.getInstance().getRecordLong());
+        return res;
+    }
+
+
 
     public Map<String, Object> stopAudioRecord(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
@@ -761,19 +773,23 @@ public class WebApp extends WebJsFunc {
             // 读取文件字节数组
             try {
                 in = new FileInputStream(path);
-                if(length!=null&&offset!=null){
-                    data = new byte[in.available()];
-                    in.read(data,offset,length);
-                }else{
+                if (length != null && offset != null) {
+                    data = new byte[offset];
+                    in.read(data);
+                    data = new byte[length];
+                    in.read(data);
+                } else {
                     data = new byte[in.available()];
                     in.read(data);
                 }
                 in.close();
             } catch (IOException e) {
+                Logger.e(e,"");
                 e.printStackTrace();
             }
             return Base64.encodeToString(data, Base64.NO_WRAP);
         } catch (Exception e) {
+            Logger.e(e,"");
             return "";
         }
     }
@@ -849,7 +865,8 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
         if (args.type.equals("base64")) {
-            String base64 = readFileAsBase64((String) getFilePath(args).get("url"),args.length,args.offset);
+            String base64 = readFileAsBase64((String) getFilePath(args).get("url"), args.length,
+                    args.offset);
             Logger.d("length:" + base64.length());
             res.put("content", base64);
         } else {
