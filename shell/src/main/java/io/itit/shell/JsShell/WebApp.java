@@ -528,7 +528,8 @@ public class WebApp extends WebJsFunc {
         String[] perms = {Manifest.permission.RECORD_AUDIO};
         Map<String, Object> res = new HashMap<>();
         if (EasyPermissions.hasPermissions(activity, perms)) {
-            this.audioFinishCallback = args.callback;
+            this.argsBean = args;
+            this.audioFinishCallback = args.finishCallback;
             VoiceRecorder.getInstance().startRecording(args.duration);
             res.put("path", VoiceRecorder.getInstance().getVoiceFilePath());
         } else {
@@ -761,7 +762,7 @@ public class WebApp extends WebJsFunc {
             try {
                 in = new FileInputStream(path);
                 if(length!=null&&offset!=null){
-                    data = new byte[length];
+                    data = new byte[in.available()];
                     in.read(data,offset,length);
                 }else{
                     data = new byte[in.available()];

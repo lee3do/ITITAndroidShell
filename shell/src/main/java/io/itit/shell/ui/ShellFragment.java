@@ -52,7 +52,6 @@ import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.CommonUtil;
-import io.itit.androidlibrary.utils.VoiceRecorder;
 import io.itit.androidlibrary.widget.LoadingDialog;
 import io.itit.shell.JsShell.AlipayApp;
 import io.itit.shell.JsShell.WebApp;
@@ -355,6 +354,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (hidden) {
         } else {
         }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.MAX_RECORDED)})
+    public void maxRecord(String message) {
+        Logger.d("maxRecord:"+message);
+        Map<String, Object> res = new HashMap<>();
+        wxApp.evalJs(wxApp.audioFinishCallback, res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
@@ -715,7 +721,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     @Override
     public void onPermissionsGranted(int i, List<String> list) {
         if (list.contains(Manifest.permission.RECORD_AUDIO)) {
-            VoiceRecorder.getInstance().startRecording(0);
+            webApp.startAudioRecord(webApp.argsBean);
         }
 
         if (list.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {

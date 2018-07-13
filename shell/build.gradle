@@ -51,7 +51,7 @@ dependencies {
     implementation files('libs/tbs_sdk.jar')
     implementation files('libs/alipaySdk-20180403.jar')
     compile 'com.wonderkiln:camerakit:0.13.2'
-    api 'io.itit:androidlibrary:2.3.2'
+    api 'io.itit:androidlibrary:2.3.3'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
 
