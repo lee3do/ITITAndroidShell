@@ -56,6 +56,21 @@ android {
     }
     flavorDimensions "names"
     productFlavors {
+        hhts {
+            applicationId "com.hhts.app"
+            buildConfigField "String", "name", "\"hhts\""
+            manifestPlaceholders = [
+                    app_name     : "华和天盛",
+                    XG_ACCESS_ID : "",
+                    XG_ACCESS_KEY: "",
+            ]
+            signingConfig signingConfigs.itit
+            dimension "names"
+            versionCode 2
+            versionName "1.0.1"
+            minSdkVersion 21
+            targetSdkVersion 24
+        }
         lzhb {
             applicationId "com.lzhb.app"
             buildConfigField "String", "name", "\"lzhb\""

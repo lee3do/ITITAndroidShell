@@ -100,6 +100,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public SmartRefreshLayout refreshLayout;
     public TabLayout mTab;
     public ViewPager mViewPager;
+    public ImageView backView;
     public List<String> mTitles = new ArrayList<>();
 
     public boolean hidden = true;
@@ -169,7 +170,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         mTab = view.findViewById(R.id.tab);
         mViewPager = view.findViewById(R.id.viewPager);
-        ImageView backView = view.findViewById(R.id.back);
+        backView = view.findViewById(R.id.back);
         toolbar = view.findViewById(R.id.toolbar);
         leftBar = view.findViewById(R.id.leftBar);
         rightBar = view.findViewById(R.id.rightBar);
@@ -205,8 +206,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             });
         }
 
-        ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
-                (ShellApp.appConfig.navigationBarColor)));
         Logger.d("statusBarHidden:" + ShellApp.appConfig.statusBarHidden);
         if (!navigate || (ShellApp.appConfig.statusBarHidden != null && ShellApp.appConfig
                 .statusBarHidden)) {
@@ -332,6 +331,12 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     private void initTitle(View view) {
         textView = view.findViewById(R.id.toolbar_title);
+        if (!StringUtils.isEmpty(ShellApp.appConfig.navigationBarColor)) {
+            textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
+            ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color
+                    .parseColor(ShellApp.appConfig.navigationBarColor)));
+
+        }
         if (!StringUtils.isEmpty(ShellApp.appConfig.navigationBarTitleColor)) {
             textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarTitleColor));
         }
