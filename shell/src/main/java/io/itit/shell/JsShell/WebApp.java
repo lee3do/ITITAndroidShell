@@ -541,8 +541,8 @@ public class WebApp extends WebJsFunc {
     public Map<String, Object> startAudioRecord(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.RECORD_AUDIO};
         Map<String, Object> res = new HashMap<>();
+        this.audioArgsBean = args;
         if (EasyPermissions.hasPermissions(activity, perms)) {
-            this.argsBean = args;
             this.audioFinishCallback = args.finishCallback;
             VoiceRecorder.getInstance().startRecording(args.duration);
             res.put("path", VoiceRecorder.getInstance().getVoiceFilePath());

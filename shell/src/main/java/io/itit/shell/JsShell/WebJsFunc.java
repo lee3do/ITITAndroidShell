@@ -33,6 +33,7 @@ public class WebJsFunc {
     public String locationCallback;
     public String audioFinishCallback;
     public JsArgs.ArgsBean argsBean;
+    public JsArgs.ArgsBean audioArgsBean;
 
     public WebJsFunc(Activity activity, MyWebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;
