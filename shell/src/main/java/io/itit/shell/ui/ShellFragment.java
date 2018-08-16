@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public XgApp xgApp;
     public AlipayApp alipayApp;
     public CameraView cameraView;
+    public RelativeLayout rl_layout;
 
     public ShellFragment() {
         // Required empty public constructor
@@ -181,6 +183,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         centerImage = view.findViewById(R.id.center_image);
         wv = view.findViewById(R.id.wv);
         cameraView = view.findViewById(R.id.camera);
+        rl_layout = view.findViewById(R.id.rl_layout);
 
         initPullToRefresh(view);
 
@@ -190,6 +193,10 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
+        if(!StringUtils.isEmpty(ShellApp.appConfig.pageBackgroundColor)){
+            rl_layout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+        }
+
 
 
         setSwipeBackEnable(canBack);
@@ -214,14 +221,21 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             if (page.page.equals(url)) {
                 if (page.hideNavigationBar != null && page.hideNavigationBar) {
                     toolbar.setVisibility(View.GONE);
+
+                }else{
+                    StatusBarUtil.immersive(getActivity(),0,0f);
                 }
                 if (page.disableHwui != null && page.disableHwui) {
                     Logger.d("set software layer");
                     //                   wv.setVisibility(View.GONE);
 //                    wv = view.findViewById(R.id.wv1);
 //                    wv.setVisibility(View.VISIBLE);
-
                 }
+
+                if(!StringUtils.isEmpty(page.pageBackgroundColor)){
+                    rl_layout.setBackgroundColor(Color.parseColor(page.pageBackgroundColor));
+                }
+
                 if (!StringUtils.isEmpty(page.navigationBarBackgroundColor)) {
                     toolbar.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
                     mTab.setBackgroundColor(Color.parseColor(page.navigationBarBackgroundColor));
@@ -327,6 +341,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         StatusBarUtil.darkMode(getActivity(), false);
 
         StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
+        Logger.d("toolbar"+toolbar.getPaddingLeft());
     }
 
     private void initTitle(View view) {

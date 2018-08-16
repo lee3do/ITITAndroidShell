@@ -9,6 +9,7 @@ import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.view.CropImageView;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.LogAdapter;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 import com.scwang.smartrefresh.header.MaterialHeader;
@@ -115,6 +116,22 @@ public class ShellApp extends Application {
         StringBuilder sb = FileUtils.readFile(context.getFilesDir().getAbsolutePath() +
                 "/webroot/app.json", "UTF-8");
         appConfig = JSON.parseObject(sb.toString(), AppConfig.class);
+        if(appConfig.debug){
+            Logger.addLogAdapter(new LogAdapter() {
+                @Override
+                public boolean isLoggable(int priority, String tag) {
+                    if(priority>Logger.INFO){
+                        return true;
+                    }
+                    return false;
+                }
+
+                @Override
+                public void log(int priority, String tag, String message) {
+
+                }
+            });
+        }
     }
 
 

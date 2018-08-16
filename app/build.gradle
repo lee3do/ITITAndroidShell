@@ -58,7 +58,7 @@ android {
     productFlavors {
         hhts {
             applicationId "com.hhts.app"
-            buildConfigField "String", "name", "\"hhts\""
+            buildConfigField "String", "name", "\"华和天盛\""
             manifestPlaceholders = [
                     app_name     : "华和天盛",
                     XG_ACCESS_ID : "",

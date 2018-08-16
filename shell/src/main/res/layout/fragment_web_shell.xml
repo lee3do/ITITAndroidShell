@@ -118,7 +118,7 @@
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:layout_alignParentLeft="true"
