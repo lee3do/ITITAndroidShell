@@ -187,12 +187,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
-//        mTab.setTabTextColors(Color.parseColor(ShellApp.appConfig
-//                .navigationBarColor),Color.parseColor(ShellApp.appConfig
-//                .navigationBarColor));
 
-        //      mTab.setSelectedTabIndicatorColor(Color.parseColor(ShellApp.appConfig
-        // .navigationBarColor));
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
@@ -319,12 +314,14 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         //状态栏透明和间距处理
         StatusBarUtil.immersive(getActivity());
 
-        if (ShellApp.appConfig.statusBarStyle != null && ShellApp.appConfig.statusBarStyle.equals
-                ("light")) {
-            StatusBarUtil.darkMode(getActivity(), false);
-        } else {
-            StatusBarUtil.darkMode(getActivity(), true);
-        }
+//        if (ShellApp.appConfig.statusBarStyle != null && ShellApp.appConfig.statusBarStyle.equals
+//                ("light")) {
+//            StatusBarUtil.darkMode(getActivity(), false);
+//        } else {
+//            StatusBarUtil.darkMode(getActivity(), true);
+//        }
+
+        StatusBarUtil.darkMode(getActivity(), false);
 
         StatusBarUtil.setPaddingSmart(getActivity(), toolbar);
     }
