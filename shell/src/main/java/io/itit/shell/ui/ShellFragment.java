@@ -174,7 +174,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar = view.findViewById(R.id.toolbar);
         leftBar = view.findViewById(R.id.leftBar);
         rightBar = view.findViewById(R.id.rightBar);
-        toolbar = view.findViewById(R.id.toolbar);
         centerImage = view.findViewById(R.id.center_image);
         wv = view.findViewById(R.id.wv);
         cameraView = view.findViewById(R.id.camera);
@@ -330,8 +329,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         textView = view.findViewById(R.id.toolbar_title);
         if (!StringUtils.isEmpty(ShellApp.appConfig.navigationBarColor)) {
             textView.setTextColor(Color.parseColor(ShellApp.appConfig.navigationBarColor));
-            ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color
-                    .parseColor(ShellApp.appConfig.navigationBarColor)));
+            ImageViewCompat.setImageTintList(backView, ColorStateList.valueOf(Color.parseColor
+                    (ShellApp.appConfig.navigationBarColor)));
 
         }
         if (!StringUtils.isEmpty(ShellApp.appConfig.navigationBarTitleColor)) {
@@ -359,7 +358,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.MAX_RECORDED)})
     public void maxRecord(String message) {
-        Logger.d("maxRecord:"+message);
+        Logger.d("maxRecord:" + message);
         Map<String, Object> res = new HashMap<>();
         wxApp.evalJs(wxApp.audioFinishCallback, res);
     }
@@ -499,6 +498,15 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 Logger.d("WebView滑动到了底端");
                 wv.evaluateJavascript("pageScrollToBottom()", null);
             }
+            if(toolbar.getVisibility()==View.GONE){
+                if (t > 100 && oldt <= 100) {
+                    Logger.d("隐藏状态栏");
+                    StatusBarUtil.hideStatusBar(getActivity(),toolbar);
+                } else if (t < 100 && oldt >= 100) {
+                    Logger.d("显示状态栏");
+                    StatusBarUtil.showStatusBar(getActivity(),toolbar);
+                }
+            }
         });
 
 
@@ -587,9 +595,9 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void showLoading(Boolean isShow, List<String> images, int timeInterval) {
         Logger.d("isShow:" + isShow);
         if (isShow) {
-           // loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
-            loadingDialog =new LoadingProgressDialog(getActivity(),
-                    "正在加载中...",images,timeInterval);
+            // loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
+            loadingDialog = new LoadingProgressDialog(getActivity(), "正在加载中...", images,
+                    timeInterval);
             loadingDialog.show();
 
         } else {

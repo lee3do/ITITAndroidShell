@@ -1,11 +1,12 @@
 package io.itit.shell.wxapi;
 
-import android.support.annotation.RequiresApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -288,4 +289,34 @@ public class StatusBarUtil {
         }
         return result;
     }
+
+    public static void hideStatusBar(@NonNull Activity activity,View view) {
+
+
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp != null && lp.height > 0) {
+            lp.height = lp.height -  getStatusBarHeight(activity);//增高
+        }
+        view.setPadding(view.getPaddingLeft(), view.getPaddingTop()- getStatusBarHeight(activity),
+                view.getPaddingRight(), view.getPaddingBottom());
+
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+
+    }
+
+    public static void showStatusBar(@NonNull Activity activity,View view) {
+
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp != null && lp.height > 0) {
+            lp.height += getStatusBarHeight(activity);//增高
+        }
+        view.setPadding(view.getPaddingLeft(), view.getPaddingTop() + getStatusBarHeight(activity),
+                view.getPaddingRight(), view.getPaddingBottom());
+
+
+    }
+
 }
