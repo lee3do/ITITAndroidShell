@@ -1,6 +1,7 @@
 package io.itit.shell.ui;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.orhanobut.logger.Logger;
 
@@ -28,6 +29,17 @@ public class MainActivity extends BaseActivity {
         }catch (Exception ignored){
             Logger.e(ignored,"MainActivity");
         }
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
+                .LayoutParams.FLAG_FULLSCREEN);
 
     }
 

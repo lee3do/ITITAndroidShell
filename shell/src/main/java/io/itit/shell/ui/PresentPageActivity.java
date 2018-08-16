@@ -63,6 +63,7 @@ public class PresentPageActivity extends BaseActivity {
         } catch (Exception ignored) {
             Logger.e(ignored, "PresentPageActivity");
         }
+        
     }
 
     @Override

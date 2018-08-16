@@ -141,8 +141,7 @@ public class WelcomeActivity extends Activity implements EasyPermissions.Permiss
 
     private void loadFinish() {
         runOnUiThread(() -> {
-            getWindow().setFlags(~WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
-                    .LayoutParams.FLAG_FULLSCREEN);
+
 
             if (StringUtils.isEmpty(ShellApp.appConfig.launchPage)) {
 
