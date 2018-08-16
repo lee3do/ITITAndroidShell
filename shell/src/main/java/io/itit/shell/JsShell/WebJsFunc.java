@@ -5,7 +5,6 @@ import android.webkit.JavascriptInterface;
 
 import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
-import com.tencent.smtt.sdk.WebView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +13,7 @@ import java.util.Map;
 
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
+import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.ui.ShellFragment;
 
@@ -23,7 +23,7 @@ import io.itit.shell.ui.ShellFragment;
 
 public class WebJsFunc {
     public BaseActivity activity;
-    public WebView webView;
+    public MyWebView webView;
     public ShellFragment shellFragment;
 
     public String payCallback;
@@ -34,7 +34,7 @@ public class WebJsFunc {
     public String audioFinishCallback;
     public JsArgs.ArgsBean argsBean;
 
-    public WebJsFunc(Activity activity, WebView webView, ShellFragment shellFragment) {
+    public WebJsFunc(Activity activity, MyWebView webView, ShellFragment shellFragment) {
         this.activity = (BaseActivity) activity;
         this.webView = webView;
         this.shellFragment = shellFragment;

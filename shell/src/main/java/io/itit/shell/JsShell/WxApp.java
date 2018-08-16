@@ -5,12 +5,12 @@ import android.app.Activity;
 import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.smtt.sdk.WebView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import io.itit.androidlibrary.utils.AppUtils;
+import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.Utils.WxUtils;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.ui.ShellFragment;
@@ -21,7 +21,7 @@ import io.itit.shell.ui.ShellFragment;
 
 public class WxApp extends WebJsFunc {
 
-    public WxApp(Activity activity, WebView webView, ShellFragment shellFragment) {
+    public WxApp(Activity activity, MyWebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }
 

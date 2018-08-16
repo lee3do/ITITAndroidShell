@@ -44,7 +44,6 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.tencent.smtt.sdk.WebView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -84,6 +83,7 @@ import io.itit.androidlibrary.widget.ActionSheetDialog;
 import io.itit.shell.ShellApp;
 import io.itit.shell.Utils.AudioPlayerUtils;
 import io.itit.shell.Utils.Locations;
+import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.domain.PostMessage;
 import io.itit.shell.ui.MainActivity;
@@ -109,7 +109,7 @@ import top.zibin.luban.OnCompressListener;
 public class WebApp extends WebJsFunc {
 
 
-    public WebApp(Activity activity, WebView webView, ShellFragment shellFragment) {
+    public WebApp(Activity activity, MyWebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }
 

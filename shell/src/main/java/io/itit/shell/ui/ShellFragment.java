@@ -532,6 +532,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             float webViewContentHeight = wv.getContentHeight() * wv.getScale();
             //WebView的现高度
             float webViewCurrentHeight = (wv.getView().getHeight() + wv.getView().getScrollY());
+           // float webViewCurrentHeight = (wv.getHeight() + wv.getScrollY());
             Logger.d(webViewContentHeight + "::" + webViewCurrentHeight);
             if ((webViewContentHeight - webViewCurrentHeight) <= 5) {
                 Logger.d("WebView滑动到了底端");

@@ -6,11 +6,11 @@ import com.orhanobut.logger.Logger;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
-import com.tencent.smtt.sdk.WebView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.JsArgs;
 import io.itit.shell.ui.ShellFragment;
 
@@ -21,7 +21,7 @@ import io.itit.shell.ui.ShellFragment;
 public class XgApp extends WebJsFunc {
     public String token;
 
-    public XgApp(Activity activity, WebView webView, ShellFragment shellFragment) {
+    public XgApp(Activity activity, MyWebView webView, ShellFragment shellFragment) {
         super(activity, webView, shellFragment);
     }
 
