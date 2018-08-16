@@ -524,6 +524,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                     }
                 }
                 webView.evaluateJavascript("pageLoad(" + JSON.toJSONString(queryMap) + ")", null);
+                new Handler().postDelayed(()->{
+                    webView.evaluateJavascript("var op=document.createElement(\"div\");var " +
+                            "oText=document.createTextNode(\"1\");op.appendChild(oText);op.style" +
+                            ".position=\"absolute\";op.style.top=\"0\";op.style" +
+                            ".zIndex=\"-100000\";document.body.appendChild(op);\n", null);
+
+                },1000);
             }
 
         });
@@ -554,8 +561,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         } else {
             wv.loadUrl(ShellApp.getFileFolderUrl(getContext()) + url);
         }
-
-
     }
 
     private void initSize(View view) {
