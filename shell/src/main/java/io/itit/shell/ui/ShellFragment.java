@@ -530,7 +530,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                             ".position=\"absolute\";op.style.top=\"0\";op.style" +
                             ".zIndex=\"-100000\";document.body.appendChild(op);\n", null);
 
-                },1000);
+                },200);
             }
 
         });
