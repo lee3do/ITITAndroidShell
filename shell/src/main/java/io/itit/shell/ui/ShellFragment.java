@@ -20,11 +20,14 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -45,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
 import cn.trinea.android.common.util.ViewUtils;
@@ -344,6 +348,25 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         textView.setText(name);
 
+        if (ShellApp.appConfig.debug) {
+            toolbar.setOnLongClickListener(v -> {
+                String url = PreferencesUtils.getString(getActivity(), "SERVER");
+                if (StringUtils.isEmpty(url)) {
+                    url = ShellApp.appConfig.serverRoot;
+                }
+                new MaterialDialog.Builder(getActivity()).theme(Theme.LIGHT).title("服务器地址")
+                        .input("http://10.0.0.77:7007", url, true, (dialog, input) -> {
+                }).positiveText("确定").negativeText("取消").onNegative((dialog, which) -> dialog
+                        .dismiss()).onPositive((dialog, which) -> {
+                    EditText text = dialog.getInputEditText();
+                    String serverUrl = text.getText().toString();
+                    PreferencesUtils.putString(getActivity(), "SERVER", serverUrl);
+                    dialog.dismiss();
+                }).show();
+                return false;
+            });
+        }
+
 
     }
 
@@ -498,13 +521,11 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                 Logger.d("WebView滑动到了底端");
                 wv.evaluateJavascript("pageScrollToBottom()", null);
             }
-            if(toolbar.getVisibility()==View.GONE){
+            if (toolbar.getVisibility() == View.GONE) {
                 if (t > 100 && oldt <= 100) {
-                    Logger.d("隐藏状态栏");
-                    StatusBarUtil.hideStatusBar(getActivity(),toolbar);
+                    StatusBarUtil.hideStatusBar(getActivity(), toolbar);
                 } else if (t < 100 && oldt >= 100) {
-                    Logger.d("显示状态栏");
-                    StatusBarUtil.showStatusBar(getActivity(),toolbar);
+                    StatusBarUtil.showStatusBar(getActivity(), toolbar);
                 }
             }
         });

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.trinea.android.common.util.FileUtils;
+import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.Consts;
 import io.itit.androidlibrary.ITITApplication;
@@ -203,7 +204,10 @@ public class ShellApp extends Application {
 
 
     public static String getFileFolderUrl(Context context) {
-        if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
+        String url = PreferencesUtils.getString(context,"SERVER");
+        if(!StringUtils.isEmpty(url)){
+            return url + File.separator ;
+        }else if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
             return "file:" + context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
         }else{
             return ShellApp.appConfig.serverRoot + File.separator;
@@ -213,7 +217,10 @@ public class ShellApp extends Application {
 
     public static String getFileFolderPath(Context context) {
 //        Logger.d(ShellApp.appConfig.serverRoot);
-        if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
+        String url = PreferencesUtils.getString(context,"SERVER");
+        if(!StringUtils.isEmpty(url)){
+            return url + File.separator ;
+        }else if(StringUtils.isEmpty(ShellApp.appConfig.serverRoot)){
             return context.getFilesDir().getAbsolutePath() + File.separator + "webroot/";
         }else{
             return ShellApp.appConfig.serverRoot + File.separator;

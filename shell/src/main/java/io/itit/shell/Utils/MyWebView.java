@@ -3,7 +3,6 @@ package io.itit.shell.Utils;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.orhanobut.logger.Logger;
 import com.tencent.smtt.sdk.WebView;
 
 
@@ -23,7 +22,6 @@ public class MyWebView extends WebView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        Logger.d("onScrollChanged"+":"+l+":"+t+":"+oldl+":"+oldt);
         if (mScrollInterface != null) {
             mScrollInterface.onSChanged(l, t, oldl, oldt);
         }
