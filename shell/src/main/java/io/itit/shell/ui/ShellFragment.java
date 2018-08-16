@@ -195,6 +195,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
         if(!StringUtils.isEmpty(ShellApp.appConfig.pageBackgroundColor)){
             rl_layout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+            wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         }
 
 

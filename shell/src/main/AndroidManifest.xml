@@ -17,6 +17,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleTheme"
             android:windowSoftInputMode="adjustResize"
+            android:resizeableActivity = "true"
             >
         </activity>
         <activity
@@ -25,17 +26,20 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/MyHoloFullScreenTheme">
+            android:resizeableActivity = "true"
         </activity>
         <activity
             android:name=".ui.GuideActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:resizeableActivity = "true"
             >
         </activity>
         <activity
             android:name=".ui.WelcomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:resizeableActivity = "true"
             >
         </activity>
         <activity
@@ -45,6 +49,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/NewTransparent"
             android:windowSoftInputMode="adjustResize"
+            android:resizeableActivity = "true"
             >
         </activity>
 
