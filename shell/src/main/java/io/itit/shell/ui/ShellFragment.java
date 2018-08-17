@@ -457,6 +457,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         if (!hidden) {
             wv.evaluateJavascript("pageHide()", null);
         }
+
+
     }
 
     @Override
