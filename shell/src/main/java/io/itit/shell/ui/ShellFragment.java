@@ -49,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import cn.trinea.android.common.util.PreferencesUtils;
 import cn.trinea.android.common.util.StringUtils;
 import cn.trinea.android.common.util.ToastUtils;
@@ -58,6 +60,8 @@ import io.itit.androidlibrary.ui.BaseBackFragment;
 import io.itit.androidlibrary.ui.ScanQrActivity;
 import io.itit.androidlibrary.utils.CommonUtil;
 import io.itit.shell.JsShell.AlipayApp;
+import io.itit.shell.JsShell.DaggerJsAppComponent;
+import io.itit.shell.JsShell.JsAppModule;
 import io.itit.shell.JsShell.WebApp;
 import io.itit.shell.JsShell.WxApp;
 import io.itit.shell.JsShell.XgApp;
@@ -109,9 +113,13 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public List<String> mTitles = new ArrayList<>();
 
     public boolean hidden = true;
+    @Inject
     public WebApp webApp;
+    @Inject
     public WxApp wxApp;
+    @Inject
     public XgApp xgApp;
+    @Inject
     public AlipayApp alipayApp;
     public CameraView cameraView;
     public RelativeLayout rl_layout;
@@ -154,6 +162,8 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         RxBus.get().register(this);
         if (getArguments() != null) {
             url = getArguments().getString(Url);
@@ -189,7 +199,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
 
         initTitle(view);
 
-
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
@@ -197,8 +206,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             rl_layout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
             wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
         }
-
-
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
@@ -317,7 +324,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         refreshLayout.setEnableLoadmore(false);
         refreshLayout.setEnableOverScrollBounce(true);
 
-
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
             wv.evaluateJavascript("pagePullToRefresh()", null);
@@ -399,7 +405,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public void maxRecord(String message) {
         Logger.d("maxRecord:" + message);
         Map<String, Object> res = new HashMap<>();
-        wxApp.evalJs(wxApp.audioFinishCallback, res);
+        webApp.evalJs(webApp.audioFinishCallback, res);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(Consts.BusAction.LoginSuccess)})
@@ -480,21 +486,22 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             wv.clearCache(true);
         }
 
-        webApp = new WebApp(getActivity(), wv, this);
+        DaggerJsAppComponent.builder().
+                jsAppModule(new JsAppModule(getActivity(),wv,this)).
+                build().
+                inject(this);
+
         wv.addJavascriptInterface(webApp, "AppBridge");
 
         if (ShellApp.UseWx) {
-            wxApp = new WxApp(getActivity(), wv, this);
             wv.addJavascriptInterface(wxApp, "WeixinBridge");
         }
 
         if (ShellApp.UseXg) {
-            xgApp = new XgApp(getActivity(), wv, this);
             wv.addJavascriptInterface(xgApp, "XGBridge");
         }
 
         if (ShellApp.UseAli) {
-            alipayApp = new AlipayApp(getActivity(), wv, this);
             wv.addJavascriptInterface(alipayApp, "AlipayBridge");
         }
 
@@ -681,7 +688,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
                                     res.put("paths", imagePath);
                                     webApp.evalJs(webApp.uploadCallback, res);
                                 }
-
                             }
 
                             @Override

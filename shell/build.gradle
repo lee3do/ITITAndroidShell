@@ -58,6 +58,10 @@ dependencies {
     api 'com.tencent.xinge:xinge:3.2.0-release'
     api 'com.tencent.wup:wup:1.0.0.E-release'
     api 'com.tencent.mid:mid:4.0.0-release'
+
+    compile 'com.google.dagger:dagger:2.17'
+    compile 'com.google.dagger:dagger-android-support:2.17'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.17'
 }
 
 apply from: "bintrayUpload.gradle"
