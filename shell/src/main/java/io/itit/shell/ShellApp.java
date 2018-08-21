@@ -195,7 +195,12 @@ public class ShellApp extends Application {
     private void initLog() {
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder().tag(Consts.LOG_TAG)
                 .build();
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy){
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return true;
+            }
+        });
     }
 
     private void initX5() {

@@ -273,8 +273,8 @@ public class WebApp extends WebJsFunc {
 
     public void setNavigationBarItems(JsArgs.ArgsBean args) {
         activity.runOnUiThread(() -> {
-            shellFragment.leftBar.removeAllViews();
-            shellFragment.rightBar.removeAllViews();
+//            shellFragment.leftBar.removeAllViews();
+//            shellFragment.rightBar.removeAllViews();
 
             if (!ListUtils.isEmpty(args.images)) {
                 for (String image : args.images) {
@@ -887,7 +887,7 @@ public class WebApp extends WebJsFunc {
 
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
-        if (args.type.equals("base64")) {
+        if (!StringUtils.isEmpty(args.type)&&args.type.equals("base64")) {
             String base64 = readFileAsBase64((String) getFilePath(args).get("url"), args.length,
                     args.offset);
             Logger.d("length:" + base64.length());
