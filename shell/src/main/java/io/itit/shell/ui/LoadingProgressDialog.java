@@ -26,20 +26,34 @@ public class LoadingProgressDialog extends Dialog {
     private boolean mCancelable;
     private int timeInterval;
     ImageView iv_loading;
+    public static LoadingProgressDialog loadingProgressDialog;
 
 
-    public LoadingProgressDialog(@NonNull Context context, String message, List<String> images,
+    private LoadingProgressDialog(@NonNull Context context, String message, List<String> images,
                                  int timeInterval) {
         this(context, R.style.LoadingDialog, message, images, false, timeInterval);
     }
 
-    public LoadingProgressDialog(@NonNull Context context, int themeResId, String message,
+    private LoadingProgressDialog(@NonNull Context context, int themeResId, String message,
                                  List<String> images, boolean cancelable, int timeInterval) {
         super(context, themeResId);
         mMessage = message;
         this.images = images;
         mCancelable = cancelable;
         this.timeInterval = timeInterval;
+    }
+
+    public static LoadingProgressDialog getInstance(@NonNull Context context, String message, List<String> images,
+                                             int timeInterval){
+        if(loadingProgressDialog==null){
+            loadingProgressDialog = new LoadingProgressDialog(context, message, images,
+                    timeInterval);
+        }
+        loadingProgressDialog.mMessage = message;
+        loadingProgressDialog.images = images;
+        loadingProgressDialog.timeInterval = timeInterval;
+        loadingProgressDialog.initView();
+        return loadingProgressDialog;
     }
 
     @Override
