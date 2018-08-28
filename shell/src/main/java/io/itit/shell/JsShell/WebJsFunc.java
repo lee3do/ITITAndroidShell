@@ -15,6 +15,7 @@ import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.Utils.MyWebView;
 import io.itit.shell.domain.JsArgs;
+import io.itit.shell.ui.MainActivity;
 import io.itit.shell.ui.ShellFragment;
 
 /**
@@ -23,6 +24,7 @@ import io.itit.shell.ui.ShellFragment;
 
 public class WebJsFunc {
     public BaseActivity activity;
+    public MainActivity mainActivity;
     public MyWebView webView;
     public ShellFragment shellFragment;
 
@@ -39,6 +41,9 @@ public class WebJsFunc {
         this.activity = (BaseActivity) activity;
         this.webView = webView;
         this.shellFragment = shellFragment;
+        if(activity instanceof  MainActivity){
+            this.mainActivity = (MainActivity) activity;
+        }
     }
 
     @JavascriptInterface

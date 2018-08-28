@@ -206,7 +206,8 @@ public class WebApp extends WebJsFunc {
         if (args.type.equals("base64")) {
             List<String> images = new ArrayList<>();
             for (int i = 0; i < args.contents.size(); i++) {
-                File file = AudioPlayerUtils.getInstance().base64ToFile(args.contents.get(i), ".png");
+                File file = AudioPlayerUtils.getInstance().base64ToFile(args.contents.get(i), "" +
+                        ".png");
                 images.add(file.getAbsolutePath());
             }
 
@@ -419,7 +420,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void showLoading(JsArgs.ArgsBean args) {
-        shellFragment.showLoading(true,args.images,args.timeInterval);
+        shellFragment.showLoading(true, args.images, args.timeInterval);
         evalJs(args.callback);
     }
 
@@ -576,20 +577,20 @@ public class WebApp extends WebJsFunc {
     }
 
     public void saveImageToAlbum(JsArgs.ArgsBean args) {
-        if(!StringUtils.isEmpty(args.content)){
+        if (!StringUtils.isEmpty(args.content)) {
             File file = AudioPlayerUtils.getInstance().base64ToFile(args.content, ".png");
             try {
-                MediaStore.Images.Media.insertImage(activity.getContentResolver(), file.getAbsolutePath(), "pic",
-                        "description");
+                MediaStore.Images.Media.insertImage(activity.getContentResolver(), file
+                        .getAbsolutePath(), "pic", "description");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             Picasso.with(activity).load(args.path).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap, "pic",
-                            "description");
+                    MediaStore.Images.Media.insertImage(activity.getContentResolver(), bitmap,
+                            "pic", "description");
                     ToastUtils.show(activity, "图片保存成功");
                 }
 
@@ -731,7 +732,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void hideLoading(JsArgs.ArgsBean args) {
-        shellFragment.showLoading(false,null, 0);
+        shellFragment.showLoading(false, null, 0);
         evalJs(args.callback);
     }
 
@@ -887,7 +888,7 @@ public class WebApp extends WebJsFunc {
 
     public Map<String, Object> readFile(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
-        if (!StringUtils.isEmpty(args.type)&&args.type.equals("base64")) {
+        if (!StringUtils.isEmpty(args.type) && args.type.equals("base64")) {
             String base64 = readFileAsBase64((String) getFilePath(args).get("url"), args.length,
                     args.offset);
             Logger.d("length:" + base64.length());
@@ -1010,9 +1011,11 @@ public class WebApp extends WebJsFunc {
     }
 
     public void setTabBarSelectedIndex(JsArgs.ArgsBean args) {
-        if (activity instanceof MainActivity) {
-            ((MainActivity) activity).mFragment.bottomBar.setCurrentItem(args.index);
+        if(!(activity instanceof MainActivity)){
+            activity.finish();
         }
+        activity.popTo(MainFragment.class, false);
+        this.mainActivity.mFragment.bottomBar.setCurrentItem(args.index);
     }
 
 

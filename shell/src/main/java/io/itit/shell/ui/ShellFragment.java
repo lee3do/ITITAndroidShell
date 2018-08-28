@@ -210,7 +210,6 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
 
-
         if (canBack) {
             // initToolbarNav(toolbar);
             backView.setVisibility(View.VISIBLE);
