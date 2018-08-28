@@ -10,7 +10,7 @@ import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
 import io.itit.shell.Utils.AndroidBug5497Workaround;
 import io.itit.shell.domain.JsArgs;
-import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
+import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 public class PresentPageActivity extends BaseActivity {
@@ -27,6 +27,9 @@ public class PresentPageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//        getWindow().setEnterTransition(new Slide().setDuration(1000));
+//        getWindow().setExitTransition(new Slide().setDuration(1000));
         setContentView(R.layout.activity_present_page);
 
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
@@ -77,10 +80,11 @@ public class PresentPageActivity extends BaseActivity {
 
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
-        Logger.d("type1 is " + type);
         if (type.equals(bottomHalf) || type.equals(topHalf)) {
-            return new DefaultVerticalAnimator();
+            Logger.d("type1 is " + type);
+            return new DefaultHorizontalAnimator();
         }
-        return super.onCreateFragmentAnimator();
+//        return super.onCreateFragmentAnimator();
+        return new DefaultHorizontalAnimator();
     }
 }

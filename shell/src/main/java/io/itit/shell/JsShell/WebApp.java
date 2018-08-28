@@ -180,7 +180,7 @@ public class WebApp extends WebJsFunc {
         return false;
     }
 
-    public void getLocation(JsArgs.ArgsBean args) {
+    public Boolean getLocation(JsArgs.ArgsBean args) {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         locationCallback = args.callback;
         if (EasyPermissions.hasPermissions(activity, perms)) {
@@ -189,6 +189,7 @@ public class WebApp extends WebJsFunc {
         } else {
             EasyPermissions.requestPermissions(shellFragment, "请授予定位权限。", 10086, perms);
         }
+        return false;
     }
 
 
@@ -389,6 +390,7 @@ public class WebApp extends WebJsFunc {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("ext", JSON.toJSONString(args));
         activity.startActivity(intent);
+      //  activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
     }
 
     public void dismissPage(JsArgs.ArgsBean args) {
