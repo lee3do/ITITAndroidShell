@@ -202,10 +202,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         toolbar.setBackgroundColor(Color.parseColor(ShellApp.appConfig
                 .navigationBarBackgroundColor));
         mTab.setBackgroundColor(Color.parseColor(ShellApp.appConfig.navigationBarBackgroundColor));
-        if(!StringUtils.isEmpty(ShellApp.appConfig.pageBackgroundColor)){
-            rl_layout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
-            wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
-        }
+
 
         setSwipeBackEnable(canBack);
         containerView = view.findViewById(R.id.container);
@@ -477,7 +474,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         wv.setHorizontalScrollBarEnabled(false);//水平不显示
         wv.setVerticalScrollBarEnabled(false); //垂直不显示
 
-        wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setTextZoom(100);
@@ -634,8 +631,12 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
             refreshLayout.setLayoutParams(lp);
 
         } else {
-            containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
-                    .pageBackgroundColor));
+            if(!StringUtils.isEmpty(ShellApp.appConfig.pageBackgroundColor)){
+                rl_layout.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+                wv.setBackgroundColor(Color.parseColor(ShellApp.appConfig.pageBackgroundColor));
+                containerView.setBackgroundColor(Color.parseColor(ShellApp.appConfig
+                        .pageBackgroundColor));
+            }
         }
         linearLayoutBottom.setOnClickListener(c -> getActivity().finish());
         linearLayoutLeft.setOnClickListener(c -> getActivity().finish());
