@@ -29,7 +29,6 @@ public class PresentPageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_present_page);
 
-
         JsArgs.ArgsBean argsBean = JSON.parseObject(getIntent().getStringExtra("ext"), JsArgs
                 .ArgsBean.class);
         boolean canBack = false;
