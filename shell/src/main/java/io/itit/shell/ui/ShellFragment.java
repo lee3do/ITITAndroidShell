@@ -91,7 +91,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
     public LoadingProgressDialog loadingDialog;
     public boolean showSegment = false;
 
-    public String url;
+    public String url="";
     private String name;
     private String type;
     private String query;
