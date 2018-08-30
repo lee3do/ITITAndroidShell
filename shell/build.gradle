@@ -54,14 +54,19 @@ dependencies {
     api 'io.itit:androidlibrary:2.3.3'
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
     api 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
-
     api 'com.tencent.xinge:xinge:3.2.0-release'
     api 'com.tencent.wup:wup:1.0.0.E-release'
     api 'com.tencent.mid:mid:4.0.0-release'
-
     compile 'com.google.dagger:dagger:2.17'
     compile 'com.google.dagger:dagger-android-support:2.17'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.17'
+    implementation files('libs/umeng-common-1.5.3.jar')
+    implementation files('libs/umeng-share-core-6.9.3.jar')
+    implementation files('libs/umeng-share-QQ-simplify-6.9.3.jar')
+    implementation files('libs/umeng-share-sina-simplify-6.9.3.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.3.jar')
+    implementation files('libs/umeng-shareboard-widget-6.9.3.jar')
+    implementation files('libs/umeng-sharetool-6.9.3.jar')
 }
 
 apply from: "bintrayUpload.gradle"

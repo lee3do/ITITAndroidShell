@@ -5,6 +5,8 @@ import android.app.Activity;
 import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,29 +32,36 @@ public class WxApp extends WebJsFunc {
     }
 
     public void shareText(JsArgs.ArgsBean args) {
-        WxUtils.shareText(args.scene,args.text);
+        new ShareAction(activity).withText(args.text).setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
+                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
+//        WxUtils.shareText(args.scene,args.text);
     }
 
     public void shareImage(JsArgs.ArgsBean args) {
-        WxUtils.shareImageFile(activity,args.scene,args.path,args.thumbPath);
+        new ShareAction(activity).withText("111").setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
+                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
+//        WxUtils.shareImageFile(activity,args.scene,args.path,args.thumbPath);
     }
 
     public void shareURL(JsArgs.ArgsBean args) {
-        WxUtils.shareUrl(activity,args.scene,args.url,args.title,args.description,args.thumbPath);
+        new ShareAction(activity).withText("111").setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
+                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
+//        WxUtils.shareUrl(activity, args.scene, args.url, args.title, args.description, args
+//                .thumbPath);
     }
 
     public Boolean login(JsArgs.ArgsBean args) {
         loginCallback = args.callback;
-        Logger.d("login:"+args.callback+","+shellFragment.url+webView.toString());
+        Logger.d("login:" + args.callback + "," + shellFragment.url + webView.toString());
         WxUtils.wxLogin(args.state);
         return false;
     }
 
-    public Map<String, Object> getInfo(JsArgs.ArgsBean args){
+    public Map<String, Object> getInfo(JsArgs.ArgsBean args) {
         Map<String, Object> res = new HashMap<>();
-        res.put("isWXAppInstalled",AppUtils.isInstalled(activity,"com.tencent.mm"));
-        res.put("isWXAppSupport",WxUtils.msgApi.getWXAppSupportAPI());
-        res.put("version",  AppUtils.getVersionName(activity,"com.tencent.mm"));
+        res.put("isWXAppInstalled", AppUtils.isInstalled(activity, "com.tencent.mm"));
+        res.put("isWXAppSupport", WxUtils.msgApi.getWXAppSupportAPI());
+        res.put("version", AppUtils.getVersionName(activity, "com.tencent.mm"));
         res.put("appId", WxUtils.appId);
         return res;
     }
@@ -72,7 +81,7 @@ public class WxApp extends WebJsFunc {
         request.appId = WxUtils.appId;
         Logger.d(JSON.toJSONString(request));
         payCallback = args.callback;
-        Logger.d("pay:"+args.callback+","+shellFragment.url+webView.toString());
+        Logger.d("pay:" + args.callback + "," + shellFragment.url + webView.toString());
         WxUtils.msgApi.sendReq(request);
         return false;
     }

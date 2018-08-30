@@ -1,9 +1,11 @@
 package io.itit.shell.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.alibaba.fastjson.JSON;
 import com.orhanobut.logger.Logger;
+import com.umeng.socialize.UMShareAPI;
 
 import cn.trinea.android.common.util.StringUtils;
 import io.itit.androidlibrary.ui.BaseActivity;
@@ -86,5 +88,11 @@ public class PresentPageActivity extends BaseActivity {
         }
 //        return super.onCreateFragmentAnimator();
         return new DefaultHorizontalAnimator();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -23,6 +23,8 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
 
 import java.io.BufferedReader;
 import java.io.CharArrayWriter;
@@ -222,6 +224,25 @@ public class ShellApp extends Application {
         this.buglyAppId = buglyAppId;
         Bugly.init(getApplicationContext(), buglyAppId, true);
         Fragmentation.builder().handleException(CrashReport::postCatchedException).install();
+    }
+
+    public void initUmeng(String appkey,String name,String s2){
+        UMConfigure.init(this,appkey
+                ,name,UMConfigure.DEVICE_TYPE_PHONE,s2);//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
+    }
+
+    public void initUmengWx(String appid,String appkey){
+        PlatformConfig.setWeixin(appid, appkey);
+    }
+
+
+    public void initUmengQQ(String appid,String appkey){
+        PlatformConfig.setQQZone(appid, appkey);
+    }
+
+
+    public void initUmengWeibo(String appid,String appkey,String redirectUrl){
+        PlatformConfig.setSinaWeibo(appid, appkey,redirectUrl);
     }
 
 

@@ -14,6 +14,9 @@ public class App extends ShellApp {
         startPage = R.drawable.start;
         if (BuildConfig.name.equals("lzhb")) {
             setBugly("fa0a542826");
+            initUmeng("5b87aa1ca40fa3260700000d","LZHB","");
+            initUmengWeibo("735888950","943604156","");
+            initUmengWx("wx6b917d2e6fb57c85","943604156");
         }
 
 

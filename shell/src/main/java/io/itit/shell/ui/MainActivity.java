@@ -1,9 +1,11 @@
 package io.itit.shell.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.orhanobut.logger.Logger;
+import com.umeng.socialize.UMShareAPI;
 
 import io.itit.androidlibrary.ui.BaseActivity;
 import io.itit.shell.R;
@@ -29,10 +31,12 @@ public class MainActivity extends BaseActivity {
         }catch (Exception ignored){
             Logger.e(ignored,"MainActivity");
         }
+    }
 
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
