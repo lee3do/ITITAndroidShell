@@ -88,7 +88,7 @@ public class LoadingProgressDialog extends Dialog {
             changeImage(0);
             tv_loading.setVisibility(View.GONE);
         } else {
-
+            iv_loading.setVisibility(View.GONE);
         }
 
     }

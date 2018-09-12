@@ -32,22 +32,22 @@ public class WxApp extends WebJsFunc {
     }
 
     public void shareText(JsArgs.ArgsBean args) {
-        new ShareAction(activity).withText(args.text).setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
-                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
-//        WxUtils.shareText(args.scene,args.text);
+//        new ShareAction(activity).withText(args.text).setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
+//                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
+        WxUtils.shareText(args.scene,args.text);
     }
 
     public void shareImage(JsArgs.ArgsBean args) {
         new ShareAction(activity).withText("111").setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
                 .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
-//        WxUtils.shareImageFile(activity,args.scene,args.path,args.thumbPath);
+        WxUtils.shareImageFile(activity,args.scene,args.path,args.thumbPath);
     }
 
     public void shareURL(JsArgs.ArgsBean args) {
-        new ShareAction(activity).withText("111").setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
-                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
-//        WxUtils.shareUrl(activity, args.scene, args.url, args.title, args.description, args
-//                .thumbPath);
+//        new ShareAction(activity).withText("111").setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA
+//                .QQ, SHARE_MEDIA.WEIXIN).setCallback(shareListener).open();
+        WxUtils.shareUrl(activity, args.scene, args.url, args.title, args.description, args
+                .thumbPath);
     }
 
     public Boolean login(JsArgs.ArgsBean args) {
@@ -67,7 +67,7 @@ public class WxApp extends WebJsFunc {
     }
 
     public void registerApp(JsArgs.ArgsBean args) {
-        WxUtils.registerApp(args.appId, activity);
+       WxUtils.registerApp(args.appId, activity);
     }
 
     public Boolean pay(JsArgs.ArgsBean args) {

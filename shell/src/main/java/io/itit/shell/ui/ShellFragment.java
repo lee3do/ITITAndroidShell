@@ -649,7 +649,7 @@ public class ShellFragment extends BaseBackFragment implements EasyPermissions.P
         Logger.d("isShow:" + isShow);
         if (isShow) {
             // loadingDialog = LoadingDialog.show(getActivity(), "", true, null);
-            loadingDialog = LoadingProgressDialog.getInstance(getActivity(), "正在加载中...", images,
+            loadingDialog = LoadingProgressDialog.getInstance(getActivity(), "正在加载中...", null,
                     timeInterval);
             loadingDialog.show();
 

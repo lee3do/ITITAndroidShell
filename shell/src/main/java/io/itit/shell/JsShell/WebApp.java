@@ -207,8 +207,8 @@ public class WebApp extends WebJsFunc {
         if (args.type.equals("base64")) {
             List<String> images = new ArrayList<>();
             for (int i = 0; i < args.contents.size(); i++) {
-                File file = AudioPlayerUtils.getInstance().base64ToFile(args.contents.get(i), "" +
-                        ".png");
+                File file = AudioPlayerUtils.getInstance().base64ToFile(args.contents.get(i), ""
+                        + ".png");
                 images.add(file.getAbsolutePath());
             }
 
@@ -275,8 +275,11 @@ public class WebApp extends WebJsFunc {
 
     public void setNavigationBarItems(JsArgs.ArgsBean args) {
         activity.runOnUiThread(() -> {
-//            shellFragment.leftBar.removeAllViews();
-//            shellFragment.rightBar.removeAllViews();
+            if (args.position.equals("left")) {
+                shellFragment.leftBar.removeAllViews();
+            } else if (args.position.equals("right")) {
+                shellFragment.rightBar.removeAllViews();
+            }
 
             if (!ListUtils.isEmpty(args.images)) {
                 for (String image : args.images) {
@@ -390,7 +393,8 @@ public class WebApp extends WebJsFunc {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("ext", JSON.toJSONString(args));
         activity.startActivity(intent);
-      //  activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+        //  activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity)
+        // .toBundle());
     }
 
     public void dismissPage(JsArgs.ArgsBean args) {
@@ -1013,7 +1017,7 @@ public class WebApp extends WebJsFunc {
     }
 
     public void setTabBarSelectedIndex(JsArgs.ArgsBean args) {
-        if(!(activity instanceof MainActivity)){
+        if (!(activity instanceof MainActivity)) {
             activity.finish();
         }
         activity.popTo(MainFragment.class, false);

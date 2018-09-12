@@ -97,7 +97,6 @@ public class ShellApp extends Application {
         initX5();
         initGallery();
         ITITApplication.appContext = this;
-
     }
 
     private void initGallery() {
